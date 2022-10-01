@@ -10,6 +10,10 @@ public class InputController : MonoBehaviour
     Vector2 mousePositionWorld; // mouse position in world relative to this GameObject's transform position
     Vector2 mousePositionNormalized; // (0,0) lower LH corner -> (1,1) upper RH corner
 
+    public Vector2 Move => move;
+    public Vector2 Look => look;
+    public Vector2 MousePositionNormalized => mousePositionNormalized;
+
     // cached
     new Camera camera;
 
