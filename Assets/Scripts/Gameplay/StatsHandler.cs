@@ -35,7 +35,7 @@ public class StatsHandler : MonoBehaviour
     float _moveSpeed_Current;
     float _rotationSpeed_Current;
     float _shieldRegenRate_Current;
-    float _shieldChargeLevel_Current;
+    [SerializeField] float _shieldChargeLevel_Current;
     int _shieldLayers_Current;
     float _fireRate_Current;
 

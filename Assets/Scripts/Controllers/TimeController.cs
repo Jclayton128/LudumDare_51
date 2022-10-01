@@ -31,7 +31,7 @@ public class TimeController : MonoBehaviour
         get => _currentEnemyTimeScale;
     }
 
-    private float _currentPlayerTimeScale;
+    private float _currentPlayerTimeScale = 1;
     public float PlayerTimeScale
     {
         get => _currentPlayerTimeScale;
