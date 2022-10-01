@@ -65,7 +65,7 @@ public class TimeController : MonoBehaviour
             OnTimerAdvancement?.Invoke(_timerAdvancementsRemainingInPhase);
             //Debug.Log($"Tick: {_timerAdvancementsRemainingInPhase} second before rotation.");
             
-            if (_timerAdvancementsRemainingInPhase == 0)
+            if (_timerAdvancementsRemainingInPhase <= 0)
             {
                 RotatePhase();
                 _timerAdvancementsRemainingInPhase = Mathf.RoundToInt(_timeBetweenPhases);
@@ -94,6 +94,13 @@ public class TimeController : MonoBehaviour
         //The UI driver for the timer will listen to OnNewPhase to update UI elements.
     }
 
+    public void DebugInstantPhaseChangeAndTimerReset()
+    {
+        Debug.Log("Debug: skipping a phase");
+        _timeForTimerAdvancement = Time.time;
+        _timerAdvancementsRemainingInPhase = 1;
+        CheckForTimerAdvancement();
+    }
 
 
 }
