@@ -23,6 +23,9 @@ public class HealthUIDriver : MonoBehaviour
     [SerializeField] float _deployTime = 0.7f;
     [SerializeField] ParticleSystem _repairingInProgressParticleFXPrefab = null;
 
+    [Tooltip("0: 4/4 hits left, 1: 3/4 hits left, 2: 2/4 hits left, 3: 1/4 hits left, 4: dead")]
+    [SerializeField] Color[] _damageLevelsByColor = new Color[5];
+
     //state
     Tween _resizeTween;
     bool _isUIDeployed = false;
@@ -44,6 +47,21 @@ public class HealthUIDriver : MonoBehaviour
         _repairEmissions.rateOverTime = 0;
     }
 
+    private void Start()
+    {
+        for (int i = 0; i < _healthStatusImages.Length; i++)
+        {
+            HandleDamageStatusChanged(i, 0);
+        }
+    }
+    
+    [ContextMenu("debug")]
+    private void DebugReceiveDamage()
+    {
+        HandleDamageStatusChanged(1, 2);
+    }
+
+    #region Phase Change
     private void HandlePhaseChange(TimeController.Phase newPhase)
     {
         if (newPhase == TimeController.Phase.C_healing)
@@ -78,42 +96,59 @@ public class HealthUIDriver : MonoBehaviour
         _resizeTween = _healthPanel.DOSizeDelta(_sizeDeltaRetracted, _deployTime);
     }
 
-    private void HandleReceivedDamage()
-    {
-       
+    #endregion
 
+    #region Subsystem Handlers
+    private void HandleDamageStatusChanged(int subsystemAffected, int newDamageTier)
+    {
+        _healthStatusImages[subsystemAffected].color = ConvertDamageTierIntoColor(newDamageTier);
     }
 
-/// <summary>
-/// Call this to begin displaying a system being repaired.
-/// </summary>
-/// <param name="subsystemIndex"></param>
+    private Color ConvertDamageTierIntoColor(int damageTier)
+    {
+        return _damageLevelsByColor[damageTier];
+    }
+
+    #endregion
+
+    #region Particle FX for repairs in progress
+
+    /// <summary>
+    /// Call this to begin displaying a system being repaired.
+    /// </summary>
+    /// <param name="subsystemIndex"></param>
     private void HandleRepairBeginning(int subsystemIndex)
     {
         _repairingParticleFX.transform.position = _healthStatusImages[subsystemIndex].rectTransform.position;
         _repairEmissions.rateOverTime = 10f;
     }
 
+
+    /// <summary>
+    /// Call this to end displaying a system being repaired.
+    /// </summary>
     private void HandleRepairEnding()
     {
         _repairEmissions.rateOverTime = 0f;
     }
 
-    [ContextMenu("Debug repair 0")]
-    private void DebugTestOnZero()
-    {
-        HandleRepairBeginning(0);
-    }
+    //[ContextMenu("Debug repair 0")]
+    //private void DebugTestOnZero()
+    //{
+    //    HandleRepairBeginning(0);
+    //}
 
-    [ContextMenu("Debug repair 1")]
-    private void DebugTestOnOne()
-    {
-        HandleRepairBeginning(1);
-    }
+    //[ContextMenu("Debug repair 1")]
+    //private void DebugTestOnOne()
+    //{
+    //    HandleRepairBeginning(1);
+    //}
 
-    [ContextMenu("Debug end ")]
-    private void DebugTestOff()
-    {
-        HandleRepairEnding();
-    }
+    //[ContextMenu("Debug end ")]
+    //private void DebugTestOff()
+    //{
+    //    HandleRepairEnding();
+    //}
+
+    #endregion
 }

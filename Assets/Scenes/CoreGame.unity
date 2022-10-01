@@ -2457,6 +2457,7 @@ GameObject:
   - component: {fileID: 2133400507}
   - component: {fileID: 2133400506}
   - component: {fileID: 2133400508}
+  - component: {fileID: 2133400509}
   m_Layer: 0
   m_Name: UI_Drivers
   m_TagString: Untagged
@@ -2524,6 +2525,24 @@ MonoBehaviour:
   _deployedUIScale: 2.5
   _deployTime: 0.7
   _repairingInProgressParticleFXPrefab: {fileID: 2173280059074986290, guid: 7cade116a12766749ba1ea015a505a6f, type: 3}
+  _damageLevelsByColor:
+  - {r: 0.15718365, g: 1, b: 0, a: 1}
+  - {r: 1, g: 0.95221215, b: 0.32549024, a: 1}
+  - {r: 1, g: 0.5163691, b: 0, a: 1}
+  - {r: 1, g: 0.21171243, b: 0, a: 1}
+  - {r: 0.31132078, g: 0.27137774, b: 0.27137774, a: 1}
+--- !u!114 &2133400509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133400505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0993a404e6c7154298d304960ecd260, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1780772532945588226
 PrefabInstance:
   m_ObjectHideFlags: 0
