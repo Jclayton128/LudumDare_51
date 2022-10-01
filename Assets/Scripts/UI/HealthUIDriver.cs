@@ -125,7 +125,6 @@ public class HealthUIDriver : MonoBehaviour
 
     private Color ConvertDamageTierIntoColor(float damageTier)
     {
-        Debug.Log(damageTier);
         return _damageLevelsByColor[Mathf.Clamp((int)Mathf.Ceil(damageTier), 0, 4)];
     }
 

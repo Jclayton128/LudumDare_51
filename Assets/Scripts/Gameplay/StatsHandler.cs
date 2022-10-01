@@ -22,10 +22,12 @@ public class StatsHandler : MonoBehaviour
     [SerializeField] float _rotationSpeed_Normal = 360f;
 
     [SerializeField] float _shieldRegenRate_Normal = 0.3f;
+    [SerializeField] float _healRate_Normal = 0.3f;
     const float _requiredRegenLevelPerShield = 1f;
     const int _shieldLayers_Max = 3;
 
     const int _numberOfSubsystems = 4;
+    const int _maxDamagePossible = 4;
     //Seconds between shots - lower is better;
     [SerializeField] float _fireRate_Normal = 0.25f;
 
@@ -118,7 +120,7 @@ public class StatsHandler : MonoBehaviour
     {
         for (int i = 0; i < _damageLevelsBySubsystem.Length; i++)
         {
-            if (_damageLevelsBySubsystem[i] >= 4)
+            if (_damageLevelsBySubsystem[i] >= _maxDamagePossible)
             {
                 Debug.LogError("Player subsystem reached 4 hits - game over!");
 
@@ -142,11 +144,11 @@ public class StatsHandler : MonoBehaviour
     {
         if (_timeController.CurrentPhase != TimeController.Phase.C_healing) return;
         AppIntegrity.Assert(subsystemIndex < _damageLevelsBySubsystem.Length, $"RepairDamage tried to repair out-of-bounds subsystem with index: {subsystemIndex}");
-        _damageLevelsBySubsystem[subsystemIndex] -= 1.5f * Time.deltaTime;
+        _damageLevelsBySubsystem[subsystemIndex] -= _healRate_Normal * Time.deltaTime;
+        _damageLevelsBySubsystem[subsystemIndex] = Mathf.Clamp(_damageLevelsBySubsystem[subsystemIndex], 0, _maxDamagePossible);
         OnReceiveDamage?.Invoke(subsystemIndex, _damageLevelsBySubsystem[subsystemIndex]);
         StartCoroutine(RepairingFX());
     }
-
 
     bool isPlayingRepairFX = false;
     IEnumerator RepairingFX()
