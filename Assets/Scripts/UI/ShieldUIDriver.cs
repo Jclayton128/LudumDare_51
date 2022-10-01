@@ -13,10 +13,21 @@ public class ShieldUIDriver : MonoBehaviour
     
     private void Awake()
     {
-        //TODO link into player stat handler better on player spawn
-        FindObjectOfType<StatsHandler>().OnChangeShieldLayerCount += HandleUpdatedShieldLayerCount;
+        GameController gc = FindObjectOfType<GameController>();
+        gc.OnPlayerSpawned += HandleOnPlayerSpawn;
+        gc.OnPlayerDespawned += HandleOnPlayerDespawn;
+    }
+    private void HandleOnPlayerSpawn(GameObject newPlayer)
+    {
+        StatsHandler sh = newPlayer.GetComponent<StatsHandler>();
+        sh.OnChangeShieldLayerCount += HandleUpdatedShieldLayerCount;
     }
 
+    private void HandleOnPlayerDespawn(GameObject despawningPlayer)
+    {
+        StatsHandler sh = despawningPlayer.GetComponent<StatsHandler>();
+        sh.OnChangeShieldLayerCount -= HandleUpdatedShieldLayerCount;
+    }
 
     //Janky implementation. No judgment.
     private void HandleUpdatedShieldLayerCount(int layersRemaining)

@@ -12,6 +12,8 @@ public class StatsHandler : MonoBehaviour
     /// </summary>
     public Action<int, float> OnReceiveDamage;
 
+    public Action OnPlayerDying;
+
     //Scene References
     TimeController _timeController;
 
@@ -56,6 +58,8 @@ public class StatsHandler : MonoBehaviour
         _shieldChargeLevel_Current = 0;
         _shieldLayers_Current = _shieldLayers_Max;
         _fireRate_Current = _fireRate_Normal;
+
+        OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
         AppIntegrity.Assert(_numberOfSubsystems == _damageLevelsBySubsystem.Length, "_damageLevelsBySubsystem.Length does not match _numberOfSubsystems!!!");
     }
 
@@ -118,9 +122,16 @@ public class StatsHandler : MonoBehaviour
             {
                 Debug.LogError("Player subsystem reached 4 hits - game over!");
 
-                // TODO: NAVIGATE TO LOSE SCENE
+                ExecuteDeathSequence();
             }
         }
+    }
+
+    private void ExecuteDeathSequence()
+    {
+        OnPlayerDying?.Invoke();
+
+        Destroy(gameObject);
     }
 
     #endregion
