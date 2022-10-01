@@ -17,6 +17,15 @@ public class DebugController : MonoBehaviour
     private void Update()
     {
         ListenForInstaPhaseSkip();
+        ListenForInstaDamage();
+    }
+
+    private void ListenForInstaDamage()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            FindObjectOfType<StatsHandler>().ReceiveImpact();
+        }
     }
 
     private void ListenForInstaPhaseSkip()

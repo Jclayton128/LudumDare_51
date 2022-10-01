@@ -444,8 +444,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerPrefab
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5125477344375620780, guid: 2462da27ceeacca4b9b0c8fbb50726d7, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2462da27ceeacca4b9b0c8fbb50726d7, type: 3}
 --- !u!1 &519420028
 GameObject:
@@ -2543,6 +2542,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0993a404e6c7154298d304960ecd260, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _shieldLayerColors:
+  - {r: 0, g: 0.5372549, b: 1, a: 1}
+  - {r: 0, g: 0.7372549, b: 1, a: 1}
+  - {r: 0, g: 0.96470594, b: 1, a: 1}
+  _shieldLayers:
+  - {fileID: 1356059172}
+  - {fileID: 704305365}
+  - {fileID: 1366062946}
 --- !u!1001 &1780772532945588226
 PrefabInstance:
   m_ObjectHideFlags: 0

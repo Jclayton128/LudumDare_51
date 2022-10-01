@@ -38,8 +38,9 @@ public class HealthUIDriver : MonoBehaviour
         _timeController = FindObjectOfType<TimeController>();
         _timeController.OnNewPhase += HandlePhaseChange;
 
-        //connect to Player's HealthHandler
-        //healthHandler.OnReceiveDamage += HandleReceivedDamage;
+        //TODO connect to Player's HealthHandler better
+        StatsHandler sh = FindObjectOfType<StatsHandler>();
+        sh.OnReceiveDamage += HandleDamageStatusChanged;
 
         _repairingParticleFX = Instantiate(_repairingInProgressParticleFXPrefab)
             .GetComponent<ParticleSystem>();
