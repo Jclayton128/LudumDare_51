@@ -84,8 +84,6 @@ public class TimerUIDriver : MonoBehaviour
     {
         for (int i = 0; i < _countdownTriangles.Length; i++)
         {
-            _sizeTweens[i].Kill();
-            _colorTweens[i].Kill();
             _countdownTriangles[i].color = _countdownTriangleStartingColors[i];
             _countdownTriangles[i].rectTransform.localScale = Vector3.one;
         }
