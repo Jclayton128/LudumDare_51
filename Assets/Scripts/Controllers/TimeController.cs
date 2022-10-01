@@ -1,23 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using System;
 using DG.Tweening;
 
 public class TimeController : MonoBehaviour
 {
-    #region Scene References
-
-    [Tooltip("These must be ordered from 0 to 9. Index 0 should be the central big triangle.")]
-    [SerializeField] Image[] _countdownTriangles = null;
-
-    #endregion
-
     #region Settings/Parameters
     public enum Phase {A_mobility, B_firepower, C_healing, Wraparound }
-    public Action<int> OnTimerAdvancment;
+    public Action<int> OnTimerAdvancement;
     public Action<Phase> OnNewPhase;
 
     const float _timeBetweenPhases = 10f; // Connection to the LD theme right here!
@@ -71,8 +62,8 @@ public class TimeController : MonoBehaviour
         {
             _timerAdvancementsRemainingInPhase--;
             _timeForTimerAdvancement = Time.time + _timeBetweenTimerAdvancements;
-            OnTimerAdvancment?.Invoke(_timerAdvancementsRemainingInPhase);
-            Debug.Log($"Tick: {_timerAdvancementsRemainingInPhase} second before rotation.");
+            OnTimerAdvancement?.Invoke(_timerAdvancementsRemainingInPhase);
+            //Debug.Log($"Tick: {_timerAdvancementsRemainingInPhase} second before rotation.");
             
             if (_timerAdvancementsRemainingInPhase == 0)
             {
@@ -98,7 +89,7 @@ public class TimeController : MonoBehaviour
 
         //Tell everything about the new phase
         OnNewPhase?.Invoke(CurrentPhase);
-        Debug.Log($"Gong: Changing Phase to {CurrentPhase}");
+        //Debug.Log($"Gong: Changing Phase to {CurrentPhase}");
 
         //The UI driver for the timer will listen to OnNewPhase to update UI elements.
     }
