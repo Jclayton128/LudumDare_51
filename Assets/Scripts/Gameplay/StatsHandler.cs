@@ -129,7 +129,24 @@ public class StatsHandler : MonoBehaviour
 
     public void RepairDamage(int subsystemIndex)
     {
+        if (_timeController.CurrentPhase != TimeController.Phase.C_healing) return;
         AppIntegrity.Assert(subsystemIndex < _damageLevelsBySubsystem.Length, $"RepairDamage tried to repair out-of-bounds subsystem with index: {subsystemIndex}");
+        _damageLevelsBySubsystem[subsystemIndex] -= 1.5f * Time.deltaTime;
+        OnReceiveDamage?.Invoke(subsystemIndex, _damageLevelsBySubsystem[subsystemIndex]);
+        StartCoroutine(RepairingFX());
+    }
+
+
+    bool isPlayingRepairFX = false;
+    IEnumerator RepairingFX()
+    {
+        if (isPlayingRepairFX) yield break;
+        isPlayingRepairFX = true;
+
+        // TODO: play particle FX or something
+
+        yield return null;
+        isPlayingRepairFX = false;
     }
 
     #endregion
