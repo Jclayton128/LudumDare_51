@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerMovementExample : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
 
