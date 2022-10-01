@@ -38,9 +38,9 @@ public class HealthUIDriver : MonoBehaviour
         _timeController = FindObjectOfType<TimeController>();
         _timeController.OnNewPhase += HandlePhaseChange;
 
-        //TODO connect to Player's HealthHandler better
-        StatsHandler sh = FindObjectOfType<StatsHandler>();
-        sh.OnReceiveDamage += HandleDamageStatusChanged;
+        GameController gc = _timeController.GetComponent<GameController>();
+        gc.OnPlayerSpawned += HandleOnPlayerSpawn;
+        gc.OnPlayerDespawned += HandleOnPlayerDespawn;
 
         _repairingParticleFX = Instantiate(_repairingInProgressParticleFXPrefab)
             .GetComponent<ParticleSystem>();
@@ -48,7 +48,25 @@ public class HealthUIDriver : MonoBehaviour
         _repairEmissions.rateOverTime = 0;
     }
 
+    private void HandleOnPlayerSpawn(GameObject newPlayer)
+    {
+        StatsHandler sh = newPlayer.GetComponent<StatsHandler>();
+        sh.OnReceiveDamage += HandleDamageStatusChanged;
+        ResetHealthStatusToFull();
+    }
+
+    private void HandleOnPlayerDespawn(GameObject despawningPlayer)
+    {
+        StatsHandler sh = despawningPlayer.GetComponent<StatsHandler>();
+        sh.OnReceiveDamage -= HandleDamageStatusChanged;
+    }
+
     private void Start()
+    {
+        ResetHealthStatusToFull();
+    }
+
+    private void ResetHealthStatusToFull()
     {
         for (int i = 0; i < _healthStatusImages.Length; i++)
         {
