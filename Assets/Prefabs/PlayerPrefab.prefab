@@ -204,7 +204,11 @@ MonoBehaviour:
   _rotationSpeed_Normal: 360
   _shieldRegenRate_Normal: 0.3
   _fireRate_Normal: 0.25
-  _damageLevelsBySubsystem: 00000000000000000000000000000000
+  _damageLevelsBySubsystem:
+  - 0
+  - 0
+  - 0
+  - 0
   _shieldChargeLevel_Current: 0
 --- !u!114 &123718380651484936
 MonoBehaviour:

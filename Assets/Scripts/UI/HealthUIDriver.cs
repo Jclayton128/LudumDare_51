@@ -55,7 +55,7 @@ public class HealthUIDriver : MonoBehaviour
             HandleDamageStatusChanged(i, 0);
         }
     }
-    
+
     [ContextMenu("debug")]
     private void DebugReceiveDamage()
     {
@@ -100,14 +100,15 @@ public class HealthUIDriver : MonoBehaviour
     #endregion
 
     #region Subsystem Handlers
-    private void HandleDamageStatusChanged(int subsystemAffected, int newDamageTier)
+    private void HandleDamageStatusChanged(int subsystemAffected, float newDamageTier)
     {
         _healthStatusImages[subsystemAffected].color = ConvertDamageTierIntoColor(newDamageTier);
     }
 
-    private Color ConvertDamageTierIntoColor(int damageTier)
+    private Color ConvertDamageTierIntoColor(float damageTier)
     {
-        return _damageLevelsByColor[damageTier];
+        Debug.Log(damageTier);
+        return _damageLevelsByColor[Mathf.Clamp((int)Mathf.Ceil(damageTier), 0, 4)];
     }
 
     #endregion

@@ -10,7 +10,7 @@ public class StatsHandler : MonoBehaviour
     /// <summary>
     /// First argument is the subsystem (0-3), second argument is that system's current damage level
     /// </summary>
-    public Action<int, int> OnReceiveDamage;
+    public Action<int, float> OnReceiveDamage;
 
     //Scene References
     TimeController _timeController;
@@ -28,9 +28,9 @@ public class StatsHandler : MonoBehaviour
     [SerializeField] float _fireRate_Normal = 0.25f;
 
     //state
-    
+
     //0 is full, 4 is dead.
-    [SerializeField] int[] _damageLevelsBySubsystem = new int[4] { 0, 0, 0, 0};
+    [SerializeField] float[] _damageLevelsBySubsystem = new float[4] { 0f, 0f, 0f, 0f };
 
     float _moveSpeed_Current;
     float _rotationSpeed_Current;
@@ -56,6 +56,7 @@ public class StatsHandler : MonoBehaviour
         _shieldChargeLevel_Current = 0;
         _shieldLayers_Current = _shieldLayers_Max;
         _fireRate_Current = _fireRate_Normal;
+        AppIntegrity.Assert(_numberOfSubsystems == _damageLevelsBySubsystem.Length, "_damageLevelsBySubsystem.Length does not match _numberOfSubsystems!!!");
     }
 
     #region Flow over time
@@ -76,7 +77,7 @@ public class StatsHandler : MonoBehaviour
         if (_shieldLayers_Current >= _shieldLayers_Max) return;
         else
         {
-            _shieldChargeLevel_Current += 
+            _shieldChargeLevel_Current +=
                 _shieldRegenRate_Current * Time.deltaTime * _timeController.PlayerTimeScale;
         }
 
@@ -102,6 +103,7 @@ public class StatsHandler : MonoBehaviour
 
     private void ReceiveDamage()
     {
+        AppIntegrity.Assert(_damageLevelsBySubsystem.Length != 0, "_damageLevelsBySubsystem is empty!");
         int damagedSubsystem = UnityEngine.Random.Range(0, _numberOfSubsystems);
         _damageLevelsBySubsystem[damagedSubsystem]++;
         OnReceiveDamage?.Invoke(damagedSubsystem, _damageLevelsBySubsystem[damagedSubsystem]);
@@ -112,9 +114,11 @@ public class StatsHandler : MonoBehaviour
     {
         for (int i = 0; i < _damageLevelsBySubsystem.Length; i++)
         {
-            if (_damageLevelsBySubsystem[i] == 4)
+            if (_damageLevelsBySubsystem[i] >= 4)
             {
                 Debug.LogError("Player subsystem reached 4 hits - game over!");
+
+                // TODO: NAVIGATE TO LOSE SCENE
             }
         }
     }
@@ -123,6 +127,10 @@ public class StatsHandler : MonoBehaviour
 
     #region Repair damage
 
+    public void RepairDamage(int subsystemIndex)
+    {
+        AppIntegrity.Assert(subsystemIndex < _damageLevelsBySubsystem.Length, $"RepairDamage tried to repair out-of-bounds subsystem with index: {subsystemIndex}");
+    }
 
     #endregion
 }
