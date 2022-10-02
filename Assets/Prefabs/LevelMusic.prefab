@@ -51,7 +51,7 @@ MonoBehaviour:
       Data2: 1244757283
       Data3: -1055916103
       Data4: -1982909591
-    Path: event:/BulletTimeMusic
+    Path: event:/Music/BulletTimeMusic
   Event: 
   PlayEvent: 1
   StopEvent: 2

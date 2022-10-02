@@ -7,7 +7,7 @@ using DG.Tweening;
 public class TimeController : MonoBehaviour
 {
     #region Settings/Parameters
-    public enum Phase {A_mobility, B_firepower, C_healing, Wraparound }
+    public enum Phase { A_mobility, B_firepower, C_healing, Wraparound }
     public Action<int> OnTimerAdvancement;
     public Action<Phase> OnNewPhase;
 
@@ -34,7 +34,8 @@ public class TimeController : MonoBehaviour
 
     #region State
     [SerializeField] private float _currentEnemyTimeScale;
-    public float EnemyTimeScale {
+    public float EnemyTimeScale
+    {
         get => _currentEnemyTimeScale;
     }
 
@@ -48,6 +49,10 @@ public class TimeController : MonoBehaviour
     float _timeForTimerAdvancement;
     int _timerAdvancementsRemainingInPhase;
     public Phase CurrentPhase { get; private set; } = TimeController.Phase.A_mobility;
+
+    public bool IsPhaseA => CurrentPhase == TimeController.Phase.A_mobility;
+    public bool IsPhaseB => CurrentPhase == TimeController.Phase.B_firepower;
+    public bool IsPhaseC => CurrentPhase == TimeController.Phase.C_healing;
 
     #endregion
 
@@ -71,7 +76,7 @@ public class TimeController : MonoBehaviour
             _timeForTimerAdvancement = Time.time + _timeBetweenTimerAdvancements;
             OnTimerAdvancement?.Invoke(_timerAdvancementsRemainingInPhase);
             //Debug.Log($"Tick: {_timerAdvancementsRemainingInPhase} second before rotation.");
-            
+
             if (_timerAdvancementsRemainingInPhase <= 0)
             {
                 RotatePhase();
@@ -91,8 +96,8 @@ public class TimeController : MonoBehaviour
 
         //"Lerp" into new enemy timescale
         int currentPhaseAsInt = (int)CurrentPhase;
-       DOTween.To(() => _currentEnemyTimeScale, x => _currentEnemyTimeScale = x,
-           _enemyTimeScales[currentPhaseAsInt], _timeToLerptoNewTimescale);
+        DOTween.To(() => _currentEnemyTimeScale, x => _currentEnemyTimeScale = x,
+            _enemyTimeScales[currentPhaseAsInt], _timeToLerptoNewTimescale);
 
 
         //"Lerp" into new enemy timescale
