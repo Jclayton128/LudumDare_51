@@ -31,9 +31,6 @@ public class GameController : MonoBehaviour {
     public void StartNewGame() {
         GlobalEvent.Invoke(GlobalEvent.GlobalEventType.GameStart);
         float timeToWaitForSongSync = _timeController.StartTimer();
-
-        Debug.Log("WAITING... " + timeToWaitForSongSync);
-
         Invoke("OnStartGameElements", timeToWaitForSongSync);
     }
 

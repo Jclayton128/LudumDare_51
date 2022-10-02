@@ -25,21 +25,15 @@ public class Audio : MonoBehaviour {
     void OnGlobalEvent(GlobalEvent.GlobalEventType eventType) {
         switch (eventType) {
             case GlobalEvent.GlobalEventType.GameStart:
-                // TODO: SET FMOD PARAM HERE
-                Debug.Log("GLOBAL EVENT --> GAME START");
                 triggerGameStart.Value = 1f;
                 triggerGameOver.Value = 0f;
                 TriggerParameters();
                 break;
             case GlobalEvent.GlobalEventType.GameOver:
-                // TODO: SET FMOD PARAM HERE
-                Debug.Log("GLOBAL EVENT --> GAME OVER");
                 triggerGameOver.Value = 1f;
                 TriggerParameters();
                 break;
             case GlobalEvent.GlobalEventType.GameReset:
-                // TODO: SET FMOD PARAM HERE
-                Debug.Log("GLOBAL EVENT --> GAME RESET");
                 triggerGameStart.Value = 0f;
                 triggerGameOver.Value = 0f;
                 TriggerParameters();
