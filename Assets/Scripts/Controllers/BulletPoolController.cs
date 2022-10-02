@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BulletPoolController : MonoBehaviour
 {
+    TimeController _timeController;
+
     List<Bullet> _activePlayerBullets = new List<Bullet> ();
     Queue<Bullet> _pooledPlayerBullets = new Queue<Bullet> ();
     [SerializeField] Bullet _playerBulletPrefab = null;
@@ -11,6 +13,11 @@ public class BulletPoolController : MonoBehaviour
     List<Bullet> _activeEnemyBullets = new List<Bullet>();
     Queue<Bullet> _pooledEnemyBullets = new Queue<Bullet>();
     [SerializeField] Bullet _enemyBulletPrefab = null;
+
+    private void Awake()
+    {
+        _timeController = GetComponent<TimeController>();
+    }
 
     public void ReturnExpiredBulletToPool(Bullet expiringBullet)
     {
@@ -37,7 +44,7 @@ public class BulletPoolController : MonoBehaviour
             if (_pooledPlayerBullets.Count == 0)
             {
                 bullet = Instantiate(_playerBulletPrefab, desiredLocation, desiredRotation);
-                bullet.Initialize(this);
+                bullet.Initialize(this, _timeController);
             }
             else
             {
@@ -61,10 +68,7 @@ public class BulletPoolController : MonoBehaviour
                 bullet.transform.rotation = desiredRotation;
             }
         }
-        float timeToExpire = Time.time + lifetime;
-        bullet.SetupForUse(timeToExpire);
         return bullet;
-
     }
 
 }
