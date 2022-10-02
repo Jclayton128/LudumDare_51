@@ -59,6 +59,7 @@ public class BulletPoolController : MonoBehaviour
             if (_pooledEnemyBullets.Count == 0)
             {
                 bullet = Instantiate(_enemyBulletPrefab, desiredLocation, desiredRotation);
+                bullet.Initialize(this, _timeController);
             }
             else
             {
