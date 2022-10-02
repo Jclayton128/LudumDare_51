@@ -2422,11 +2422,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1780772534551894077, guid: 0db641dfab6b0b7428e1104f729bc22f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -5.3
+      value: -5.299999
       objectReference: {fileID: 0}
     - target: {fileID: 1780772534551894077, guid: 0db641dfab6b0b7428e1104f729bc22f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1.8
+      value: -1.7999992
       objectReference: {fileID: 0}
     - target: {fileID: 1780772534551894077, guid: 0db641dfab6b0b7428e1104f729bc22f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2535,7 +2535,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 519420031}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -2543,7 +2543,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 435957959
+  m_SortingLayerID: 872899697
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &1448436842
@@ -3557,6 +3557,12 @@ MonoBehaviour:
   - 0.5
   - 1
   - 0.1
+  _playerTimeScales:
+  - 1
+  - 1
+  - 0.1
+  _currentEnemyTimeScale: 0
+  _currentPlayerTimeScale: 1
 --- !u!114 &2052628006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3714,15 +3720,20 @@ MonoBehaviour:
   - {fileID: 244938438}
   - {fileID: 221582459}
   - {fileID: 1272669199}
+  _healthStatusRepairFX:
+  - {fileID: 1724064064315050246}
+  - {fileID: 1724064064315050245}
+  - {fileID: 1724064064315050244}
+  - {fileID: 1724064064315050243}
   _deployedUIScale: 2.5
   _deployTime: 0.7
-  _repairingInProgressParticleFXPrefab: {fileID: 2173280059074986290, guid: 7cade116a12766749ba1ea015a505a6f, type: 3}
   _damageLevelsByColor:
   - {r: 0.15718365, g: 1, b: 0, a: 1}
   - {r: 1, g: 0.95221215, b: 0.32549024, a: 1}
   - {r: 1, g: 0.5163691, b: 0, a: 1}
   - {r: 1, g: 0.21171243, b: 0, a: 1}
   - {r: 0.31132078, g: 0.27137774, b: 0.27137774, a: 1}
+  _particlesToEmitPerFrameWhileRepairing: 2
 --- !u!114 &2133400509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3750,6 +3761,42 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1448436842}
     m_Modifications:
+    - target: {fileID: 703706765015010538, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+      propertyPath: ShapeModule.m_Scale.x
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 703706765015010538, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+      propertyPath: ShapeModule.m_Scale.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 703706765015010538, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 703706765671454167, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+      propertyPath: ShapeModule.m_Scale.x
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 703706765671454167, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+      propertyPath: ShapeModule.m_Scale.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 703706765671454167, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 703706766727079572, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+      propertyPath: ShapeModule.m_Scale.x
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 703706766727079572, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+      propertyPath: ShapeModule.m_Scale.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 703706766727079572, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1724064063143294212, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -3840,6 +3887,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+--- !u!198 &1724064064315050243 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 703706766727079572, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+  m_PrefabInstance: {fileID: 1724064064315050242}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &1724064064315050244 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 703706765015010538, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+  m_PrefabInstance: {fileID: 1724064064315050242}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &1724064064315050245 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 703706765671454167, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+  m_PrefabInstance: {fileID: 1724064064315050242}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &1724064064315050246 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8879823877208863767, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
+  m_PrefabInstance: {fileID: 1724064064315050242}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1780772532945588226
 PrefabInstance:
   m_ObjectHideFlags: 0

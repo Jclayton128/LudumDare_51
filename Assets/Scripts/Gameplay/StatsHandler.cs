@@ -8,10 +8,17 @@ public class StatsHandler : MonoBehaviour
     public Action<int> OnChangeShieldLayerCount;
 
     /// <summary>
-    /// First argument is the subsystem (0-3), second argument is that system's current damage level
+    /// First argument is the subsystem (0-3), second argument is that system's 
+    /// current damage level. Third argument is whether this event is called due to
+    /// damage being repaire (to determine whether to emit RepairParticleFX)
     /// </summary>
-    public Action<int, float> OnReceiveDamage;
+    public Action<int, float, bool> OnReceiveDamage;
 
+    /// <summary>
+    /// Argument is the subsystem (0-3)
+    /// </summary>
+    public Action<int> OnBeginRepairsToSystem;
+    public Action<int> OnEndRepairsToSystem;
     public Action OnPlayerDying;
 
     //Scene References
@@ -112,7 +119,8 @@ public class StatsHandler : MonoBehaviour
         AppIntegrity.Assert(_damageLevelsBySubsystem.Length != 0, "_damageLevelsBySubsystem is empty!");
         int damagedSubsystem = UnityEngine.Random.Range(0, _numberOfSubsystems);
         _damageLevelsBySubsystem[damagedSubsystem]++;
-        OnReceiveDamage?.Invoke(damagedSubsystem, _damageLevelsBySubsystem[damagedSubsystem]);
+        OnReceiveDamage?.Invoke(
+            damagedSubsystem, _damageLevelsBySubsystem[damagedSubsystem], false);
         CheckForDeath();
     }
 
@@ -146,8 +154,11 @@ public class StatsHandler : MonoBehaviour
         AppIntegrity.Assert(subsystemIndex < _damageLevelsBySubsystem.Length, $"RepairDamage tried to repair out-of-bounds subsystem with index: {subsystemIndex}");
         _damageLevelsBySubsystem[subsystemIndex] -= _healRate_Normal * Time.deltaTime;
         _damageLevelsBySubsystem[subsystemIndex] = Mathf.Clamp(_damageLevelsBySubsystem[subsystemIndex], 0, _maxDamagePossible);
-        OnReceiveDamage?.Invoke(subsystemIndex, _damageLevelsBySubsystem[subsystemIndex]);
-        StartCoroutine(RepairingFX());
+        OnReceiveDamage?.Invoke(subsystemIndex, _damageLevelsBySubsystem[subsystemIndex], true);
+        
+        //Might not need this if HealthUIDriver is emitting particles on that system's
+        //particleFX each frame OnDamageReceived is called
+        //StartCoroutine(RepairingFX());
     }
 
     bool isPlayingRepairFX = false;
