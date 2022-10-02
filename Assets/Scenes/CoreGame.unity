@@ -3561,6 +3561,7 @@ GameObject:
   - component: {fileID: 2052628007}
   - component: {fileID: 2052628009}
   - component: {fileID: 2052628010}
+  - component: {fileID: 2052628011}
   m_Layer: 0
   m_Name: Controllers
   m_TagString: Untagged
@@ -3675,6 +3676,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 4572541516144422410, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
   _spawnPerimeterRadius: 7
+--- !u!114 &2052628011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2052628003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c002e1f5d50a6447a6467940beb8bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _explosionPrefab: {fileID: 479345073867527574, guid: 73be3c4796106c144b2b1d237db79cac, type: 3}
+  _gloryFactor: 1
 --- !u!114 &2071413694 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1724064063869455036, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}

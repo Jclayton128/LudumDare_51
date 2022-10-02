@@ -6,6 +6,7 @@ public class EnemyController : MonoBehaviour
 {
     GameController _gameController;
     TimeController _timeController;
+    ExplosionController _explosionController;
     [SerializeField] GameObject _enemyPrefab = null;
     [SerializeField] float _spawnPerimeterRadius = 5f;
 
@@ -24,6 +25,7 @@ public class EnemyController : MonoBehaviour
         _gameController.OnPlayerStartsRun += HandleOnPlayerSpawn;
 
         _timeController = _gameController.GetComponent<TimeController>();
+        _explosionController  =_gameController.GetComponent <ExplosionController>();
     }
 
     public void HandleOnPlayerSpawn(GameObject newPlayer)
@@ -58,12 +60,14 @@ public class EnemyController : MonoBehaviour
             if (_pooledEnemies.Count == 0)
             {
                 enemy = Instantiate(_enemyPrefab);
+                enemy.GetComponent<Entity>().Initialize(this, _explosionController);
             }
             else
             {
                 enemy = _pooledEnemies.Dequeue ();
                 enemy.SetActive(true);
             }
+            enemy.GetComponent<Entity>().SetUpForUse();
             Vector2 pos = (Vector2)_gameController.CurrentPlayer.transform.position +
                 (FindPointOnUnitCircleCircumference() * _spawnPerimeterRadius);
             enemy.transform.position = pos;

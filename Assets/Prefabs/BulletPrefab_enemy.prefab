@@ -53,7 +53,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3830533406619047830, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}
       propertyPath: m_Name
-      value: BulletPrefab_player
+      value: BulletPrefab_enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 3830533406619047830, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}

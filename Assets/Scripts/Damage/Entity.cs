@@ -1,9 +1,20 @@
 using UnityEngine;
+using System;
 
 // An "Entity" is a game character that has health and can be killed.
 
 public class Entity : MonoBehaviour
 {
+    ExplosionController _explosionController;
+    EnemyController _enemyController;
+
+    /// <summary>
+    /// Float argument is the damage amount
+    /// </summary>
+    public Action<float> OnReceiveDamage;
+
+    public Action OnDie;
+
     [Header("Health")]
     [SerializeField] float startingHealth = 100f;
     [SerializeField] float timeInvincibleAfterHit = 0f;
@@ -11,31 +22,75 @@ public class Entity : MonoBehaviour
     [Space]
     [Header("Death")]
     [SerializeField] bool hideOnDeath = false;
-    [SerializeField] ParticleSystem deathFX;
+    //[SerializeField] ParticleSystem deathFX;
 
-    float hp = 100f;
-    bool isAlive = true;
+    float currentHealth;
+    public bool IsAlive { get; private set; } = true;
 
-    float timeSinceTookDamage = Mathf.Infinity;
+    float _timeInvulnerabilityEnds = 0;
+
+    private void Awake()
+    {
+        currentHealth = startingHealth;
+    }
+
+    public void Initialize(EnemyController ecRef, ExplosionController exconRef)
+    {
+        _enemyController = ecRef;
+        _explosionController = exconRef;
+    }
+
+    public void SetUpForUse()
+    {
+        _timeInvulnerabilityEnds = 0;
+        currentHealth = startingHealth;
+        IsAlive = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //TODO reference a variable damage amount. Not all bullets do exactly 1 damage?
+        TakeDamage(1);
+    }
 
     public bool TakeDamage(float amount)
     {
-        if (timeSinceTookDamage < timeInvincibleAfterHit) return false;
+        if (Time.time < _timeInvulnerabilityEnds) return false;
 
-        hp -= amount;
+        _explosionController.RequestExplosion(amount, transform.position);
+        OnReceiveDamage?.Invoke(amount);
+        currentHealth -= amount;
 
-        if (hp <= 0) Die();
+        if (timeInvincibleAfterHit > 0)
+        {
+            _timeInvulnerabilityEnds = Time.time + timeInvincibleAfterHit;
+        }
+
+        if (currentHealth <= 0) Die();
 
         return true;
     }
 
     void Die()
     {
-        if (!isAlive) return;
-        isAlive = false;
-        hp = Mathf.Min(hp, 0f);
-        if (hideOnDeath) HideSprite();
-        if (deathFX != null) deathFX.Play();
+        if (!IsAlive) return;
+        IsAlive = false;
+
+        currentHealth = Mathf.Min(currentHealth, 0f);
+
+        _explosionController.RequestExplosion(startingHealth, transform.position);
+        OnDie?.Invoke();
+
+        if (_enemyController)
+        {
+            _enemyController.ReturnDeadEnemy(this.gameObject);
+        }
+        else
+        {
+            if (hideOnDeath) HideSprite();
+        }
+
+        //if (deathFX != null) deathFX.Play();
     }
 
     void HideSprite()
