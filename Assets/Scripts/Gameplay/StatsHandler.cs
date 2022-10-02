@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FMODUnity;
 using UnityEngine;
 
-public class StatsHandler : MonoBehaviour
-{
+public class StatsHandler : MonoBehaviour {
     ExplosionController _explosionController;
 
     public Action<int> OnChangeShieldLayerCount;
@@ -27,9 +27,13 @@ public class StatsHandler : MonoBehaviour
 
     [SerializeField] float _moveSpeed_Normal = 10f;
     [SerializeField] float _rotationSpeed_Normal = 360f;
-
     [SerializeField] float _shieldRegenRate_Normal = 0.3f;
     [SerializeField] float _healRate_Normal = 0.3f;
+    [SerializeField] StudioEventEmitter repairSound;
+    [SerializeField] StudioEventEmitter repairCompleteSound;
+    [SerializeField] StudioEventEmitter playerShieldHitSound;
+    [SerializeField] StudioEventEmitter playerHurtSound;
+    [SerializeField] StudioEventEmitter playerDeathSound;
     const float _requiredRegenLevelPerShield = 1f;
     const int _shieldLayers_Max = 3;
 
@@ -39,15 +43,16 @@ public class StatsHandler : MonoBehaviour
     [SerializeField] float _fireRate_Normal = 0.25f;
     [SerializeField] float _fireRate_Fast = 0.1f;
 
+    bool hasPerfectHealthThisRound = true;
+
     //state
 
     //0 is full, 4 is dead.
     [SerializeField] float[] _damageLevelsBySubsystem = new float[4] { 0f, 0f, 0f, 0f };
-    
+
     //These modifiers are multiplied against appropriate system.
     //They are changed as the ship received/repairs damage
     [SerializeField] float[] _statModifiersBySubsystem = new float[4] { 1f, 1f, 1f, 1f };
-
 
     //float _moveSpeed_Current;
     //float _rotationSpeed_Current;
@@ -55,32 +60,54 @@ public class StatsHandler : MonoBehaviour
     [SerializeField] float _shieldChargeLevel_Current;
     int _shieldLayers_Current;
     float _fireRate_Current;
+    bool isAlive = true;
 
-    public float CameraZoom
-    { get => _cameraZoom_Normal * _statModifiersBySubsystem[0]; }
+    public bool IsAlive => isAlive;
 
-    public float ShieldRegenRate
-    { get => _shieldRegenRate_Normal * _statModifiersBySubsystem[1]; }
+    public float CameraZoom { get => _cameraZoom_Normal * _statModifiersBySubsystem[0]; }
 
-    public float MoveSpeed 
-    { get => _moveSpeed_Normal * _statModifiersBySubsystem[2]; }
+    public float ShieldRegenRate { get => _shieldRegenRate_Normal * _statModifiersBySubsystem[1]; }
 
-    public float FireRate
-    { get => _fireRate_Current * _statModifiersBySubsystem[3]; }
+    public float MoveSpeed { get => _moveSpeed_Normal * _statModifiersBySubsystem[2]; }
 
-    public float RotationSpeed 
-    { get => _rotationSpeed_Normal; }
+    public float FireRate { get => _fireRate_Current * _statModifiersBySubsystem[3]; }
 
+    public float RotationSpeed { get => _rotationSpeed_Normal; }
 
-    private void Awake()
-    {
-        _timeController = FindObjectOfType<TimeController>();
-        _explosionController = _timeController.GetComponent<ExplosionController>();
-        this.OnReceiveDamage += ConvertDamageLevelsIntoStatChanges;
+    private void OnEnable() {
+        _timeController.OnNewPhase += HandleNewPhase;
     }
 
-    private void Start()
-    {
+    private void OnDisable() {
+        _timeController.OnNewPhase -= HandleNewPhase;
+    }
+
+    void HandleNewPhase(TimeController.Phase incomingPhase) {
+        if (incomingPhase == TimeController.Phase.A_mobility) {
+            hasPerfectHealthThisRound = GetHasPerfectHealth();
+        }
+    }
+
+    bool GetHasPerfectHealth() {
+        for (int i = 0; i < _damageLevelsBySubsystem.Length; i++) {
+            if (_damageLevelsBySubsystem[i] > 0) return false;
+        }
+        return true;
+    }
+
+    private void Awake() {
+        _timeController = FindObjectOfType<TimeController>();
+        _explosionController = _timeController.GetComponent<ExplosionController>();
+        AppIntegrity.Assert(repairSound != null);
+        AppIntegrity.Assert(repairCompleteSound != null);
+        AppIntegrity.Assert(playerShieldHitSound != null);
+        AppIntegrity.Assert(playerHurtSound != null);
+        AppIntegrity.Assert(playerDeathSound != null);
+    }
+
+    private void Start() {
+        this.OnReceiveDamage += ConvertDamageLevelsIntoStatChanges;
+
         _shieldChargeLevel_Current = 0;
         _shieldLayers_Current = _shieldLayers_Max;
 
@@ -89,58 +116,48 @@ public class StatsHandler : MonoBehaviour
     }
 
     #region Flow over time
-    private void Update()
-    {
+    private void Update() {
         RegenerateShield();
         _fireRate_Current = _timeController.IsPhaseB ? _fireRate_Fast : _fireRate_Normal;
     }
 
-    private void RegenerateShield()
-    {
-        if (_shieldChargeLevel_Current >= _requiredRegenLevelPerShield)
-        {
+    private void RegenerateShield() {
+        if (_shieldChargeLevel_Current >= _requiredRegenLevelPerShield) {
             _shieldChargeLevel_Current = 0;
             _shieldLayers_Current++;
             OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
         }
 
         if (_shieldLayers_Current >= _shieldLayers_Max) return;
-        else
-        {
+        else {
             _shieldChargeLevel_Current +=
                 ShieldRegenRate * Time.deltaTime * _timeController.PlayerTimeScale;
         }
-
     }
 
     #endregion
 
     #region Receive Incoming Damage
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
+    private void OnTriggerEnter2D(Collider2D collision) {
         ReceiveBulletImpact();
     }
 
-    public void ReceiveBulletImpact()
-    {
+    public void ReceiveBulletImpact() {
 
-        if (_shieldLayers_Current > 0)
-        {
+        if (_shieldLayers_Current > 0) {
             _shieldLayers_Current--;
             OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
             _explosionController.RequestExplosion(2, transform.position, Color.green);
-        }
-        else
-        {
+            playerShieldHitSound.Play();
+        } else {
             ReceiveDamage();
+            playerHurtSound.Play();
         }
     }
 
-    
-    private void ReceiveDamage()
-    {
-        
+    private void ReceiveDamage() {
+        hasPerfectHealthThisRound = false;
         AppIntegrity.Assert(_damageLevelsBySubsystem.Length != 0, "_damageLevelsBySubsystem is empty!");
         _explosionController.RequestExplosion(2, transform.position, Color.green);
         int damagedSubsystem = UnityEngine.Random.Range(0, _numberOfSubsystems);
@@ -149,16 +166,12 @@ public class StatsHandler : MonoBehaviour
             damagedSubsystem, _damageLevelsBySubsystem[damagedSubsystem], false);
         CheckForDeath();
     }
-    public void ReceivedTargetedBulletImpact(int targetedSystem)
-    {
-        if (_shieldLayers_Current > 0)
-        {
+    public void ReceivedTargetedBulletImpact(int targetedSystem) {
+        if (_shieldLayers_Current > 0) {
             _shieldLayers_Current--;
             OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
             _explosionController.RequestExplosion(2, transform.position, Color.green);
-        }
-        else
-        {
+        } else {
             ReceiveTargetedDamage(targetedSystem);
         }
     }
@@ -167,8 +180,7 @@ public class StatsHandler : MonoBehaviour
     /// This is a Debug tool. Gameplay damage should be random.
     /// </summary>
     /// <param name="targetedSystem"></param>
-    private void ReceiveTargetedDamage(int targetedSystem)
-    {
+    private void ReceiveTargetedDamage(int targetedSystem) {
         AppIntegrity.Assert(_damageLevelsBySubsystem.Length != 0, "_damageLevelsBySubsystem is empty!");
         _explosionController.RequestExplosion(2, transform.position, Color.green);
 
@@ -179,12 +191,9 @@ public class StatsHandler : MonoBehaviour
     }
 
 
-    private void CheckForDeath()
-    {
-        for (int i = 0; i < _damageLevelsBySubsystem.Length; i++)
-        {
-            if (_damageLevelsBySubsystem[i] >= _maxDamagePossible)
-            {
+    private void CheckForDeath() {
+        for (int i = 0; i < _damageLevelsBySubsystem.Length; i++) {
+            if (_damageLevelsBySubsystem[i] >= _maxDamagePossible) {
                 Debug.LogError("Player subsystem reached 4 hits - game over!");
 
                 ExecuteDeathSequence();
@@ -192,52 +201,66 @@ public class StatsHandler : MonoBehaviour
         }
     }
 
-    private void ExecuteDeathSequence()
-    {
+    private void ExecuteDeathSequence() {
+        isAlive = false;
+        playerDeathSound.Play();
         _explosionController.RequestExplosion(20, transform.position, Color.green);
         OnPlayerDying?.Invoke();
+        HideSprite();
+        Destroy(gameObject, 3f);
+    }
 
-        Destroy(gameObject);
+    void HideSprite() {
+        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        if (spriteRenderer == null) return;
+        spriteRenderer.enabled = false;
     }
 
     #endregion
 
     #region Repair damage
 
-    public void RepairDamage(int subsystemIndex)
-    {
+    public void RepairDamage(int subsystemIndex) {
         if (_timeController.CurrentPhase != TimeController.Phase.C_healing) return;
         AppIntegrity.Assert(subsystemIndex < _damageLevelsBySubsystem.Length, $"RepairDamage tried to repair out-of-bounds subsystem with index: {subsystemIndex}");
+        float previousDamageLevel = _damageLevelsBySubsystem[subsystemIndex];
         _damageLevelsBySubsystem[subsystemIndex] -= _healRate_Normal * Time.unscaledDeltaTime;
-        _damageLevelsBySubsystem[subsystemIndex] = Mathf.Clamp(_damageLevelsBySubsystem[subsystemIndex], 0, _maxDamagePossible);
-        OnReceiveDamage?.Invoke(subsystemIndex, _damageLevelsBySubsystem[subsystemIndex], true);
+        _damageLevelsBySubsystem[subsystemIndex] = Mathf.Clamp(_damageLevelsBySubsystem[subsystemIndex], hasPerfectHealthThisRound ? -1 : 0, _maxDamagePossible);
+        float currentDamageLevel = _damageLevelsBySubsystem[subsystemIndex];
 
-        //Might not need this if HealthUIDriver is emitting particles on that system's
-        //particleFX each frame OnDamageReceived is called
-        //StartCoroutine(RepairingFX());
+        if (currentDamageLevel < previousDamageLevel) {
+            PlayRepairSound();
+            OnReceiveDamage?.Invoke(subsystemIndex, currentDamageLevel, true);
+            if (currentDamageLevel == 0 || currentDamageLevel == -1) OnRepairComplete();
+        }
     }
 
-    bool isPlayingRepairFX = false;
-    IEnumerator RepairingFX()
-    {
-        if (isPlayingRepairFX) yield break;
-        isPlayingRepairFX = true;
+    void PlayRepairSound() {
+        if (!repairSound.IsPlaying()) repairSound.Play();
+        if (cStopRepairSound != null) StopCoroutine(cStopRepairSound);
+        // we want to stop playing the repair sound as soon as RepairDamage stops being called.
+        cStopRepairSound = StartCoroutine(StopRepairSound());
+    }
 
-        // TODO: play particle FX or something
+    void OnRepairComplete() {
+        if (cStopRepairSound != null) StopCoroutine(cStopRepairSound);
+        repairSound.Stop();
+        repairCompleteSound.Play();
+    }
 
-        yield return null;
-        isPlayingRepairFX = false;
+    Coroutine cStopRepairSound;
+    IEnumerator StopRepairSound() {
+        yield return new WaitForSeconds(0.1f);
+        repairSound.Stop();
     }
 
     #endregion
 
     private void ConvertDamageLevelsIntoStatChanges(
-        int subsystem, float damageLevel, bool ignored)
-    {
-        float normalizedDamage = damageLevel/ _maxDamagePossible;
+        int subsystem, float damageLevel, bool ignored) {
+        float normalizedDamage = damageLevel / _maxDamagePossible;
 
-        switch (subsystem)
-        {
+        switch (subsystem) {
             case 0:
                 //Camera zooms in with more damage
                 _statModifiersBySubsystem[0] = Mathf.Lerp(1f, 0.25f, normalizedDamage);

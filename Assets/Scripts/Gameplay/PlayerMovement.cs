@@ -1,12 +1,13 @@
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
-    //[SerializeField] float moveSpeed = 5f;
+    [SerializeField] float moveAccel = 10f;
 
-    StatsHandler statsHandler;
     TimeController timeController;
     InputController input;
+    StatsHandler stats;
 
+    Vector2 desiredHeading;
     Vector2 previousPosition;
     Vector2 velocity;
 
@@ -14,13 +15,14 @@ public class PlayerMovement : MonoBehaviour {
 
     void Awake() {
         input = GetComponent<InputController>();
-        statsHandler = GetComponent<StatsHandler>();
+        stats = GetComponent<StatsHandler>();
         timeController = FindObjectOfType<TimeController>();
     }
 
     void Update() {
+        desiredHeading = Vector2.MoveTowards(stats.IsAlive ? input.Move : Vector2.zero, desiredHeading, moveAccel * Time.deltaTime);
         previousPosition = transform.position;
-        transform.position += (Vector3)input.Move * statsHandler.MoveSpeed * timeController.PlayerTimeScale * Time.deltaTime;
+        transform.position += (Vector3)desiredHeading * stats.MoveSpeed * timeController.PlayerTimeScale * Time.deltaTime;
         velocity = ((Vector2)transform.position - previousPosition) / Time.deltaTime;
     }
 }

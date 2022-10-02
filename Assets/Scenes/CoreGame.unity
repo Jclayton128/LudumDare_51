@@ -3601,14 +3601,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7ce11179c683924f8402a7a7d441751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _phaseCTimeScale: 0.1
   _enemyTimeScales:
   - 0.5
   - 1
-  - 0.1
+  - 0.5
   _playerTimeScales:
   - 1
+  - 0.5
   - 1
-  - 0.1
   _currentEnemyTimeScale: 0
   _currentPlayerTimeScale: 1
 --- !u!114 &2052628006
