@@ -20,18 +20,25 @@ public class TimeController : MonoBehaviour
     {
         0.5f, 1.0f, 0.1f
     };
+
+    [Tooltip("These correspond to Phase A, Phase B, and Phase C, in order")]
+    [SerializeField]
+    private float[] _playerTimeScales = new float[3]
+{
+        1.0f, 1.0f, 0.1f
+};
     float _timeToLerptoNewTimescale = 1f;
 
 
     #endregion
 
     #region State
-    private float _currentEnemyTimeScale;
+    [SerializeField] private float _currentEnemyTimeScale;
     public float EnemyTimeScale {
         get => _currentEnemyTimeScale;
     }
 
-    private float _currentPlayerTimeScale = 1;
+    [SerializeField] private float _currentPlayerTimeScale = 1;
     public float PlayerTimeScale
     {
         get => _currentPlayerTimeScale;
@@ -87,11 +94,14 @@ public class TimeController : MonoBehaviour
        DOTween.To(() => _currentEnemyTimeScale, x => _currentEnemyTimeScale = x,
            _enemyTimeScales[currentPhaseAsInt], _timeToLerptoNewTimescale);
 
+
+        //"Lerp" into new enemy timescale
+        DOTween.To(() => _currentPlayerTimeScale, x => _currentPlayerTimeScale = x,
+            _playerTimeScales[currentPhaseAsInt], _timeToLerptoNewTimescale);
+
         //Tell everything about the new phase
         OnNewPhase?.Invoke(CurrentPhase);
-        //Debug.Log($"Gong: Changing Phase to {CurrentPhase}");
 
-        //The UI driver for the timer will listen to OnNewPhase to update UI elements.
     }
 
     public void DebugInstantPhaseChangeAndTimerReset()

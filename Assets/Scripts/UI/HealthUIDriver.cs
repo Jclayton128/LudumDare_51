@@ -14,6 +14,8 @@ public class HealthUIDriver : MonoBehaviour
     [Tooltip("0: Up, 1: Down, 2: Left, 3: Right")]
     [SerializeField] Image[] _healthStatusImages = null;
 
+    [SerializeField] ParticleSystem[] _healthStatusRepairFX = null;
+
     TimeController _timeController;
 
     #endregion
@@ -21,17 +23,16 @@ public class HealthUIDriver : MonoBehaviour
     //settings
     [SerializeField] float _deployedUIScale = 2.5f;
     [SerializeField] float _deployTime = 0.7f;
-    [SerializeField] ParticleSystem _repairingInProgressParticleFXPrefab = null;
 
     [Tooltip("0: 4/4 hits left, 1: 3/4 hits left, 2: 2/4 hits left, 3: 1/4 hits left, 4: dead")]
     [SerializeField] Color[] _damageLevelsByColor = new Color[5];
+
+    [SerializeField] int _particlesToEmitPerFrameWhileRepairing = 2;
 
     //state
     Tween _resizeTween;
     bool _isUIDeployed = false;
     Vector2 _sizeDeltaRetracted;
-    ParticleSystem.EmissionModule _repairEmissions;
-    ParticleSystem _repairingParticleFX;
 
     private void Awake()
     {
@@ -39,23 +40,19 @@ public class HealthUIDriver : MonoBehaviour
         _timeController.OnNewPhase += HandlePhaseChange;
 
         GameController gc = _timeController.GetComponent<GameController>();
-        gc.OnPlayerSpawned += HandleOnPlayerSpawn;
-        gc.OnPlayerDespawned += HandleOnPlayerDespawn;
+        gc.OnPlayerStartsRun += HandleOnPlayerStartsRun;
+        gc.OnPlayerDies += HandleOnPlayerDies;
 
-        _repairingParticleFX = Instantiate(_repairingInProgressParticleFXPrefab)
-            .GetComponent<ParticleSystem>();
-        _repairEmissions = _repairingParticleFX.emission;
-        _repairEmissions.rateOverTime = 0;
     }
 
-    private void HandleOnPlayerSpawn(GameObject newPlayer)
+    private void HandleOnPlayerStartsRun(GameObject newPlayer)
     {
         StatsHandler sh = newPlayer.GetComponent<StatsHandler>();
         sh.OnReceiveDamage += HandleDamageStatusChanged;
         ResetHealthStatusToFull();
     }
 
-    private void HandleOnPlayerDespawn(GameObject despawningPlayer)
+    private void HandleOnPlayerDies(GameObject despawningPlayer)
     {
         StatsHandler sh = despawningPlayer.GetComponent<StatsHandler>();
         sh.OnReceiveDamage -= HandleDamageStatusChanged;
@@ -70,14 +67,14 @@ public class HealthUIDriver : MonoBehaviour
     {
         for (int i = 0; i < _healthStatusImages.Length; i++)
         {
-            HandleDamageStatusChanged(i, 0);
+            HandleDamageStatusChanged(i, 0, false);
         }
     }
 
     [ContextMenu("debug")]
     private void DebugReceiveDamage()
     {
-        HandleDamageStatusChanged(1, 2);
+        HandleDamageStatusChanged(1, 2, false);
     }
 
     #region Phase Change
@@ -118,56 +115,23 @@ public class HealthUIDriver : MonoBehaviour
     #endregion
 
     #region Subsystem Handlers
-    private void HandleDamageStatusChanged(int subsystemAffected, float newDamageTier)
+    private void HandleDamageStatusChanged(int subsystemAffected, float newDamageTier,
+        bool isRepairedDamaged)
     {
         _healthStatusImages[subsystemAffected].color = ConvertDamageTierIntoColor(newDamageTier);
+
+        if (isRepairedDamaged)
+        {
+            _healthStatusRepairFX[subsystemAffected].
+                    Emit(_particlesToEmitPerFrameWhileRepairing);
+        }
+
     }
 
     private Color ConvertDamageTierIntoColor(float damageTier)
     {
         return _damageLevelsByColor[Mathf.Clamp((int)Mathf.Ceil(damageTier), 0, 4)];
     }
-
-    #endregion
-
-    #region Particle FX for repairs in progress
-
-    /// <summary>
-    /// Call this to begin displaying a system being repaired.
-    /// </summary>
-    /// <param name="subsystemIndex"></param>
-    private void HandleRepairBeginning(int subsystemIndex)
-    {
-        _repairingParticleFX.transform.position = _healthStatusImages[subsystemIndex].rectTransform.position;
-        _repairEmissions.rateOverTime = 10f;
-    }
-
-
-    /// <summary>
-    /// Call this to end displaying a system being repaired.
-    /// </summary>
-    private void HandleRepairEnding()
-    {
-        _repairEmissions.rateOverTime = 0f;
-    }
-
-    //[ContextMenu("Debug repair 0")]
-    //private void DebugTestOnZero()
-    //{
-    //    HandleRepairBeginning(0);
-    //}
-
-    //[ContextMenu("Debug repair 1")]
-    //private void DebugTestOnOne()
-    //{
-    //    HandleRepairBeginning(1);
-    //}
-
-    //[ContextMenu("Debug end ")]
-    //private void DebugTestOff()
-    //{
-    //    HandleRepairEnding();
-    //}
 
     #endregion
 }

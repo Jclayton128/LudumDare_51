@@ -71,10 +71,16 @@ public class PlayerBlasterHandler : MonoBehaviour
         Bullet bullet = _bulletPoolController.RequestBullet(true, _bulletLifetime,
             _muzzleTransform.position, _muzzleTransform.rotation);
 
+        float timeToExpire = Time.time + _bulletLifetime;
+
         //TODO hook this into the player ship's velocity so a
         //fast player doesn't outpace own bullets
-        bullet.GetComponent<Rigidbody2D>().velocity =
-            _muzzleTransform.up * _bulletVelocity;            
+        Vector2 vel = _muzzleTransform.up * _bulletVelocity;
+
+        bullet.SetupForUse(timeToExpire, vel);
+
+
+         
     }
 
 
