@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="ParameterPreset" id="{63da2568-e2b0-4609-9e3f-5472ce1d9b14}">
+		<property name="name">
+			<value>Repair</value>
+		</property>
+		<relationship name="folder">
+			<destination>{3ecf1f0d-12fd-4c13-ae31-ca539d7e6ce5}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{bcd7f292-1241-4705-864e-1d8f2427fe1b}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{bcd7f292-1241-4705-864e-1d8f2427fe1b}">
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+		<relationship name="modulators">
+			<destination>{46d403c0-a5d0-412c-b77a-b96cffee4d76}</destination>
+		</relationship>
+	</object>
+	<object class="ADSRModulator" id="{46d403c0-a5d0-412c-b77a-b96cffee4d76}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>cursorPosition</value>
+		</property>
+		<property name="initialValue">
+			<value>100</value>
+		</property>
+		<property name="attackTime">
+			<value>865.384644</value>
+		</property>
+		<property name="peakValue">
+			<value>100</value>
+		</property>
+		<property name="decayTime">
+			<value>3826.92285</value>
+		</property>
+		<property name="sustainValue">
+			<value>100</value>
+		</property>
+		<property name="releaseTime">
+			<value>440</value>
+		</property>
+	</object>
+</objects>

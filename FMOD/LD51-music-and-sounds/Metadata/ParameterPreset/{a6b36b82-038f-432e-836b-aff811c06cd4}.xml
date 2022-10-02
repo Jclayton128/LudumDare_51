@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="ParameterPreset" id="{a6b36b82-038f-432e-836b-aff811c06cd4}">
+		<property name="name">
+			<value>Auto-Stop</value>
+		</property>
+		<relationship name="folder">
+			<destination>{f321a2f5-4998-4e0a-9f07-0ad0384d49e7}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{445ba475-463d-41c7-98b7-c19ac1e144ff}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{445ba475-463d-41c7-98b7-c19ac1e144ff}">
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+		<relationship name="modulators">
+			<destination>{80e34e09-42cf-4179-ac1d-6b47604fd1f8}</destination>
+		</relationship>
+	</object>
+	<object class="ADSRModulator" id="{80e34e09-42cf-4179-ac1d-6b47604fd1f8}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>cursorPosition</value>
+		</property>
+		<property name="initialValue">
+			<value>100</value>
+		</property>
+		<property name="attackTime">
+			<value>2615.38501</value>
+		</property>
+		<property name="peakValue">
+			<value>100</value>
+		</property>
+		<property name="decayTime">
+			<value>865.384644</value>
+		</property>
+		<property name="sustainValue">
+			<value>100</value>
+		</property>
+	</object>
+</objects>
