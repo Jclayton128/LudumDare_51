@@ -11,23 +11,32 @@ public class RepairMouseHandler : MonoBehaviour
     [Space]
     [Space]
     [Header("UI / Event")]
-    [SerializeField] GraphicRaycaster m_Raycaster;
-    [SerializeField] EventSystem m_EventSystem;
+
+    GraphicRaycaster m_Raycaster;
+    EventSystem m_EventSystem;
 
     PointerEventData m_PointerEventData;
+
+    GameObject player;
     StatsHandler stats;
     InputController input;
 
+    float timeDebounceFindPlayer = 0f;
+
     private void Awake()
     {
-        GameObject player = GameObject.FindWithTag("Player");
-        AppIntegrity.Assert(player != null, "CANNOT FIND PLAYER - has the player spawned?");
-        stats = player.GetComponent<StatsHandler>();
-        input = player.GetComponent<InputController>();
+        FindPlayer();
+        m_Raycaster = FindObjectOfType<GraphicRaycaster>();
+        m_EventSystem = FindObjectOfType<EventSystem>();
     }
 
     void Update()
     {
+        if (player == null)
+        {
+            FindPlayer();
+            return;
+        }
         // SOLUTION BELOW FROM THIS FORUM THREAD: https://forum.unity.com/threads/how-to-raycast-onto-a-unity-canvas-ui-image.855259/
         if (!input.IsFirePressed) return;
         //Set up the new Pointer Event
@@ -46,5 +55,21 @@ public class RepairMouseHandler : MonoBehaviour
         if (!input.IsFirePressed) return;
         if (raycastedGameObject != gameObject) return;
         stats.RepairDamage(subsystemIndex);
+    }
+
+    void FindPlayer()
+    {
+        if (timeDebounceFindPlayer > 0)
+        {
+            timeDebounceFindPlayer -= Time.deltaTime;
+            return;
+        }
+        timeDebounceFindPlayer = 0.2f;
+        player = GameObject.FindWithTag("Player");
+        if (player == null) return;
+        stats = player.GetComponent<StatsHandler>();
+        input = player.GetComponent<InputController>();
+        AppIntegrity.Assert(stats != null, "stats should not be null");
+        AppIntegrity.Assert(input != null, "input should not be null");
     }
 }
