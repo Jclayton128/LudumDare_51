@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputController : MonoBehaviour
-{
+public class InputController : MonoBehaviour {
     [SerializeField][Range(0f, 1f)] float dpadDeadZone = 0.2f;
+    [SerializeField] Texture2D mouseReticleTexture;
 
     #region State
     Vector2 move;
@@ -20,51 +20,65 @@ public class InputController : MonoBehaviour
     public Vector2 MousePositionScreen => mousePositionScreen;
     public Vector2 MousePositionNormalized => mousePositionNormalized;
     public bool IsFirePressed => isFirePressed;
+    public bool IsInputKeyboardAndMouse => playerInput.currentControlScheme == "Keyboard&Mouse";
     #endregion
 
     #region Cached
     new Camera camera;
     StatsHandler stats;
+    PlayerInput playerInput;
+    string prevControlScheme;
     #endregion
 
-    void Update()
-    {
+    void Awake() {
+        if (camera == null) camera = Camera.main;
+        playerInput = GetComponent<PlayerInput>();
+        playerInput.camera = camera;
+    }
+
+    void Update() {
         if (camera == null) camera = Camera.main;
         mousePositionScreen = Mouse.current.position.ReadValue();
         mousePositionWorld = camera.ScreenToWorldPoint(mousePositionScreen) - transform.position;
         mousePositionNormalized = camera.ScreenToViewportPoint(mousePositionScreen);
-
+        SetMouseStyle();
         // Debug.Log($"move={move}, look={look}, mouseNorm={mousePositionNormalized}, mouseWorld={mousePositionWorld}");
     }
 
-    void OnMove(InputValue value)
-    {
+    void OnMove(InputValue value) {
         move = value.Get<Vector2>();
     }
 
-    void OnLook(InputValue value)
-    {
+    void OnLook(InputValue value) {
         look = value.Get<Vector2>();
     }
 
-    void OnFire(InputValue value)
-    {
+    void OnFire(InputValue value) {
         isFirePressed = value.isPressed;
     }
 
-    void OnHeal(InputValue value)
-    {
+    void OnHeal(InputValue value) {
         if (!value.isPressed) return;
         if (stats == null) stats = GetComponent<StatsHandler>();
         int subsystemIndex = GetSubsystemRepairIndex(value.Get<Vector2>());
         stats.RepairDamage(subsystemIndex);
     }
 
-    int GetSubsystemRepairIndex(Vector2 dpad)
-    {
+    int GetSubsystemRepairIndex(Vector2 dpad) {
         if (dpad.y > dpadDeadZone) return 0;
         if (dpad.y < -dpadDeadZone) return 1;
         if (dpad.x > dpadDeadZone) return 2;
         return 3;
+    }
+
+    void SetMouseStyle() {
+        if (mouseReticleTexture == null) return;
+        if (playerInput.currentControlScheme == prevControlScheme) return;
+        if (!IsInputKeyboardAndMouse) {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            return;
+        }
+        Cursor.SetCursor(mouseReticleTexture, Vector2.zero, CursorMode.Auto);
+        prevControlScheme = playerInput.currentControlScheme;
     }
 }
