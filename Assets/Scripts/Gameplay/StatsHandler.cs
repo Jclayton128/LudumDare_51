@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FMODUnity;
 using UnityEngine;
 
-public class StatsHandler : MonoBehaviour
-{
+public class StatsHandler : MonoBehaviour {
     public Action<int> OnChangeShieldLayerCount;
 
     /// <summary>
@@ -27,9 +27,10 @@ public class StatsHandler : MonoBehaviour
     //settings
     [SerializeField] float _moveSpeed_Normal = 10f;
     [SerializeField] float _rotationSpeed_Normal = 360f;
-
     [SerializeField] float _shieldRegenRate_Normal = 0.3f;
     [SerializeField] float _healRate_Normal = 0.3f;
+    [SerializeField] StudioEventEmitter repairSound;
+    [SerializeField] StudioEventEmitter repairCompleteSound;
     const float _requiredRegenLevelPerShield = 1f;
     const int _shieldLayers_Max = 3;
 
@@ -55,13 +56,13 @@ public class StatsHandler : MonoBehaviour
     public float RotationSpeed { get => _rotationSpeed_Current; }
     public float FireRate { get => _fireRate_Current; }
 
-    private void Awake()
-    {
+    private void Awake() {
         _timeController = FindObjectOfType<TimeController>();
+        AppIntegrity.Assert(repairSound != null);
+        AppIntegrity.Assert(repairCompleteSound != null);
     }
 
-    private void Start()
-    {
+    private void Start() {
         _moveSpeed_Current = _moveSpeed_Normal;
         _rotationSpeed_Current = _rotationSpeed_Normal;
         _shieldRegenRate_Current = _shieldRegenRate_Normal;
@@ -74,24 +75,20 @@ public class StatsHandler : MonoBehaviour
     }
 
     #region Flow over time
-    private void Update()
-    {
+    private void Update() {
         RegenerateShield();
         _fireRate_Current = _timeController.IsPhaseB ? _fireRate_Fast : _fireRate_Normal;
     }
 
-    private void RegenerateShield()
-    {
-        if (_shieldChargeLevel_Current >= _requiredRegenLevelPerShield)
-        {
+    private void RegenerateShield() {
+        if (_shieldChargeLevel_Current >= _requiredRegenLevelPerShield) {
             _shieldChargeLevel_Current = 0;
             _shieldLayers_Current++;
             OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
         }
 
         if (_shieldLayers_Current >= _shieldLayers_Max) return;
-        else
-        {
+        else {
             _shieldChargeLevel_Current +=
                 _shieldRegenRate_Current * Time.deltaTime * _timeController.PlayerTimeScale;
         }
@@ -102,22 +99,17 @@ public class StatsHandler : MonoBehaviour
 
     #region Receive Incoming Damage
 
-    public void ReceiveImpact()
-    {
+    public void ReceiveImpact() {
         Debug.Log("receiving impact");
-        if (_shieldLayers_Current > 0)
-        {
+        if (_shieldLayers_Current > 0) {
             _shieldLayers_Current--;
             OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
-        }
-        else
-        {
+        } else {
             ReceiveDamage();
         }
     }
 
-    private void ReceiveDamage()
-    {
+    private void ReceiveDamage() {
         AppIntegrity.Assert(_damageLevelsBySubsystem.Length != 0, "_damageLevelsBySubsystem is empty!");
         int damagedSubsystem = UnityEngine.Random.Range(0, _numberOfSubsystems);
         _damageLevelsBySubsystem[damagedSubsystem]++;
@@ -126,12 +118,9 @@ public class StatsHandler : MonoBehaviour
         CheckForDeath();
     }
 
-    private void CheckForDeath()
-    {
-        for (int i = 0; i < _damageLevelsBySubsystem.Length; i++)
-        {
-            if (_damageLevelsBySubsystem[i] >= _maxDamagePossible)
-            {
+    private void CheckForDeath() {
+        for (int i = 0; i < _damageLevelsBySubsystem.Length; i++) {
+            if (_damageLevelsBySubsystem[i] >= _maxDamagePossible) {
                 Debug.LogError("Player subsystem reached 4 hits - game over!");
 
                 ExecuteDeathSequence();
@@ -139,8 +128,7 @@ public class StatsHandler : MonoBehaviour
         }
     }
 
-    private void ExecuteDeathSequence()
-    {
+    private void ExecuteDeathSequence() {
         OnPlayerDying?.Invoke();
 
         Destroy(gameObject);
@@ -150,29 +138,38 @@ public class StatsHandler : MonoBehaviour
 
     #region Repair damage
 
-    public void RepairDamage(int subsystemIndex)
-    {
+    public void RepairDamage(int subsystemIndex) {
         if (_timeController.CurrentPhase != TimeController.Phase.C_healing) return;
         AppIntegrity.Assert(subsystemIndex < _damageLevelsBySubsystem.Length, $"RepairDamage tried to repair out-of-bounds subsystem with index: {subsystemIndex}");
+        float previousDamageLevel = _damageLevelsBySubsystem[subsystemIndex];
         _damageLevelsBySubsystem[subsystemIndex] -= _healRate_Normal * Time.deltaTime;
         _damageLevelsBySubsystem[subsystemIndex] = Mathf.Clamp(_damageLevelsBySubsystem[subsystemIndex], 0, _maxDamagePossible);
-        OnReceiveDamage?.Invoke(subsystemIndex, _damageLevelsBySubsystem[subsystemIndex], true);
+        float currentDamageLevel = _damageLevelsBySubsystem[subsystemIndex];
 
-        //Might not need this if HealthUIDriver is emitting particles on that system's
-        //particleFX each frame OnDamageReceived is called
-        //StartCoroutine(RepairingFX());
+        if (currentDamageLevel < previousDamageLevel) {
+            PlayRepairSound();
+            OnReceiveDamage?.Invoke(subsystemIndex, currentDamageLevel, true);
+            if (currentDamageLevel == 0) OnRepairComplete();
+        }
     }
 
-    bool isPlayingRepairFX = false;
-    IEnumerator RepairingFX()
-    {
-        if (isPlayingRepairFX) yield break;
-        isPlayingRepairFX = true;
+    void PlayRepairSound() {
+        if (!repairSound.IsPlaying()) repairSound.Play();
+        if (cStopRepairSound != null) StopCoroutine(cStopRepairSound);
+        // we want to stop playing the repair sound as soon as RepairDamage stops being called.
+        cStopRepairSound = StartCoroutine(StopRepairSound());
+    }
 
-        // TODO: play particle FX or something
+    void OnRepairComplete() {
+        if (cStopRepairSound != null) StopCoroutine(cStopRepairSound);
+        repairSound.Stop();
+        repairCompleteSound.Play();
+    }
 
-        yield return null;
-        isPlayingRepairFX = false;
+    Coroutine cStopRepairSound;
+    IEnumerator StopRepairSound() {
+        yield return new WaitForSeconds(0.1f);
+        repairSound.Stop();
     }
 
     #endregion
