@@ -16,17 +16,15 @@ public class StatsHandler : MonoBehaviour {
     /// </summary>
     public Action<int, float, bool> OnReceiveDamage;
 
-    /// <summary>
-    /// Argument is the subsystem (0-3)
-    /// </summary>
-    public Action<int> OnBeginRepairsToSystem;
-    public Action<int> OnEndRepairsToSystem;
+
     public Action OnPlayerDying;
 
     //Scene References
     TimeController _timeController;
 
     //settings
+    [SerializeField] float _cameraZoom_Normal = 5f;
+
     [SerializeField] float _moveSpeed_Normal = 10f;
     [SerializeField] float _rotationSpeed_Normal = 360f;
     [SerializeField] float _shieldRegenRate_Normal = 0.3f;
@@ -50,18 +48,31 @@ public class StatsHandler : MonoBehaviour {
     //0 is full, 4 is dead.
     [SerializeField] float[] _damageLevelsBySubsystem = new float[4] { 0f, 0f, 0f, 0f };
 
-    float _moveSpeed_Current;
-    float _rotationSpeed_Current;
-    float _shieldRegenRate_Current;
+    //These modifiers are multiplied against appropriate system.
+    //They are changed as the ship received/repairs damage
+    [SerializeField] float[] _statModifiersBySubsystem = new float[4] { 1f, 1f, 1f, 1f };
+
+
+    //float _moveSpeed_Current;
+    //float _rotationSpeed_Current;
+    //float _shieldRegenRate_Current;
     [SerializeField] float _shieldChargeLevel_Current;
     int _shieldLayers_Current;
     float _fireRate_Current;
     bool isAlive = true;
 
-    public float MoveSpeed { get => _moveSpeed_Current; }
-    public float RotationSpeed { get => _rotationSpeed_Current; }
-    public float FireRate { get => _fireRate_Current; }
     public bool IsAlive => isAlive;
+
+    public float CameraZoom { get => _cameraZoom_Normal * _statModifiersBySubsystem[0]; }
+
+    public float ShieldRegenRate { get => _shieldRegenRate_Normal * _statModifiersBySubsystem[1]; }
+
+    public float MoveSpeed { get => _moveSpeed_Normal * _statModifiersBySubsystem[2]; }
+
+    public float FireRate { get => _fireRate_Current * _statModifiersBySubsystem[3]; }
+
+    public float RotationSpeed { get => _rotationSpeed_Normal; }
+
 
     private void Awake() {
         _timeController = FindObjectOfType<TimeController>();
@@ -74,12 +85,10 @@ public class StatsHandler : MonoBehaviour {
     }
 
     private void Start() {
-        _moveSpeed_Current = _moveSpeed_Normal;
-        _rotationSpeed_Current = _rotationSpeed_Normal;
-        _shieldRegenRate_Current = _shieldRegenRate_Normal;
+        this.OnReceiveDamage += ConvertDamageLevelsIntoStatChanges;
+
         _shieldChargeLevel_Current = 0;
         _shieldLayers_Current = _shieldLayers_Max;
-        _fireRate_Current = _fireRate_Normal;
 
         OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
         AppIntegrity.Assert(_numberOfSubsystems == _damageLevelsBySubsystem.Length, "_damageLevelsBySubsystem.Length does not match _numberOfSubsystems!!!");
@@ -101,7 +110,7 @@ public class StatsHandler : MonoBehaviour {
         if (_shieldLayers_Current >= _shieldLayers_Max) return;
         else {
             _shieldChargeLevel_Current +=
-                _shieldRegenRate_Current * Time.deltaTime * _timeController.PlayerTimeScale;
+                ShieldRegenRate * Time.deltaTime * _timeController.PlayerTimeScale;
         }
 
     }
@@ -128,14 +137,38 @@ public class StatsHandler : MonoBehaviour {
     }
 
     private void ReceiveDamage() {
-        _explosionController.RequestExplosion(2, transform.position, Color.green);
         AppIntegrity.Assert(_damageLevelsBySubsystem.Length != 0, "_damageLevelsBySubsystem is empty!");
+        _explosionController.RequestExplosion(2, transform.position, Color.green);
         int damagedSubsystem = UnityEngine.Random.Range(0, _numberOfSubsystems);
-        _damageLevelsBySubsystem[damagedSubsystem]++;
+        _damageLevelsBySubsystem[damagedSubsystem] += 1f;
         OnReceiveDamage?.Invoke(
             damagedSubsystem, _damageLevelsBySubsystem[damagedSubsystem], false);
         CheckForDeath();
     }
+    public void ReceivedTargetedBulletImpact(int targetedSystem) {
+        if (_shieldLayers_Current > 0) {
+            _shieldLayers_Current--;
+            OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
+            _explosionController.RequestExplosion(2, transform.position, Color.green);
+        } else {
+            ReceiveTargetedDamage(targetedSystem);
+        }
+    }
+
+    /// <summary>
+    /// This is a Debug tool. Gameplay damage should be random.
+    /// </summary>
+    /// <param name="targetedSystem"></param>
+    private void ReceiveTargetedDamage(int targetedSystem) {
+        AppIntegrity.Assert(_damageLevelsBySubsystem.Length != 0, "_damageLevelsBySubsystem is empty!");
+        _explosionController.RequestExplosion(2, transform.position, Color.green);
+
+        _damageLevelsBySubsystem[targetedSystem] += 1f;
+        OnReceiveDamage?.Invoke(
+            targetedSystem, _damageLevelsBySubsystem[targetedSystem], false);
+        CheckForDeath();
+    }
+
 
     private void CheckForDeath() {
         for (int i = 0; i < _damageLevelsBySubsystem.Length; i++) {
@@ -201,4 +234,34 @@ public class StatsHandler : MonoBehaviour {
     }
 
     #endregion
+
+    private void ConvertDamageLevelsIntoStatChanges(
+        int subsystem, float damageLevel, bool ignored) {
+        float normalizedDamage = damageLevel / _maxDamagePossible;
+
+        switch (subsystem) {
+            case 0:
+                //Camera zooms in with more damage
+                _statModifiersBySubsystem[0] = Mathf.Lerp(1f, 0.25f, normalizedDamage);
+                break;
+
+            case 1:
+                // Shield regen rate drops with more damage
+                _statModifiersBySubsystem[1] = Mathf.Lerp(1f, 0.25f, normalizedDamage);
+                break;
+
+            case 2:
+                // Translate speed drops with more damage
+                _statModifiersBySubsystem[2] = Mathf.Lerp(1f, 0.5f, normalizedDamage);
+                break;
+
+            case 3:
+                // Time between shots increases with more damage
+                _statModifiersBySubsystem[3] = Mathf.Lerp(1f, 4f, normalizedDamage);
+                break;
+
+        }
+    }
+
+
 }
