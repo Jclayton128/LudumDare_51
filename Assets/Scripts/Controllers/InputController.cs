@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class InputController : MonoBehaviour
 {
+    [SerializeField][Range(0f, 1f)] float dpadDeadZone = 0.2f;
+
     #region State
     Vector2 move;
     Vector2 look; // note - look only applies to gamepad R stick
@@ -22,6 +24,7 @@ public class InputController : MonoBehaviour
 
     #region Cached
     new Camera camera;
+    StatsHandler stats;
     #endregion
 
     void Update()
@@ -47,5 +50,21 @@ public class InputController : MonoBehaviour
     void OnFire(InputValue value)
     {
         isFirePressed = value.isPressed;
+    }
+
+    void OnHeal(InputValue value)
+    {
+        if (!value.isPressed) return;
+        if (stats == null) stats = GetComponent<StatsHandler>();
+        int subsystemIndex = GetSubsystemRepairIndex(value.Get<Vector2>());
+        stats.RepairDamage(subsystemIndex);
+    }
+
+    int GetSubsystemRepairIndex(Vector2 dpad)
+    {
+        if (dpad.y > dpadDeadZone) return 0;
+        if (dpad.y < -dpadDeadZone) return 1;
+        if (dpad.x > dpadDeadZone) return 2;
+        return 3;
     }
 }
