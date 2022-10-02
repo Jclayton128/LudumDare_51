@@ -18,6 +18,7 @@ public class InputController : MonoBehaviour {
     public Vector2 Move => move;
     public Vector2 Look => look;
     public Vector2 MousePositionScreen => mousePositionScreen;
+    public Vector2 MousePositionWorld => mousePositionWorld;
     public Vector2 MousePositionNormalized => mousePositionNormalized;
     public bool IsFirePressed => isFirePressed;
     public bool IsInputKeyboardAndMouse => playerInput.currentControlScheme == "Keyboard&Mouse";
