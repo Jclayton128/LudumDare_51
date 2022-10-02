@@ -22,9 +22,21 @@ public class DebugController : MonoBehaviour
 
     private void ListenForInstaDamage()
     {
-        if (Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            FindObjectOfType<StatsHandler>().ReceiveBulletImpact();
+            FindObjectOfType<StatsHandler>().ReceivedTargetedBulletImpact(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            FindObjectOfType<StatsHandler>().ReceivedTargetedBulletImpact(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            FindObjectOfType<StatsHandler>().ReceivedTargetedBulletImpact(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            FindObjectOfType<StatsHandler>().ReceivedTargetedBulletImpact(3);
         }
     }
 

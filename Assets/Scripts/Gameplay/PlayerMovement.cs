@@ -1,8 +1,9 @@
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
-    [SerializeField] float moveSpeed = 5f;
+    //[SerializeField] float moveSpeed = 5f;
 
+    StatsHandler statsHandler;
     TimeController timeController;
     InputController input;
 
@@ -13,12 +14,13 @@ public class PlayerMovement : MonoBehaviour {
 
     void Awake() {
         input = GetComponent<InputController>();
+        statsHandler = GetComponent<StatsHandler>();
         timeController = FindObjectOfType<TimeController>();
     }
 
     void Update() {
         previousPosition = transform.position;
-        transform.position += (Vector3)input.Move * moveSpeed * timeController.PlayerTimeScale * Time.deltaTime;
+        transform.position += (Vector3)input.Move * statsHandler.MoveSpeed * timeController.PlayerTimeScale * Time.deltaTime;
         velocity = ((Vector2)transform.position - previousPosition) / Time.deltaTime;
     }
 }
