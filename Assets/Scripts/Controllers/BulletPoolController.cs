@@ -35,7 +35,7 @@ public class BulletPoolController : MonoBehaviour
 
     }
 
-    public Bullet RequestBullet(bool isRequestingPlayerBullet, float lifetime, 
+    public Bullet RequestBullet(bool isRequestingPlayerBullet, 
         Vector3 desiredLocation, Quaternion desiredRotation)
     {
         Bullet bullet;
