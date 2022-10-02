@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{566f6734-5807-4027-b07c-c509c4b7975b}">
+		<property name="assetPath">
+			<value>Explosions/sfx_exp_short_soft1.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>0.47460317460317458</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{5768edba-5cb8-4d4a-a867-5cd71427474d}</destination>
+		</relationship>
+	</object>
+</objects>

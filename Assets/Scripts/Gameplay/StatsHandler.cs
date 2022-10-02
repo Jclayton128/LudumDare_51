@@ -37,6 +37,7 @@ public class StatsHandler : MonoBehaviour
     const int _maxDamagePossible = 4;
     //Seconds between shots - lower is better;
     [SerializeField] float _fireRate_Normal = 0.25f;
+    [SerializeField] float _fireRate_Fast = 0.1f;
 
     //state
 
@@ -76,6 +77,7 @@ public class StatsHandler : MonoBehaviour
     private void Update()
     {
         RegenerateShield();
+        _fireRate_Current = _timeController.IsPhaseB ? _fireRate_Fast : _fireRate_Normal;
     }
 
     private void RegenerateShield()
@@ -155,7 +157,7 @@ public class StatsHandler : MonoBehaviour
         _damageLevelsBySubsystem[subsystemIndex] -= _healRate_Normal * Time.deltaTime;
         _damageLevelsBySubsystem[subsystemIndex] = Mathf.Clamp(_damageLevelsBySubsystem[subsystemIndex], 0, _maxDamagePossible);
         OnReceiveDamage?.Invoke(subsystemIndex, _damageLevelsBySubsystem[subsystemIndex], true);
-        
+
         //Might not need this if HealthUIDriver is emitting particles on that system's
         //particleFX each frame OnDamageReceived is called
         //StartCoroutine(RepairingFX());

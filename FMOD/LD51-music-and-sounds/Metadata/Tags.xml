@@ -4,5 +4,55 @@
 		<property name="name">
 			<value>Master</value>
 		</property>
+		<relationship name="items">
+			<destination>{b720e140-440f-47aa-81f6-1a5cb8717e00}</destination>
+			<destination>{cedafc98-cabd-4875-90a5-c804cf4a5dbb}</destination>
+			<destination>{be588528-9aca-47ab-97e0-2cdc9ca6cba7}</destination>
+			<destination>{df380246-5d5e-4b4c-bbc8-23514d2e6972}</destination>
+			<destination>{6e620659-c8fc-4b84-b40d-b4fa6d0abcbc}</destination>
+			<destination>{b5a10fe0-9311-489f-8df0-40a3d611300f}</destination>
+			<destination>{9cbc3baa-34ac-4bb1-bdfc-9e97c05544ae}</destination>
+			<destination>{77070213-9855-4612-9c71-458dc18504d4}</destination>
+		</relationship>
+	</object>
+	<object class="Tag" id="{b720e140-440f-47aa-81f6-1a5cb8717e00}">
+		<property name="name">
+			<value>ahdsr-modulator</value>
+		</property>
+	</object>
+	<object class="Tag" id="{cedafc98-cabd-4875-90a5-c804cf4a5dbb}">
+		<property name="name">
+			<value>async</value>
+		</property>
+	</object>
+	<object class="Tag" id="{be588528-9aca-47ab-97e0-2cdc9ca6cba7}">
+		<property name="name">
+			<value>loop-region</value>
+		</property>
+	</object>
+	<object class="Tag" id="{df380246-5d5e-4b4c-bbc8-23514d2e6972}">
+		<property name="name">
+			<value>multi-instrument</value>
+		</property>
+	</object>
+	<object class="Tag" id="{6e620659-c8fc-4b84-b40d-b4fa6d0abcbc}">
+		<property name="name">
+			<value>parameter</value>
+		</property>
+	</object>
+	<object class="Tag" id="{b5a10fe0-9311-489f-8df0-40a3d611300f}">
+		<property name="name">
+			<value>random-modulator</value>
+		</property>
+	</object>
+	<object class="Tag" id="{9cbc3baa-34ac-4bb1-bdfc-9e97c05544ae}">
+		<property name="name">
+			<value>send</value>
+		</property>
+	</object>
+	<object class="Tag" id="{77070213-9855-4612-9c71-458dc18504d4}">
+		<property name="name">
+			<value>spatializer</value>
+		</property>
 	</object>
 </objects>

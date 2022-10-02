@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EncodableAsset" id="{bf85b980-b6d3-4393-b1d1-f1d6b542069d}">
+		<property name="assetPath">
+			<value>OutOfAmmo/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{5768edba-5cb8-4d4a-a867-5cd71427474d}</destination>
+		</relationship>
+	</object>
+</objects>

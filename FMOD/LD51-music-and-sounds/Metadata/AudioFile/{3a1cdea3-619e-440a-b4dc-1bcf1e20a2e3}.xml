@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{3a1cdea3-619e-440a-b4dc-1bcf1e20a2e3}">
+		<property name="assetPath">
+			<value>Shots/Lasers/191594__leszek-szary__laser.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>0.83283446712018139</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{5768edba-5cb8-4d4a-a867-5cd71427474d}</destination>
+		</relationship>
+	</object>
+</objects>
