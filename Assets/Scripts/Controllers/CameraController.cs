@@ -19,7 +19,11 @@ public class CameraController : MonoBehaviour
     private void HandleOnDamageReceived(int system, float f, bool b)
     {
         if (system != 0) return;
-        Debug.Log("changing zoom?");
+        Invoke(nameof(ChangeZoomAPotatoLater), 0.1f);
+    }
+
+    private void ChangeZoomAPotatoLater()
+    {
         _cvc.m_Lens.OrthographicSize = _sh.CameraZoom;
     }
    
