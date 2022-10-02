@@ -91,7 +91,7 @@ public class PlayerBlasterHandler : MonoBehaviour {
     }
 
     private void Fire() {
-        Bullet bullet = _bulletPoolController.RequestBullet(true, _bulletLifetime,
+        Bullet bullet = _bulletPoolController.RequestBullet(true,
             _muzzleTransform.position, _muzzleTransform.rotation);
 
         Vector2 vel = _muzzleTransform.up * _bulletVelocity;

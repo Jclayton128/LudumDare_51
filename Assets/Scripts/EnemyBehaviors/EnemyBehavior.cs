@@ -65,7 +65,10 @@ public class EnemyBehavior : MonoBehaviour
     private void Fire()
     {
         float lifetime = (_range / _weaponSpeed) * 1.5f;
-        Quaternion rot = Quaternion.LookRotation(_moveDirection, Vector3.up;
-        _bulletPoolController.RequestBullet(false, lifetime, transform.position, rot);
+        Vector2 velocity = Vector2.one; //actual velocity
+        Quaternion rot = Quaternion.LookRotation(_moveDirection, Vector3.up);
+        Bullet bullet = _bulletPoolController.RequestBullet(
+            false, transform.position, rot);
+        bullet.SetupForUse(lifetime, velocity);
     }
 }
