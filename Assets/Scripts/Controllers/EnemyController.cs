@@ -67,7 +67,7 @@ public class EnemyController : MonoBehaviour
                 enemy = _pooledEnemies.Dequeue ();
                 enemy.SetActive(true);
             }
-            enemy.GetComponent<Entity>().SetUpForUse();
+            enemy.GetComponent<Entity>().Reset();
             Vector2 pos = (Vector2)_gameController.CurrentPlayer.transform.position +
                 (FindPointOnUnitCircleCircumference() * _spawnPerimeterRadius);
             enemy.transform.position = pos;
