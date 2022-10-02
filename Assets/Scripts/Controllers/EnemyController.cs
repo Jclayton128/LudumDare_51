@@ -21,7 +21,7 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         _gameController = GetComponent<GameController>();
-        _gameController.OnPlayerSpawned += HandleOnPlayerSpawn;
+        _gameController.OnPlayerStartsRun += HandleOnPlayerSpawn;
 
         _timeController = _gameController.GetComponent<TimeController>();
     }

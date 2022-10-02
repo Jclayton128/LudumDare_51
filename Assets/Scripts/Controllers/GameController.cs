@@ -1,23 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System;
 
 public class GameController : MonoBehaviour
 {
     UIController _uiController;
 
-    public Action<GameObject> OnPlayerSpawned;
-    public Action<GameObject> OnPlayerDespawned;
-
-    //settings
-    [SerializeField] GameObject _playerPrefab = null;
+    public Action<GameObject> OnPlayerStartsRun;
+    public Action<GameObject> OnPlayerDies;
 
     //state
     public bool IsGameRunning = false;
     GameObject _currentPlayer;
     public GameObject CurrentPlayer { get => _currentPlayer; }
-    StatsHandler _currentPlayerStatsHandler;
 
     private void Awake()
     {
@@ -31,12 +28,12 @@ public class GameController : MonoBehaviour
 
     public void StartNewGame()
     {
-        _currentPlayer = Instantiate(_playerPrefab, Vector2.zero, Quaternion.identity);
+        _currentPlayer = GameObject.FindGameObjectWithTag("Player");
         _currentPlayer.GetComponent<StatsHandler>().OnPlayerDying += HandlePlayerDying;
         
         _uiController.SetContext(UIController.Context.InGame);
         IsGameRunning = true;
-        OnPlayerSpawned?.Invoke(_currentPlayer);
+        OnPlayerStartsRun?.Invoke(_currentPlayer);
     }
 
     public void HandlePlayerDying()
@@ -44,5 +41,10 @@ public class GameController : MonoBehaviour
         _uiController.SetContext(UIController.Context.PostGame);
         _currentPlayer.GetComponent<StatsHandler>().OnPlayerDying -= HandlePlayerDying;
         IsGameRunning = false;
+    }
+
+    public void HandleRestartMetaGameLoop()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

@@ -39,8 +39,8 @@ public class HealthUIDriver : MonoBehaviour
         _timeController.OnNewPhase += HandlePhaseChange;
 
         GameController gc = _timeController.GetComponent<GameController>();
-        gc.OnPlayerSpawned += HandleOnPlayerSpawn;
-        gc.OnPlayerDespawned += HandleOnPlayerDespawn;
+        gc.OnPlayerStartsRun += HandleOnPlayerStartsRun;
+        gc.OnPlayerDies += HandleOnPlayerDies;
 
         _repairingParticleFX = Instantiate(_repairingInProgressParticleFXPrefab)
             .GetComponent<ParticleSystem>();
@@ -48,14 +48,14 @@ public class HealthUIDriver : MonoBehaviour
         _repairEmissions.rateOverTime = 0;
     }
 
-    private void HandleOnPlayerSpawn(GameObject newPlayer)
+    private void HandleOnPlayerStartsRun(GameObject newPlayer)
     {
         StatsHandler sh = newPlayer.GetComponent<StatsHandler>();
         sh.OnReceiveDamage += HandleDamageStatusChanged;
         ResetHealthStatusToFull();
     }
 
-    private void HandleOnPlayerDespawn(GameObject despawningPlayer)
+    private void HandleOnPlayerDies(GameObject despawningPlayer)
     {
         StatsHandler sh = despawningPlayer.GetComponent<StatsHandler>();
         sh.OnReceiveDamage -= HandleDamageStatusChanged;

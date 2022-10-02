@@ -14,10 +14,10 @@ public class ShieldUIDriver : MonoBehaviour
     private void Awake()
     {
         GameController gc = FindObjectOfType<GameController>();
-        gc.OnPlayerSpawned += HandleOnPlayerSpawn;
-        gc.OnPlayerDespawned += HandleOnPlayerDespawn;
+        gc.OnPlayerStartsRun += HandleOnPlayerStartsRun;
+        gc.OnPlayerDies += HandleOnPlayerDespawn;
     }
-    private void HandleOnPlayerSpawn(GameObject newPlayer)
+    private void HandleOnPlayerStartsRun(GameObject newPlayer)
     {
         StatsHandler sh = newPlayer.GetComponent<StatsHandler>();
         sh.OnChangeShieldLayerCount += HandleUpdatedShieldLayerCount;
