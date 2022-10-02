@@ -14,7 +14,9 @@ public class GameController : MonoBehaviour
     [SerializeField] GameObject _playerPrefab = null;
 
     //state
+    public bool IsGameRunning = false;
     GameObject _currentPlayer;
+    public GameObject CurrentPlayer { get => _currentPlayer; }
     StatsHandler _currentPlayerStatsHandler;
 
     private void Awake()
@@ -33,6 +35,7 @@ public class GameController : MonoBehaviour
         _currentPlayer.GetComponent<StatsHandler>().OnPlayerDying += HandlePlayerDying;
         
         _uiController.SetContext(UIController.Context.InGame);
+        IsGameRunning = true;
         OnPlayerSpawned?.Invoke(_currentPlayer);
     }
 
@@ -40,5 +43,6 @@ public class GameController : MonoBehaviour
     {
         _uiController.SetContext(UIController.Context.PostGame);
         _currentPlayer.GetComponent<StatsHandler>().OnPlayerDying -= HandlePlayerDying;
+        IsGameRunning = false;
     }
 }
