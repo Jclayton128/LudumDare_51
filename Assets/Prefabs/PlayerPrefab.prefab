@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4317105603638782824
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7137663520809658817}
+  m_Layer: 0
+  m_Name: Muzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7137663520809658817
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4317105603638782824}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.24, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3507766121535081055}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4508659126498175888
 GameObject:
   m_ObjectHideFlags: 0
@@ -29,7 +60,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7137663520809658817}
   m_Father: {fileID: 395729155832750680}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -97,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 713abe5e9a4d24649857cd6f9047afa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseTurnRate: 50
+  _baseTurnRate: 180
   _firingTurnRateModifier: 0.25
 --- !u!1 &5838383410017903743
 GameObject:
@@ -113,6 +145,7 @@ GameObject:
   - component: {fileID: 123718380651484936}
   - component: {fileID: 2229418728326665894}
   - component: {fileID: 6730070422100128331}
+  - component: {fileID: 3083795031452987394}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -201,7 +234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed_Normal: 10
-  _rotationSpeed_Normal: 360
+  _rotationSpeed_Normal: 180
   _shieldRegenRate_Normal: 0.3
   _fireRate_Normal: 0.25
   _damageLevelsBySubsystem:
@@ -265,3 +298,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+--- !u!114 &3083795031452987394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5838383410017903743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 620ee1bc9a1460747ad39eeb72e14e3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _muzzleTransform: {fileID: 7137663520809658817}
+  _bulletVelocity: 4
+  _bulletLifetime: 2
+  _isFiring: 0
