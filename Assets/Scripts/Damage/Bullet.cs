@@ -38,10 +38,9 @@ public class Bullet : MonoBehaviour
         {
             _poolController.ReturnExpiredBulletToPool(this);
         }
-    }
 
-    private void FixedUpdate()
-    {
+
+        //Moved this here for smoother movement in Phase C.
         if (_isPlayerBullet)
         {
             transform.position +=
@@ -52,6 +51,11 @@ public class Bullet : MonoBehaviour
             transform.position +=
                 _velocity * Time.deltaTime * _timeController.EnemyTimeScale;
         }
+    }
+
+    private void FixedUpdate()
+    {
+        //Bullet movement was here, but moved to Update for smoother movement in Phase C
 
     }
 

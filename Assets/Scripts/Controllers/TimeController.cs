@@ -14,6 +14,8 @@ public class TimeController : MonoBehaviour {
     const float _timeBetweenTimerAdvancements = 1f;
     const float _timePerSongMeasure = 2.5f;
 
+    [SerializeField] float _phaseCTimeScale = 0.1f;
+
     [Tooltip("These correspond to Phase A, Phase B, and Phase C, in order")]
     [SerializeField]
     private float[] _enemyTimeScales = new float[3]
@@ -113,6 +115,20 @@ public class TimeController : MonoBehaviour {
             CurrentPhase = Phase.A_mobility;
         }
 
+        //This is to ensure that explosions still look slow in Phase C since they operate
+        //on Time's scaledTime (not Player/EnemyTimeScale)
+        if (CurrentPhase != Phase.C_healing)
+        {
+            DOTween.To(() => Time.timeScale, x => Time.timeScale = x,
+            1, _timeToLerptoNewTimescale);
+        }
+        else
+        {
+            DOTween.To(() => Time.timeScale, x => Time.timeScale = x,
+            _phaseCTimeScale, _timeToLerptoNewTimescale);
+        }
+
+
         //"Lerp" into new enemy timescale
         int currentPhaseAsInt = (int)CurrentPhase;
         DOTween.To(() => _currentEnemyTimeScale, x => _currentEnemyTimeScale = x,
@@ -122,6 +138,7 @@ public class TimeController : MonoBehaviour {
         //"Lerp" into new enemy timescale
         DOTween.To(() => _currentPlayerTimeScale, x => _currentPlayerTimeScale = x,
             _playerTimeScales[currentPhaseAsInt], _timeToLerptoNewTimescale);
+
 
         //Tell everything about the new phase
         OnNewPhase?.Invoke(CurrentPhase);
