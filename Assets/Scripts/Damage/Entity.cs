@@ -57,7 +57,7 @@ public class Entity : MonoBehaviour
     {
         if (Time.time < _timeInvulnerabilityEnds) return false;
 
-        _explosionController.RequestExplosion(amount, transform.position);
+        _explosionController.RequestExplosion(amount, transform.position, Color.red);
         OnReceiveDamage?.Invoke(amount);
         currentHealth -= amount;
 
@@ -78,7 +78,7 @@ public class Entity : MonoBehaviour
 
         currentHealth = Mathf.Min(currentHealth, 0f);
 
-        _explosionController.RequestExplosion(startingHealth, transform.position);
+        _explosionController.RequestExplosion(startingHealth, transform.position, Color.red);
         OnDie?.Invoke();
 
         if (_enemyController)

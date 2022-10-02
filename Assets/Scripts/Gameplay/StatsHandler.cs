@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class StatsHandler : MonoBehaviour
 {
+    ExplosionController _explosionController;
+
     public Action<int> OnChangeShieldLayerCount;
 
     /// <summary>
@@ -58,6 +60,7 @@ public class StatsHandler : MonoBehaviour
     private void Awake()
     {
         _timeController = FindObjectOfType<TimeController>();
+        _explosionController = _timeController.GetComponent<ExplosionController>();
     }
 
     private void Start()
@@ -102,13 +105,19 @@ public class StatsHandler : MonoBehaviour
 
     #region Receive Incoming Damage
 
-    public void ReceiveImpact()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("receiving impact");
+        ReceiveBulletImpact();
+    }
+
+    public void ReceiveBulletImpact()
+    {
+
         if (_shieldLayers_Current > 0)
         {
             _shieldLayers_Current--;
             OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
+            _explosionController.RequestExplosion(2, transform.position, Color.green);
         }
         else
         {
@@ -118,6 +127,7 @@ public class StatsHandler : MonoBehaviour
 
     private void ReceiveDamage()
     {
+        _explosionController.RequestExplosion(2, transform.position, Color.green);
         AppIntegrity.Assert(_damageLevelsBySubsystem.Length != 0, "_damageLevelsBySubsystem is empty!");
         int damagedSubsystem = UnityEngine.Random.Range(0, _numberOfSubsystems);
         _damageLevelsBySubsystem[damagedSubsystem]++;
@@ -141,6 +151,7 @@ public class StatsHandler : MonoBehaviour
 
     private void ExecuteDeathSequence()
     {
+        _explosionController.RequestExplosion(20, transform.position, Color.green);
         OnPlayerDying?.Invoke();
 
         Destroy(gameObject);

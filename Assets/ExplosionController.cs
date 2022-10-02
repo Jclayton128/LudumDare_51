@@ -13,7 +13,7 @@ public class ExplosionController : MonoBehaviour
     [Tooltip("This multiplies the number of particle emitted from an explosion")]
     [SerializeField] float _gloryFactor = 1f;
 
-    internal void RequestExplosion(float amount, Vector3 position)
+    internal void RequestExplosion(float amount, Vector3 position, Color color)
     {
         //TODO play explosion audio clip here.
 
@@ -29,6 +29,8 @@ public class ExplosionController : MonoBehaviour
             explosion = _pooledExplosions.Dequeue();
             explosion.gameObject.SetActive(true);
         }
+        ParticleSystem.MainModule main = explosion.main;
+        main.startColor = color;
         int emissionCount = Mathf.RoundToInt((amount + 0.5f) * _gloryFactor);
         explosion.Emit(emissionCount);
         explosion.transform.position = position;

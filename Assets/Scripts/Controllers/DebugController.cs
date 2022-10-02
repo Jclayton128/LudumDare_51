@@ -24,7 +24,7 @@ public class DebugController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.H))
         {
-            FindObjectOfType<StatsHandler>().ReceiveImpact();
+            FindObjectOfType<StatsHandler>().ReceiveBulletImpact();
         }
     }
 
