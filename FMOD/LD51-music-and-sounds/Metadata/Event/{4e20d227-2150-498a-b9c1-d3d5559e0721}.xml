@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{4e20d227-2150-498a-b9c1-d3d5559e0721}">
 		<property name="name">
-			<value>EnemyDeath03</value>
+			<value>EnemyDeath</value>
 		</property>
 		<property name="outputFormat">
 			<value>2</value>
@@ -271,7 +271,17 @@
 	</object>
 	<object class="MixerBusPanner" id="{3bc2d422-4f06-43f2-9004-157c1d65dbca}" />
 	<object class="MixerBusFader" id="{d0552781-2e55-472a-9620-9ca6d11d5394}" />
-	<object class="SpatialiserEffect" id="{46e5197e-f5e8-4cb8-8d3e-f1e2c980c641}" />
+	<object class="SpatialiserEffect" id="{46e5197e-f5e8-4cb8-8d3e-f1e2c980c641}">
+		<property name="distanceRolloffType">
+			<value>1</value>
+		</property>
+		<property name="maximumDistance">
+			<value>25</value>
+		</property>
+		<property name="overrideRange">
+			<value>true</value>
+		</property>
+	</object>
 	<object class="MixerBusFader" id="{d784b799-6b73-47f3-b6f4-9649b066964f}" />
 	<object class="AutomationPoint" id="{a1cf735b-e5b5-4019-883d-da621a8a0f7e}">
 		<property name="position">

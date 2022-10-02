@@ -33,6 +33,9 @@ public class StatsHandler : MonoBehaviour {
     [SerializeField] float _healRate_Normal = 0.3f;
     [SerializeField] StudioEventEmitter repairSound;
     [SerializeField] StudioEventEmitter repairCompleteSound;
+    [SerializeField] StudioEventEmitter playerShieldHitSound;
+    [SerializeField] StudioEventEmitter playerHurtSound;
+    [SerializeField] StudioEventEmitter playerDeathSound;
     const float _requiredRegenLevelPerShield = 1f;
     const int _shieldLayers_Max = 3;
 
@@ -53,16 +56,21 @@ public class StatsHandler : MonoBehaviour {
     [SerializeField] float _shieldChargeLevel_Current;
     int _shieldLayers_Current;
     float _fireRate_Current;
+    bool isAlive = true;
 
     public float MoveSpeed { get => _moveSpeed_Current; }
     public float RotationSpeed { get => _rotationSpeed_Current; }
     public float FireRate { get => _fireRate_Current; }
+    public bool IsAlive => isAlive;
 
     private void Awake() {
         _timeController = FindObjectOfType<TimeController>();
+        _explosionController = _timeController.GetComponent<ExplosionController>();
         AppIntegrity.Assert(repairSound != null);
         AppIntegrity.Assert(repairCompleteSound != null);
-        _explosionController = _timeController.GetComponent<ExplosionController>();
+        AppIntegrity.Assert(playerShieldHitSound != null);
+        AppIntegrity.Assert(playerHurtSound != null);
+        AppIntegrity.Assert(playerDeathSound != null);
     }
 
     private void Start() {
@@ -112,8 +120,10 @@ public class StatsHandler : MonoBehaviour {
             _shieldLayers_Current--;
             OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
             _explosionController.RequestExplosion(2, transform.position, Color.green);
+            playerShieldHitSound.Play();
         } else {
             ReceiveDamage();
+            playerHurtSound.Play();
         }
     }
 
@@ -138,10 +148,18 @@ public class StatsHandler : MonoBehaviour {
     }
 
     private void ExecuteDeathSequence() {
+        isAlive = false;
+        playerDeathSound.Play();
         _explosionController.RequestExplosion(20, transform.position, Color.green);
         OnPlayerDying?.Invoke();
+        HideSprite();
+        Destroy(gameObject, 3f);
+    }
 
-        Destroy(gameObject);
+    void HideSprite() {
+        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        if (spriteRenderer == null) return;
+        spriteRenderer.enabled = false;
     }
 
     #endregion
@@ -152,7 +170,7 @@ public class StatsHandler : MonoBehaviour {
         if (_timeController.CurrentPhase != TimeController.Phase.C_healing) return;
         AppIntegrity.Assert(subsystemIndex < _damageLevelsBySubsystem.Length, $"RepairDamage tried to repair out-of-bounds subsystem with index: {subsystemIndex}");
         float previousDamageLevel = _damageLevelsBySubsystem[subsystemIndex];
-        _damageLevelsBySubsystem[subsystemIndex] -= _healRate_Normal * Time.deltaTime;
+        _damageLevelsBySubsystem[subsystemIndex] -= _healRate_Normal * Time.unscaledDeltaTime;
         _damageLevelsBySubsystem[subsystemIndex] = Mathf.Clamp(_damageLevelsBySubsystem[subsystemIndex], 0, _maxDamagePossible);
         float currentDamageLevel = _damageLevelsBySubsystem[subsystemIndex];
 
