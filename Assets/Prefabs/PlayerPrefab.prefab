@@ -746,7 +746,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5c033276bcc3db4abf0ea25e9d1daed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed_Normal: 10
+  _cameraZoom_Normal: 5
+  _moveSpeed_Normal: 5
   _rotationSpeed_Normal: 180
   _shieldRegenRate_Normal: 0.3
   _healRate_Normal: 0.3
@@ -762,6 +763,11 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  _statModifiersBySubsystem:
+  - 1
+  - 1
+  - 1
+  - 1
   _shieldChargeLevel_Current: 0
 --- !u!114 &123718380651484936
 MonoBehaviour:
@@ -819,7 +825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f1df68e19f5c481ebe3d8375cccb255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveAccel: 10
 --- !u!114 &3083795031452987394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -833,9 +839,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _muzzleTransform: {fileID: 7137663520809658817}
-  _bulletVelocity: 4
+  _bulletVelocity: 5
   _bulletLifetime: 2
-  _gunSpinUpTime: 2
+  _gunSpinUpTime: 1.8
   _gunSpinUpRate:
     serializedVersion: 2
     m_Curve:

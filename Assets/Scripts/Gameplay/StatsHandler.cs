@@ -43,6 +43,8 @@ public class StatsHandler : MonoBehaviour {
     [SerializeField] float _fireRate_Normal = 0.25f;
     [SerializeField] float _fireRate_Fast = 0.1f;
 
+    bool hasPerfectHealthThisRound = true;
+
     //state
 
     //0 is full, 4 is dead.
@@ -51,7 +53,6 @@ public class StatsHandler : MonoBehaviour {
     //These modifiers are multiplied against appropriate system.
     //They are changed as the ship received/repairs damage
     [SerializeField] float[] _statModifiersBySubsystem = new float[4] { 1f, 1f, 1f, 1f };
-
 
     //float _moveSpeed_Current;
     //float _rotationSpeed_Current;
@@ -73,6 +74,26 @@ public class StatsHandler : MonoBehaviour {
 
     public float RotationSpeed { get => _rotationSpeed_Normal; }
 
+    private void OnEnable() {
+        _timeController.OnNewPhase += HandleNewPhase;
+    }
+
+    private void OnDisable() {
+        _timeController.OnNewPhase -= HandleNewPhase;
+    }
+
+    void HandleNewPhase(TimeController.Phase incomingPhase) {
+        if (incomingPhase == TimeController.Phase.A_mobility) {
+            hasPerfectHealthThisRound = GetHasPerfectHealth();
+        }
+    }
+
+    bool GetHasPerfectHealth() {
+        for (int i = 0; i < _damageLevelsBySubsystem.Length; i++) {
+            if (_damageLevelsBySubsystem[i] > 0) return false;
+        }
+        return true;
+    }
 
     private void Awake() {
         _timeController = FindObjectOfType<TimeController>();
@@ -112,7 +133,6 @@ public class StatsHandler : MonoBehaviour {
             _shieldChargeLevel_Current +=
                 ShieldRegenRate * Time.deltaTime * _timeController.PlayerTimeScale;
         }
-
     }
 
     #endregion
@@ -137,6 +157,7 @@ public class StatsHandler : MonoBehaviour {
     }
 
     private void ReceiveDamage() {
+        hasPerfectHealthThisRound = false;
         AppIntegrity.Assert(_damageLevelsBySubsystem.Length != 0, "_damageLevelsBySubsystem is empty!");
         _explosionController.RequestExplosion(2, transform.position, Color.green);
         int damagedSubsystem = UnityEngine.Random.Range(0, _numberOfSubsystems);
@@ -204,13 +225,13 @@ public class StatsHandler : MonoBehaviour {
         AppIntegrity.Assert(subsystemIndex < _damageLevelsBySubsystem.Length, $"RepairDamage tried to repair out-of-bounds subsystem with index: {subsystemIndex}");
         float previousDamageLevel = _damageLevelsBySubsystem[subsystemIndex];
         _damageLevelsBySubsystem[subsystemIndex] -= _healRate_Normal * Time.unscaledDeltaTime;
-        _damageLevelsBySubsystem[subsystemIndex] = Mathf.Clamp(_damageLevelsBySubsystem[subsystemIndex], 0, _maxDamagePossible);
+        _damageLevelsBySubsystem[subsystemIndex] = Mathf.Clamp(_damageLevelsBySubsystem[subsystemIndex], hasPerfectHealthThisRound ? -1 : 0, _maxDamagePossible);
         float currentDamageLevel = _damageLevelsBySubsystem[subsystemIndex];
 
         if (currentDamageLevel < previousDamageLevel) {
             PlayRepairSound();
             OnReceiveDamage?.Invoke(subsystemIndex, currentDamageLevel, true);
-            if (currentDamageLevel == 0) OnRepairComplete();
+            if (currentDamageLevel == 0 || currentDamageLevel == -1) OnRepairComplete();
         }
     }
 
