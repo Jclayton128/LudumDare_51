@@ -446,6 +446,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dpadDeadZone: 0.2
+  mouseReticleTexture: {fileID: 2800000, guid: e129f01808a804d3f9b5ec034d799af2, type: 3}
+  cursorMode: 0
 --- !u!114 &6730070422100128331
 MonoBehaviour:
   m_ObjectHideFlags: 0
