@@ -21,15 +21,22 @@ public class PlayerBlasterHandler : MonoBehaviour {
 
     //state
     [SerializeField] bool _isFiring = false;
-    float _timeForNextShot = Mathf.Infinity;
+    float _timeForNextShot = 0f;
     float _timeSinceStartedShooting = Mathf.Infinity;
     bool _canFire = false;
+
+    private void OnEnable() {
+        _timeController.OnNewPhase += HandleOnPhaseChange;
+    }
+
+    private void OnDisable() {
+        _timeController.OnNewPhase -= HandleOnPhaseChange;
+    }
 
     private void Awake() {
         _statsHandlers = GetComponent<StatsHandler>();
         _bulletPoolController = FindObjectOfType<BulletPoolController>();
         _timeController = _bulletPoolController.GetComponent<TimeController>();
-        _timeController.OnNewPhase += HandleOnPhaseChange;
         input = GetComponent<InputController>();
         movement = GetComponent<PlayerMovement>();
         _canFire = true;
@@ -37,7 +44,7 @@ public class PlayerBlasterHandler : MonoBehaviour {
 
     private void HandleOnPhaseChange(TimeController.Phase newPhase) {
         if (newPhase == TimeController.Phase.A_mobility || newPhase == TimeController.Phase.B_firepower) {
-            _canFire = true;
+            _canFire = _statsHandlers.IsAlive;
             _timeSinceStartedShooting = 0f;
         } else {
             _canFire = false;
@@ -60,10 +67,11 @@ public class PlayerBlasterHandler : MonoBehaviour {
         }
 
         _timeSinceStartedShooting += Time.deltaTime;
+        if (!_statsHandlers.IsAlive) _canFire = false;
     }
 
     private float GetNextShotTime() {
-        if (_timeController.IsPhaseA) return Time.time + _statsHandlers.FireRate;
+        if (!_timeController.IsPhaseB) return Time.time + _statsHandlers.FireRate;
         return Time.time + _statsHandlers.FireRate * _gunSpinUpRate.Evaluate(Mathf.Clamp01(_timeSinceStartedShooting / _gunSpinUpTime));
     }
 
@@ -75,7 +83,6 @@ public class PlayerBlasterHandler : MonoBehaviour {
     private void HandleOnStartFiring() {
         if (_isFiring) return;
         _isFiring = true;
-        _timeForNextShot = Time.time;
         _timeSinceStartedShooting = 0f;
     }
 

@@ -60,12 +60,12 @@ public class TimeController : MonoBehaviour {
 
     public float StartTimer() {
         // When triggered, FMOD will advance to the GAME_START sound upon completion of the current measure. The GAME_START sound is exactly 1 measure in duration.
-        float timeLeftInCurrentMeasure = _timePerSongMeasure - Time.time % _timePerSongMeasure;
+        float timeLeftInCurrentMeasure = _timePerSongMeasure - Time.unscaledTime % _timePerSongMeasure;
         float timeToWaitForSongSync = timeLeftInCurrentMeasure + _timePerSongMeasure;
-        timeToStart = Time.time + timeToWaitForSongSync;
+        timeToStart = Time.unscaledTime + timeToWaitForSongSync;
 
-        // _timeToRotatePhases = Time.time + _timeBetweenPhases;
-        _timeForTimerAdvancement = Time.time + timeToWaitForSongSync + _timeBetweenTimerAdvancements;
+        // _timeToRotatePhases = Time.unscaledTime + _timeBetweenPhases;
+        _timeForTimerAdvancement = Time.unscaledTime + timeToWaitForSongSync + _timeBetweenTimerAdvancements;
         _timerAdvancementsRemainingInPhase = Mathf.RoundToInt(_timeBetweenPhases);
 
         return timeToWaitForSongSync;
@@ -73,11 +73,12 @@ public class TimeController : MonoBehaviour {
 
     public void StopTimer() {
         isTimerActive = false;
+        timeToStart = Mathf.Infinity;
     }
 
     private void Start() {
-        // _timeToRotatePhases = Time.time + _timeBetweenPhases;
-        _timeForTimerAdvancement = Time.time + _timeBetweenTimerAdvancements;
+        // _timeToRotatePhases = Time.unscaledTime + _timeBetweenPhases;
+        _timeForTimerAdvancement = Time.unscaledTime + _timeBetweenTimerAdvancements;
         _timerAdvancementsRemainingInPhase = Mathf.RoundToInt(_timeBetweenPhases);
         isTimerActive = false;
         timeToStart = Mathf.Infinity;
@@ -90,14 +91,14 @@ public class TimeController : MonoBehaviour {
     }
 
     private void TryStartTimer() {
-        if (timeToStart > Time.time) return;
+        if (timeToStart > Time.unscaledTime) return;
         isTimerActive = true;
     }
 
     private void CheckForTimerAdvancement() {
-        if (Time.time >= _timeForTimerAdvancement) {
+        if (Time.unscaledTime >= _timeForTimerAdvancement) {
             _timerAdvancementsRemainingInPhase--;
-            _timeForTimerAdvancement = Time.time + _timeBetweenTimerAdvancements;
+            _timeForTimerAdvancement = Time.unscaledTime + _timeBetweenTimerAdvancements;
             OnTimerAdvancement?.Invoke(_timerAdvancementsRemainingInPhase);
             //Debug.Log($"Tick: {_timerAdvancementsRemainingInPhase} second before rotation.");
 
@@ -117,13 +118,10 @@ public class TimeController : MonoBehaviour {
 
         //This is to ensure that explosions still look slow in Phase C since they operate
         //on Time's scaledTime (not Player/EnemyTimeScale)
-        if (CurrentPhase != Phase.C_healing)
-        {
+        if (CurrentPhase != Phase.C_healing) {
             DOTween.To(() => Time.timeScale, x => Time.timeScale = x,
             1, _timeToLerptoNewTimescale);
-        }
-        else
-        {
+        } else {
             DOTween.To(() => Time.timeScale, x => Time.timeScale = x,
             _phaseCTimeScale, _timeToLerptoNewTimescale);
         }
@@ -147,7 +145,7 @@ public class TimeController : MonoBehaviour {
 
     public void DebugInstantPhaseChangeAndTimerReset() {
         Debug.Log("Debug: skipping a phase");
-        _timeForTimerAdvancement = Time.time;
+        _timeForTimerAdvancement = Time.unscaledTime;
         _timerAdvancementsRemainingInPhase = 1;
         CheckForTimerAdvancement();
     }

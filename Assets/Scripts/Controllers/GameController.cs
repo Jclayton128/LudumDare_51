@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using DG.Tweening;
 
 public class GameController : MonoBehaviour {
     UIController _uiController;
@@ -45,15 +46,36 @@ public class GameController : MonoBehaviour {
     }
 
     public void HandlePlayerDying() {
-        _uiController.SetContext(UIController.Context.PostGame);
-        _currentPlayer.GetComponent<StatsHandler>().OnPlayerDying -= HandlePlayerDying;
-        IsGameRunning = false;
         _timeController.StopTimer();
         GlobalEvent.Invoke(GlobalEvent.GlobalEventType.GameOver);
+        _currentPlayer.GetComponent<StatsHandler>().OnPlayerDying -= HandlePlayerDying;
+        IsGameRunning = false;
+        StartCoroutine(PlayerDeathTimeline());
     }
 
     public void HandleRestartMetaGameLoop() {
         GlobalEvent.Invoke(GlobalEvent.GlobalEventType.GameReset);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    IEnumerator PlayerDeathTimeline() {
+        Tween timescaleTween;
+
+        timescaleTween = DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 0.15f, 0.3f);
+        yield return timescaleTween.WaitForCompletion();
+
+        yield return new WaitForSecondsRealtime(0.1f);
+
+        timescaleTween = DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, 0.1f);
+        yield return timescaleTween.WaitForCompletion();
+
+        Time.timeScale = 1f;
+        yield return new WaitForSecondsRealtime(1f);
+
+        OnGameOverState();
+    }
+
+    void OnGameOverState() {
+        _uiController.SetContext(UIController.Context.PostGame);
     }
 }
