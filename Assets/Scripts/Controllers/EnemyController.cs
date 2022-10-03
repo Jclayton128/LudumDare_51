@@ -23,6 +23,7 @@ public class EnemyController : MonoBehaviour
 
     //state
     float _countdownUntilNextSpawn;
+    [SerializeField] bool _isSpawning = false;
 
     private void Awake()
     {
@@ -84,9 +85,10 @@ public class EnemyController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.B)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)4, 1);
         if (Input.GetKeyDown(KeyCode.N)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)5, 1);
 
+        if (Input.GetKeyDown(KeyCode.P)) _isSpawning = !_isSpawning;
 
 
-        if (_gameController.IsGameRunning )
+        if (_isSpawning && _gameController.IsGameRunning )
         {
             _countdownUntilNextSpawn -= Time.deltaTime * _timeController.EnemyTimeScale;
             
