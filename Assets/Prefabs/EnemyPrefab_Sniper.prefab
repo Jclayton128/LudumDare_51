@@ -75,9 +75,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _standoffRange_Nominal: 6
-  _maxWeaponRange: 5
+  _maxMoveSpeed: 2
+  _accelDecelTime: 2
+  _weaponRange: 15
   _weaponSpeed: 5
   _timeBetweenShots: 1
-  _maxMoveSpeed: 4
-  _isLeadingPlayerWithShots: 0
-  _accelDecelTime: 2
+  _shotType: 1

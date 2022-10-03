@@ -1305,10 +1305,10 @@ MonoBehaviour:
 
     T: Move to next Phase
 
-    H: Inflict damage to random
-    system
+    0-3: Damage specific system
 
-    B: Spawn enemy at random point off-screen'
+    Z-N:
+    Spawn specific enemy, enum type 0-5'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1335,7 +1335,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
+  m_fontSize: 25.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3392,8 +3392,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c4e4190ff0689f41a66b691642dda75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyPrefab: {fileID: 7351433339355187186, guid: eb9bc2cec5452264fbb1a1487bdd1f46, type: 3}
+  _enemyPrefabs:
+  - {fileID: 7351433339355187186, guid: eb9bc2cec5452264fbb1a1487bdd1f46, type: 3}
+  - {fileID: 3406081471608059151, guid: c908b91f01a26ff469085dd0cd63eee7, type: 3}
+  - {fileID: 9028203586643859608, guid: 6694a0a6342245c4aafa3d208db0f7e8, type: 3}
   _spawnPerimeterRadius: 7
+  _timeBetweenEnemySpawns: 2
 --- !u!114 &2052628011
 MonoBehaviour:
   m_ObjectHideFlags: 0
