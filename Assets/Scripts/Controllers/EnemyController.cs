@@ -101,14 +101,14 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         //SHIM DEBUG
-        if (Input.GetKeyDown(KeyCode.Z)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)0, 1);
-        if (Input.GetKeyDown(KeyCode.X)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)1, 1);
-        if (Input.GetKeyDown(KeyCode.C)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)2, 1);
-        if (Input.GetKeyDown(KeyCode.V)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)3, 1);
-        if (Input.GetKeyDown(KeyCode.B)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)4, 1);
-        if (Input.GetKeyDown(KeyCode.N)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)5, 1);
+        //if (Input.GetKeyDown(KeyCode.Z)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)0, 1);
+        //if (Input.GetKeyDown(KeyCode.X)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)1, 1);
+        //if (Input.GetKeyDown(KeyCode.C)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)2, 1);
+        //if (Input.GetKeyDown(KeyCode.V)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)3, 1);
+        //if (Input.GetKeyDown(KeyCode.B)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)4, 1);
+        //if (Input.GetKeyDown(KeyCode.N)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)5, 1);
 
-        if (Input.GetKeyDown(KeyCode.P)) _isSpawning = !_isSpawning;
+        //if (Input.GetKeyDown(KeyCode.P)) _isSpawning = !_isSpawning;
 
 
         if (_isSpawning && _gameController.IsGameRunning )

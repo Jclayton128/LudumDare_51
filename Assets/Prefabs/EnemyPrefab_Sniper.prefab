@@ -71,6 +71,36 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4572541516144422410, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
   m_PrefabInstance: {fileID: 6445046772719512056}
   m_PrefabAsset: {fileID: 0}
+--- !u!60 &3235350185001936910
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7351433339355187186}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.55, y: 0.5233333}
+    newSize: {x: 3.3, y: 3.14}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.2753234, y: 0.054429993}
+      - {x: -0.16934788, y: -0.26032424}
+      - {x: 0.16743949, y: -0.2598769}
+      - {x: 0.275, y: 0.065000005}
+      - {x: -0.003251046, y: 0.26040572}
 --- !u!114 &-2104759711744717038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,8 +116,9 @@ MonoBehaviour:
   _standoffRange_Nominal: 6
   _maxMoveSpeed: 2
   _accelDecelTime: 2
+  _isGuard: 0
   _weaponRange: 15
-  _weaponSpeed: 8
+  _weaponSpeed: 6
   _timeBetweenShots: 1
   _shotType: 1
   timeTelegraphLunge: 0.4
@@ -131,33 +162,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _growthScale: 1.2
   _tempo: 2
---- !u!60 &3235350185001936910
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7351433339355187186}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.55, y: 0.5233333}
-    newSize: {x: 3.3, y: 3.14}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.2753234, y: 0.054429993}
-      - {x: -0.16934788, y: -0.26032424}
-      - {x: 0.16743949, y: -0.2598769}
-      - {x: 0.275, y: 0.065000005}
-      - {x: -0.003251046, y: 0.26040572}

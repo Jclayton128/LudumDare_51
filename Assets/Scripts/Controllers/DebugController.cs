@@ -16,8 +16,8 @@ public class DebugController : MonoBehaviour
 
     private void Update()
     {
-        ListenForInstaPhaseSkip();
-        ListenForInstaDamage();
+        //ListenForInstaPhaseSkip();
+        //ListenForInstaDamage();
     }
 
     private void ListenForInstaDamage()
@@ -43,9 +43,9 @@ public class DebugController : MonoBehaviour
     private void ListenForInstaPhaseSkip()
     {
         //DEBUG remove this in final build!
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            _timeController.DebugInstantPhaseChangeAndTimerReset();
-        }
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    _timeController.DebugInstantPhaseChangeAndTimerReset();
+        //}
     }
 }

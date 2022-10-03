@@ -10,8 +10,13 @@ public class UIController : MonoBehaviour
     [SerializeField] GameObject _timerPanel = null;
     [SerializeField] GameObject _shieldPanel = null;
     [SerializeField] GameObject _healthPanel = null;
+    [SerializeField] GameObject _scorePanel = null;
     [SerializeField] GameObject _endgamePanel = null;
     [SerializeField] GameObject _audioSettingsPanel = null;
+
+    [SerializeField] Image[] _backgroundpanels = null;
+    [SerializeField] GameObject[] _otherContentsOfMainPage = null;
+
 
     [SerializeField] Button _startButton = null;
 
@@ -38,7 +43,9 @@ public class UIController : MonoBehaviour
                 _timerPanel.SetActive(false);
                 _shieldPanel.SetActive(false);
                 _healthPanel.SetActive(false);
+                _scorePanel.SetActive(false);
                 _endgamePanel.SetActive(false);
+
                 _audioSettingsPanel.SetActive(false);
                 _startButton.Select(); // needed for gamepad
                 break;
@@ -48,6 +55,7 @@ public class UIController : MonoBehaviour
                 _timerPanel.SetActive(true);
                 _shieldPanel.SetActive(true);
                 _healthPanel.SetActive(true);
+                _scorePanel.SetActive(true);
                 _endgamePanel.SetActive(false);
                 _audioSettingsPanel.SetActive(false);
                 break;
@@ -57,6 +65,7 @@ public class UIController : MonoBehaviour
                 _timerPanel.SetActive(false);
                 _shieldPanel.SetActive(false);
                 _healthPanel.SetActive(false);
+                _scorePanel.SetActive(false);
                 _endgamePanel.SetActive(true);
                 _audioSettingsPanel.SetActive(false);
 
