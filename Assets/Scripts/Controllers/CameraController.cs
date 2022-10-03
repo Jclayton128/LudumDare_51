@@ -17,6 +17,8 @@ public class CameraController : MonoBehaviour {
     float initialZoom = 6f; // Warning - this number ought to match the parameter in StatsHandler
     Tween currentZoomTween;
 
+    int _storedDamageEventWhileInPhaseC;
+
     private void OnEnable() {
         _sh.OnReceiveDamage += HandleOnDamageReceived;
         _sh.OnPlayerDying += HandleOnDying;
@@ -54,7 +56,8 @@ public class CameraController : MonoBehaviour {
                 x => _cvc.m_Lens.OrthographicSize = x,
                 _sh.CameraZoom * zoomModHealPhase,
                 cameraTransitionRate);
-        } else {
+        } 
+        else {
             DOTween.To(
                 () => _cco.m_Offset.x,
                 x => _cco.m_Offset.x = x,
@@ -66,7 +69,20 @@ public class CameraController : MonoBehaviour {
                 x => _cvc.m_Lens.OrthographicSize = x,
                 _sh.CameraZoom,
                 cameraTransitionRate);
+            
+            // This is needed in the event that damage is during phase C to system 0. Otherwise
+            // The camera will zoom back out of Phase C mode and into a weird zoom level.
+            Invoke(nameof(AdjustCameraToNewDamageBasedZoomLevelOnceOutOfPhaseC),
+                cameraTransitionRate);
         }
+    }
+
+    private void AdjustCameraToNewDamageBasedZoomLevelOnceOutOfPhaseC()
+    {
+        HandleOnDamageReceived(_storedDamageEventWhileInPhaseC, 0, false);
+
+        _storedDamageEventWhileInPhaseC = -1;
+
     }
 
     private void HandleOnDying() {
@@ -76,6 +92,14 @@ public class CameraController : MonoBehaviour {
 
     private void HandleOnDamageReceived(int system, float f, bool b) {
         if (system != 0) return;
+
+        if (_tc.CurrentPhase == TimeController.Phase.C_healing)
+        {
+            _storedDamageEventWhileInPhaseC = system;
+
+            return;
+        }
+
         if (b) return;
         Invoke(nameof(ChangeZoomAPotatoLater), 0.1f);
     }

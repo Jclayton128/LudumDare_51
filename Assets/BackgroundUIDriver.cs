@@ -27,13 +27,11 @@ public class BackgroundUIDriver : MonoBehaviour
     {
         if (count % 2 == 0)
         {
-            Debug.Log("up");
             _upSystem.Emit(_count);
             
         }
         else
         {
-            Debug.Log("down");
             _downSystem.Emit(_count);
         }
     }
