@@ -1,12 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
-using UnityEngine.Events;
 using FMODUnity;
 
 public class Audio : MonoBehaviour {
     [SerializeField] StudioGlobalParameterTrigger triggerGameStart;
     [SerializeField] StudioGlobalParameterTrigger triggerGameOver;
+
+    const string TRIGGER_GAME_START = "IsGameStarted";
+    const string TRIGGER_GAME_OVER = "IsGameOver";
 
     StudioEventEmitter emitter;
     FMOD.Studio.EventInstance eventInstance;
@@ -40,24 +41,27 @@ public class Audio : MonoBehaviour {
     void OnGlobalEvent(GlobalEvent.GlobalEventType eventType) {
         switch (eventType) {
             case GlobalEvent.GlobalEventType.GameStart:
-                triggerGameStart.Value = 1f;
-                triggerGameOver.Value = 0f;
-                TriggerParameters();
+                TriggerGameStart();
                 break;
             case GlobalEvent.GlobalEventType.GameOver:
-                triggerGameOver.Value = 1f;
-                TriggerParameters();
+                TriggerGameOver();
                 break;
             case GlobalEvent.GlobalEventType.GameReset:
-                triggerGameStart.Value = 0f;
-                triggerGameOver.Value = 0f;
-                TriggerParameters();
+                TriggerGameReset();
                 break;
         }
     }
 
-    void TriggerParameters() {
-        triggerGameStart.TriggerParameters();
-        triggerGameOver.TriggerParameters();
+    void TriggerGameStart() {
+        emitter.SetParameter(TRIGGER_GAME_OVER, 0f);
+        emitter.SetParameter(TRIGGER_GAME_START, 1f);
+    }
+
+    void TriggerGameOver() {
+        emitter.SetParameter(TRIGGER_GAME_OVER, 1f);
+    }
+
+    void TriggerGameReset() {
+        emitter.SetParameter(TRIGGER_GAME_START, 0f);
     }
 }
