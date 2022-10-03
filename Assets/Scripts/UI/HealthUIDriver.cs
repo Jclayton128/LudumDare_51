@@ -15,6 +15,7 @@ public class HealthUIDriver : MonoBehaviour
     [SerializeField] Image[] _healthStatusImages = null;
 
     [SerializeField] ParticleSystem[] _healthStatusRepairFX = null;
+    [SerializeField] Image[] _systemIcons = null;
 
     TimeController _timeController;
 
@@ -23,6 +24,7 @@ public class HealthUIDriver : MonoBehaviour
     //settings
     [SerializeField] float _deployedUIScale = 2.5f;
     [SerializeField] float _deployTime = 0.7f;
+    [SerializeField] Color _iconColor = new Color(1, 1, 1, 0.6f);
 
     [Tooltip("0: 4/4 hits left, 1: 3/4 hits left, 2: 2/4 hits left, 3: 1/4 hits left, 4: dead")]
     [SerializeField] Color[] _damageLevelsByColor = new Color[6];
@@ -33,6 +35,7 @@ public class HealthUIDriver : MonoBehaviour
     Tween _resizeTween;
     bool _isUIDeployed = false;
     Vector2 _sizeDeltaRetracted;
+    Tween[] _iconColorTweens = new Tween[4];
 
     private void Awake()
     {
@@ -42,6 +45,13 @@ public class HealthUIDriver : MonoBehaviour
         GameController gc = _timeController.GetComponent<GameController>();
         gc.OnPlayerStartsRun += HandleOnPlayerStartsRun;
         gc.OnPlayerDies += HandleOnPlayerDies;
+
+        for (int i = 0; i < _systemIcons.Length; i++)
+        {
+            _iconColorTweens[i].Kill();
+            _iconColorTweens[i] =
+                _systemIcons[i].DOColor(Color.clear, _deployTime).SetUpdate(false);
+        }
 
     }
 
@@ -104,12 +114,27 @@ public class HealthUIDriver : MonoBehaviour
 
         _resizeTween.Kill();
         _resizeTween = _healthPanel.DOSizeDelta(_sizeDeltaRetracted * _deployedUIScale, _deployTime);
+        
+        for (int i = 0; i < _systemIcons.Length; i++)
+        {
+            _iconColorTweens[i].Kill();
+            _iconColorTweens[i] =
+                _systemIcons[i].DOColor(_iconColor, _deployTime).SetUpdate(false);
+        }
+    
     }
 
     private void RetractHealthPanel()
     {
         _resizeTween.Kill();
         _resizeTween = _healthPanel.DOSizeDelta(_sizeDeltaRetracted, _deployTime);
+
+        for (int i = 0; i < _systemIcons.Length; i++)
+        {
+            _iconColorTweens[i].Kill();
+            _iconColorTweens[i] =
+                _systemIcons[i].DOColor(Color.clear, _deployTime).SetUpdate(false);
+        }
     }
 
     #endregion

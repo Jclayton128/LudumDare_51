@@ -299,8 +299,9 @@ public class StatsHandler : MonoBehaviour {
                 break;
 
             case 1:
-                // Shield regen rate drops with more damage
-                _statModifiersBySubsystem[1] = Mathf.Lerp(1.33f, 0.25f, normalizedDamage);
+                // Time between shots increases with more damage
+                _statModifiersBySubsystem[1] = Mathf.Lerp(.75f, 4f, normalizedDamage);
+               
                 break;
 
             case 2:
@@ -309,8 +310,8 @@ public class StatsHandler : MonoBehaviour {
                 break;
 
             case 3:
-                // Time between shots increases with more damage
-                _statModifiersBySubsystem[3] = Mathf.Lerp(.75f, 4f, normalizedDamage);
+                // Shield regen rate drops with more damage
+                _statModifiersBySubsystem[3] = Mathf.Lerp(1.33f, 0.25f, normalizedDamage);
                 break;
 
         }
