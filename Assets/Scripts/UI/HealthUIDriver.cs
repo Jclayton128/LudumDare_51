@@ -17,6 +17,10 @@ public class HealthUIDriver : MonoBehaviour
     [SerializeField] ParticleSystem[] _healthStatusRepairFX = null;
     [SerializeField] Image[] _systemIcons = null;
 
+    [SerializeField] TextMeshProUGUI _instructionTMP = null;
+    [SerializeField] TextMeshProUGUI _tooltipTMP = null;
+    [SerializeField] Color _tooltipColor = Color.white;
+
     TimeController _timeController;
 
     #endregion
@@ -31,11 +35,22 @@ public class HealthUIDriver : MonoBehaviour
 
     [SerializeField] int _particlesToEmitPerFrameWhileRepairing = 2;
 
+    [SerializeField]
+    string[] _systemNames = new string[4]
+    {
+        "Radar",
+        "Weapon",
+        "Mobility",
+        "Shield"
+    };
+
     //state
     Tween _resizeTween;
     bool _isUIDeployed = false;
     Vector2 _sizeDeltaRetracted;
     Tween[] _iconColorTweens = new Tween[4];
+    Tween _tooltipColorTween;
+    Tween _instructionTween;
 
     private void Awake()
     {
@@ -52,6 +67,9 @@ public class HealthUIDriver : MonoBehaviour
             _iconColorTweens[i] =
                 _systemIcons[i].DOColor(Color.clear, _deployTime).SetUpdate(false);
         }
+
+        _instructionTMP.color = Color.clear;
+        _tooltipTMP.color = Color.clear;
 
     }
 
@@ -121,7 +139,13 @@ public class HealthUIDriver : MonoBehaviour
             _iconColorTweens[i] =
                 _systemIcons[i].DOColor(_iconColor, _deployTime).SetUpdate(false);
         }
-    
+
+        _tooltipColorTween.Kill();
+        _tooltipColorTween = _tooltipTMP.DOColor(_tooltipColor, _deployTime);
+        _instructionTween.Kill();
+        _instructionTween = _instructionTMP.DOColor(_tooltipColor, _deployTime);
+
+
     }
 
     private void RetractHealthPanel()
@@ -135,6 +159,11 @@ public class HealthUIDriver : MonoBehaviour
             _iconColorTweens[i] =
                 _systemIcons[i].DOColor(Color.clear, _deployTime).SetUpdate(false);
         }
+
+        _tooltipColorTween.Kill();
+        _tooltipColorTween = _tooltipTMP.DOColor(Color.clear, _deployTime);
+        _instructionTween.Kill();
+        _instructionTween = _instructionTMP.DOColor(Color.clear, _deployTime);
     }
 
     #endregion
@@ -143,6 +172,12 @@ public class HealthUIDriver : MonoBehaviour
     private void HandleDamageStatusChanged(int subsystemAffected, float newDamageTier,
         bool isRepairedDamaged)
     {
+        _tooltipTMP.text = _systemNames[subsystemAffected];
+        _tooltipColorTween.Kill();
+        _tooltipTMP.color = _tooltipColor;
+        _tooltipColorTween = _tooltipTMP.DOColor(Color.clear, _deployTime * 3f);
+
+
         _healthStatusImages[subsystemAffected].color = ConvertDamageTierIntoColor(newDamageTier);
 
         if (isRepairedDamaged)
