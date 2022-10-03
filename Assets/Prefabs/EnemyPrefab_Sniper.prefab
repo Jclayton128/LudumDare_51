@@ -82,8 +82,8 @@ MonoBehaviour:
   _maxMoveSpeed: 2
   _accelDecelTime: 2
   _weaponRange: 15
-  _weaponSpeed: 7
-  _timeBetweenShots: 1.5
+  _weaponSpeed: 8
+  _timeBetweenShots: 1
   _shotType: 1
   timeTelegraphLunge: 0.4
   lungeDuration: 1
@@ -112,3 +112,17 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1369148108180154977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7351433339355187186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 648459c2d4001d0468c10c295a2ce976, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _growthScale: 1.2
+  _tempo: 2
