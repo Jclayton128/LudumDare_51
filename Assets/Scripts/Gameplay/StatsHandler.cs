@@ -88,7 +88,24 @@ public class StatsHandler : MonoBehaviour {
 
     void HandleNewPhase(TimeController.Phase incomingPhase) {
         if (incomingPhase == TimeController.Phase.A_mobility) {
-            hasPerfectHealthThisRound = GetHasPerfectHealth();
+
+            hasPerfectHealthThisRound = true;
+
+            //SHIM I turned this feature off so you can always choose to buff a system
+            //hasPerfectHealthThisRound = GetHasPerfectHealth();
+        }
+
+        //On entering Phase C again, Remove All Buffs.
+        if (incomingPhase == TimeController.Phase.C_healing)
+        {
+            for (int i = 0; i < _damageLevelsBySubsystem.Length; i++)
+            {
+                if (_damageLevelsBySubsystem[i] < 0)
+                {
+                    ReceiveTargetedDamage(i);
+                }
+               
+            }
         }
     }
 
@@ -182,7 +199,7 @@ public class StatsHandler : MonoBehaviour {
 
     private void ReceiveDamage() {
         if (!isAlive) return;
-        hasPerfectHealthThisRound = false;
+        //hasPerfectHealthThisRound = false;
         AppIntegrity.Assert(_damageLevelsBySubsystem.Length != 0, "_damageLevelsBySubsystem is empty!");
         _explosionController.RequestExplosion(2, transform.position, Color.green);
         int damagedSubsystem = UnityEngine.Random.Range(0, _numberOfSubsystems);
@@ -195,7 +212,7 @@ public class StatsHandler : MonoBehaviour {
 
     public void ReceivedTargetedBulletImpact(int targetedSystem) {
         if (!isAlive) return;
-        hasPerfectHealthThisRound = false;
+        //hasPerfectHealthThisRound = false;
         if (_shieldLayers_Current > 0) {
             _shieldLayers_Current--;
             OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);

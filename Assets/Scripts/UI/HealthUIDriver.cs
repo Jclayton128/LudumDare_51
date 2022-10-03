@@ -181,6 +181,7 @@ public class HealthUIDriver : MonoBehaviour
     private void HandleDamageStatusChanged(int subsystemAffected, float newDamageTier,
         bool isRepairedDamaged)
     {
+
         _tooltipTMP.text = _systemNames[subsystemAffected];
         _tooltipColorTween.Kill();
         _tooltipTMP.color = _tooltipColor;
