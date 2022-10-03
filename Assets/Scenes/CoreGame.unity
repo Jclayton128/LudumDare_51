@@ -3189,6 +3189,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1808051073}
   m_CullTransparentMesh: 1
+--- !u!198 &1902321596 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6474141847635861979, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
+  m_PrefabInstance: {fileID: 6474141847621256609}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1906489924 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1201189241427790641, guid: 21c2907fff3df3a47a4c97f7026adeb9, type: 3}
@@ -3260,12 +3265,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6474141847635861979, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
-      propertyPath: InitialModule.startRotation.scalar
-      value: 3.1415925
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
+--- !u!198 &1969619167 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6474141847635861979, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
+  m_PrefabInstance: {fileID: 1941444353}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2052628003
 GameObject:
   m_ObjectHideFlags: 0
@@ -3504,6 +3510,7 @@ GameObject:
   - component: {fileID: 2133400508}
   - component: {fileID: 2133400509}
   - component: {fileID: 2133400510}
+  - component: {fileID: 2133400511}
   m_Layer: 0
   m_Name: UI_Drivers
   m_TagString: Untagged
@@ -3623,6 +3630,25 @@ MonoBehaviour:
   - Run!
   - Fight!
   - Heal!
+--- !u!114 &2133400511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133400505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13b71ed50702d814f9f9f3ba71cd8295, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _phaseColors:
+  - {r: 1, g: 0, b: 0, a: 0.6}
+  - {r: 0.005925894, g: 1, b: 0, a: 0.6}
+  - {r: 0, g: 0.2863114, b: 1, a: 0.6}
+  _upSystem: {fileID: 1902321596}
+  _downSystem: {fileID: 1969619167}
+  _count: 500
 --- !u!1001 &2136666988
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4133,6 +4159,22 @@ PrefabInstance:
     - target: {fileID: 6474141847635861978, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474141847635861979, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
+      propertyPath: autoRandomSeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474141847635861979, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.atime1
+      value: 47901
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474141847635861979, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.a
+      value: 0.8352941
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474141847635861979, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.m_NumAlphaKeys
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
