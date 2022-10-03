@@ -67,7 +67,7 @@ public class StatsHandler : MonoBehaviour {
 
     public bool IsAlive => isAlive;
 
-    public float CameraZoom { get => _cameraZoom_Normal * _statModifiersBySubsystem[0]; }
+    public float CameraZoom { get => isAlive ? _cameraZoom_Normal * _statModifiersBySubsystem[0] : _cameraZoom_Normal; }
 
     public float ShieldRegenRate { get => _shieldRegenRate_Normal * _statModifiersBySubsystem[1]; }
 
@@ -302,9 +302,11 @@ public class StatsHandler : MonoBehaviour {
     }
 
     IEnumerator ScreenShakeOnDeath() {
-        screenShakeOnDeath.GenerateImpulse(Vector3.right);
+        float amount = UnityEngine.Random.Range(.4f, .6f);
+        screenShakeOnDeath.GenerateImpulse(Vector3.right * amount);
         yield return new WaitForSeconds(0.1f);
-        screenShakeOnDeath.GenerateImpulse(Vector3.up);
+        amount = UnityEngine.Random.Range(.4f, .6f);
+        screenShakeOnDeath.GenerateImpulse(Vector3.up * amount);
     }
 
     #endregion
