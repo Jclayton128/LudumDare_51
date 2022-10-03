@@ -10,6 +10,7 @@ public class UIController : MonoBehaviour
     [SerializeField] GameObject _shieldPanel = null;
     [SerializeField] GameObject _healthPanel = null;
     [SerializeField] GameObject _endgamePanel = null;
+    [SerializeField] GameObject _audioSettingsPanel = null;
 
     [SerializeField] TextMeshProUGUI _killCountTMP = null;
     [SerializeField] TextMeshProUGUI _phaseCountTMP = null;
@@ -18,7 +19,12 @@ public class UIController : MonoBehaviour
     [SerializeField] GameObject _creditsSubpanel = null;
     bool _isStatsToggled = true;
 
-    public enum Context {Pregame, InGame, PostGame }
+    public enum Context {
+        Pregame,
+        InGame,
+        PostGame,
+        AudioSettings,
+    }
 
     public void SetContext(Context newContext)
     {
@@ -30,6 +36,7 @@ public class UIController : MonoBehaviour
                 _shieldPanel.SetActive(false);
                 _healthPanel.SetActive(false);
                 _endgamePanel.SetActive(false);
+                _audioSettingsPanel.SetActive(false);
                 break;
 
             case Context.InGame:
@@ -38,6 +45,7 @@ public class UIController : MonoBehaviour
                 _shieldPanel.SetActive(true);
                 _healthPanel.SetActive(true);
                 _endgamePanel.SetActive(false);
+                _audioSettingsPanel.SetActive(false);
                 break;
 
             case Context.PostGame:
@@ -46,6 +54,7 @@ public class UIController : MonoBehaviour
                 _shieldPanel.SetActive(false);
                 _healthPanel.SetActive(false);
                 _endgamePanel.SetActive(true);
+                _audioSettingsPanel.SetActive(false);
 
 
                 int killcount = FindObjectOfType<EnemyController>().GetKillCount();
@@ -54,6 +63,15 @@ public class UIController : MonoBehaviour
                 int phaseCount = FindObjectOfType<TimeController>().GetPhaseCount();
                 _phaseCountTMP.text = $"Phases Survived: {phaseCount}";
 
+                break;
+
+            case Context.AudioSettings:
+                _startPanel.SetActive(false);
+                _timerPanel.SetActive(false);
+                _shieldPanel.SetActive(false);
+                _healthPanel.SetActive(false);
+                _endgamePanel.SetActive(false);
+                _audioSettingsPanel.SetActive(true);
                 break;
         }
     }

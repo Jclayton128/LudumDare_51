@@ -1,15 +1,13 @@
 using UnityEngine;
-
 using FMODUnity;
 using FMOD.Studio;
-using UnityEngine;
 
 public class AudioSettings : MonoBehaviour {
     // [Range(0f,10f)]public float volume = 7f;
 
     [SerializeField] StudioEventEmitter testVolumeSound;
 
-    const string MASTER_BUS = "bus:/Master/";
+    const string MASTER_BUS = "bus:/Master";
     const string MUSIC_BUS = "bus:/Master/Music";
     const string SFX_BUS = "bus:/Master/SFX";
 
@@ -27,6 +25,9 @@ public class AudioSettings : MonoBehaviour {
 
     public void SetSfxVolume(float volume) {
         SetChannelVolume(sfxBus, volume);
+    }
+
+    public void TestSfxVolume() {
         if (testVolumeSound != null) testVolumeSound.Play();
     }
 
