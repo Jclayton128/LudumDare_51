@@ -39,12 +39,12 @@ public class AnnouncerUIDriver : MonoBehaviour
         _announcerTMP.text = _phaseNames[(int)newPhase];
         _announcerTMP.color = _announcerColor;
         _colorTween.Kill();
-        _colorTween = _announcerTMP.DOColor(Color.clear, _announceTime);
+        _colorTween = _announcerTMP.DOColor(Color.clear, _announceTime).SetUpdate(false);
 
         _sizeTween.Kill();
         _announcerTMP.fontSize = _initialFontSize;
         _sizeTween = DOTween.To(() =>
        _announcerTMP.fontSize, x => _announcerTMP.fontSize = x,
-        _initialFontSize * _announcerFontScale, _announceTime);
+        _initialFontSize * _announcerFontScale, _announceTime).SetUpdate(false);
     }
 }

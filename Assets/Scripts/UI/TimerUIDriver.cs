@@ -57,8 +57,8 @@ public class TimerUIDriver : MonoBehaviour
         _colorTweens[timeRemaining].Kill();
 
         //Grow and Dissolve the current triangle
-        _sizeTweens[timeRemaining] = _countdownTriangles[timeRemaining].rectTransform.DOScale(1.3f, _timerEvaporationTime/1.3f);
-        _colorTweens[timeRemaining] = _countdownTriangles[timeRemaining].DOColor(Color.clear, _timerEvaporationTime);
+        _sizeTweens[timeRemaining] = _countdownTriangles[timeRemaining].rectTransform.DOScale(1.3f, _timerEvaporationTime/1.3f).SetUpdate(true);
+        _colorTweens[timeRemaining] = _countdownTriangles[timeRemaining].DOColor(Color.clear, _timerEvaporationTime).SetUpdate(true);
     }
 
     private void UpdateDisplayedPhaseOnNewPhase(TimeController.Phase currentPhase)
