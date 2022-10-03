@@ -65,7 +65,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1202532460792927086, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
       propertyPath: startingHealth
-      value: 15
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4572541516144422410, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
       propertyPath: m_Name
@@ -83,6 +83,36 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4572541516144422410, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
   m_PrefabInstance: {fileID: 4773377021396072082}
   m_PrefabAsset: {fileID: 0}
+--- !u!60 &5877829112508445397
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9028203586643859608}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.93285716, y: 0.88714284}
+    newSize: {x: 3.3, y: 3.14}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.23199928, y: -0.35599673}
+      - {x: -0.37972316, y: 0.08437747}
+      - {x: -0.00562346, y: 0.35730982}
+      - {x: 0.3789935, y: 0.089056015}
+      - {x: 0.23360062, y: -0.35733995}
 --- !u!114 &-2412133136375505779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,6 +142,7 @@ MonoBehaviour:
   _standoffRange_Nominal: 3
   _maxMoveSpeed: 1
   _accelDecelTime: 3
+  _isGuard: 0
   _weaponRange: 4
   _weaponSpeed: 5
   _timeBetweenShots: 3
@@ -143,33 +174,3 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!60 &5877829112508445397
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9028203586643859608}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.93285716, y: 0.88714284}
-    newSize: {x: 3.3, y: 3.14}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.23199928, y: -0.35599673}
-      - {x: -0.37972316, y: 0.08437747}
-      - {x: -0.00562346, y: 0.35730982}
-      - {x: 0.3789935, y: 0.089056015}
-      - {x: 0.23360062, y: -0.35733995}

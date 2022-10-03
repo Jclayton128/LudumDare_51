@@ -2370,7 +2370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &760527123
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5275,6 +5275,10 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6474141847635861979, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474141847635861979, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
       value: 1.05
       objectReference: {fileID: 0}
@@ -6397,6 +6401,10 @@ PrefabInstance:
     - target: {fileID: 6474141847635861979, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
       propertyPath: EmissionModule.m_BurstCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474141847635861979, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
       objectReference: {fileID: 0}
     - target: {fileID: 6474141847635861979, guid: de4ac7ac7432d3c4c852a00758c1b709, type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.size
