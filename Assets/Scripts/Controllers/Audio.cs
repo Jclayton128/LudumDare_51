@@ -9,6 +9,8 @@ public class Audio : MonoBehaviour {
     [SerializeField] StudioGlobalParameterTrigger triggerGameOver;
 
     StudioEventEmitter emitter;
+    FMOD.Studio.EventInstance eventInstance;
+    int timelinePositionMs = 0;
 
     void OnEnable() {
         GlobalEvent.Subscribe(OnGlobalEvent);
@@ -18,8 +20,21 @@ public class Audio : MonoBehaviour {
         GlobalEvent.Unsubscribe(OnGlobalEvent);
     }
 
-    private void Awake() {
+    void Awake() {
         emitter = GetComponent<FMODUnity.StudioEventEmitter>();
+        emitter.Preload = true;
+    }
+
+    void Start() {
+        timelinePositionMs = 0;
+        eventInstance = emitter.EventInstance;
+    }
+
+    void Update() {
+        emitter.EventInstance.getTimelinePosition(out timelinePositionMs);
+        float timelinePosition = ((float)timelinePositionMs) * 0.001f;
+        AudioStats.currentPlaybackTime = timelinePosition;
+        Debug.Log($"Setting AudioStats => {timelinePosition}");
     }
 
     void OnGlobalEvent(GlobalEvent.GlobalEventType eventType) {

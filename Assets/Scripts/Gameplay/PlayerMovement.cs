@@ -1,6 +1,7 @@
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
+    [SerializeField] bool debug = false;
     [SerializeField] float moveAccel = 10f;
 
     TimeController timeController;
@@ -25,6 +26,6 @@ public class PlayerMovement : MonoBehaviour {
         transform.position += (Vector3)desiredHeading * stats.MoveSpeed * timeController.PlayerTimeScale * Time.deltaTime;
         velocity = ((Vector2)transform.position - previousPosition) / Time.deltaTime;
 
-        Debug.Log($"move={input.Move} alive={stats.IsAlive} desiredHeading={desiredHeading}");
+        if (debug) Debug.Log($"move={input.Move} alive={stats.IsAlive} desiredHeading={desiredHeading}");
     }
 }
