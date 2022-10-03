@@ -172,6 +172,7 @@ public class StatsHandler : MonoBehaviour {
         CheckForDeath();
     }
     public void ReceivedTargetedBulletImpact(int targetedSystem) {
+        hasPerfectHealthThisRound = false;
         if (_shieldLayers_Current > 0) {
             _shieldLayers_Current--;
             OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
