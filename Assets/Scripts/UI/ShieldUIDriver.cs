@@ -9,6 +9,7 @@ public class ShieldUIDriver : MonoBehaviour
     [Tooltip("0: inner layer, 1: mid layer, 2: outer layer")]
     [SerializeField] Color[] _shieldLayerColors = new Color[3];
     [SerializeField] Image[] _shieldLayers = null;
+    [SerializeField] Image _shieldChargeLevel = null;
 
     
     private void Awake()
@@ -16,11 +17,18 @@ public class ShieldUIDriver : MonoBehaviour
         GameController gc = FindObjectOfType<GameController>();
         gc.OnPlayerStartsRun += HandleOnPlayerStartsRun;
         gc.OnPlayerDies += HandleOnPlayerDespawn;
+
     }
     private void HandleOnPlayerStartsRun(GameObject newPlayer)
     {
         StatsHandler sh = newPlayer.GetComponent<StatsHandler>();
         sh.OnChangeShieldLayerCount += HandleUpdatedShieldLayerCount;
+        sh.OnShieldChargeLevelChange += HandleShieldLevelChange;
+    }
+
+    private void HandleShieldLevelChange(float newLevel)
+    {
+        _shieldChargeLevel.fillAmount = newLevel;
     }
 
     private void HandleOnPlayerDespawn(GameObject despawningPlayer)

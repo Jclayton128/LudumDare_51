@@ -19,6 +19,7 @@ public class StatsHandler : MonoBehaviour {
 
 
     public Action OnPlayerDying;
+    public Action<float> OnShieldChargeLevelChange;
 
     //Scene References
     TimeController _timeController;
@@ -129,14 +130,20 @@ public class StatsHandler : MonoBehaviour {
     private void RegenerateShield() {
         if (_shieldChargeLevel_Current >= _requiredRegenLevelPerShield) {
             _shieldChargeLevel_Current = 0;
+            OnShieldChargeLevelChange?.Invoke(_shieldChargeLevel_Current);
             _shieldLayers_Current++;
             OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
         }
 
-        if (_shieldLayers_Current >= _shieldLayers_Max) return;
+        if (_shieldLayers_Current >= _shieldLayers_Max)
+        {
+            OnShieldChargeLevelChange?.Invoke(1);
+            return;
+        }
         else {
             _shieldChargeLevel_Current +=
                 ShieldRegenRate * Time.deltaTime * _timeController.PlayerTimeScale;
+            OnShieldChargeLevelChange?.Invoke(_shieldChargeLevel_Current);
         }
     }
 
