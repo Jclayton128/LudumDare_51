@@ -8,11 +8,17 @@ Shader "Unlit/SpriteOffset"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "Queue" = "Transparent" }
         LOD 100
 
         Pass
         {
+            Cull Off
+            Lighting Off
+            ZTest Off
+            ZWrite Off
+            Blend SrcAlpha OneMinusSrcAlpha
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
