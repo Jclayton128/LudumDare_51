@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class UIController : MonoBehaviour
 {
@@ -10,6 +11,12 @@ public class UIController : MonoBehaviour
     [SerializeField] GameObject _healthPanel = null;
     [SerializeField] GameObject _endgamePanel = null;
 
+    [SerializeField] TextMeshProUGUI _killCountTMP = null;
+    [SerializeField] TextMeshProUGUI _phaseCountTMP = null;
+
+    [SerializeField] GameObject _statsSubpanel = null;
+    [SerializeField] GameObject _creditsSubpanel = null;
+    bool _isStatsToggled = true;
 
     public enum Context {Pregame, InGame, PostGame }
 
@@ -39,10 +46,23 @@ public class UIController : MonoBehaviour
                 _shieldPanel.SetActive(false);
                 _healthPanel.SetActive(false);
                 _endgamePanel.SetActive(true);
+
+
+                int killcount = FindObjectOfType<EnemyController>().GetKillCount();
+                _killCountTMP.text = $"Enemies Dispatched: {killcount}";
+
+                int phaseCount = FindObjectOfType<TimeController>().GetPhaseCount();
+                _phaseCountTMP.text = $"Phases Survived: {phaseCount}";
+
                 break;
-
-
-
         }
+    }
+
+    public void HandleCreditsButtonClick()
+    {
+        _isStatsToggled = !_isStatsToggled;
+        _creditsSubpanel.SetActive(!_isStatsToggled);
+        _statsSubpanel.SetActive(_isStatsToggled);
+
     }
 }

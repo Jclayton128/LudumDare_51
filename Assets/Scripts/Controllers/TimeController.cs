@@ -56,6 +56,8 @@ public class TimeController : MonoBehaviour {
     public bool IsPhaseB => CurrentPhase == TimeController.Phase.B_firepower;
     public bool IsPhaseC => CurrentPhase == TimeController.Phase.C_healing;
 
+    int phaseCount = 0;
+
     #endregion
 
     public float StartTimer() {
@@ -115,6 +117,7 @@ public class TimeController : MonoBehaviour {
     private void RotatePhase() {
         //Increment Phase
         CurrentPhase++;
+        phaseCount++;
         if (CurrentPhase == Phase.Wraparound) {
             CurrentPhase = Phase.A_mobility;
         }
@@ -153,5 +156,9 @@ public class TimeController : MonoBehaviour {
         CheckForTimerAdvancement();
     }
 
+    public int GetPhaseCount()
+    {
+        return phaseCount;
+    }
 
 }

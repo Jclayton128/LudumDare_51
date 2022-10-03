@@ -16,6 +16,7 @@ public class EnemyController : MonoBehaviour
     Dictionary<EnemyInfoHolder.EnemyType, Queue<GameObject>> _enemyQueues =
         new Dictionary<EnemyInfoHolder.EnemyType, Queue<GameObject>>();
 
+    int _enemyKillCount = 0;
 
     //settings
     //TODO make this steadily faster?
@@ -144,6 +145,7 @@ public class EnemyController : MonoBehaviour
 
     public void ReturnDeadEnemy(GameObject deadEnemy)
     {
+        _enemyKillCount++;
         EnemyInfoHolder.EnemyType eType = deadEnemy.GetComponent<EnemyInfoHolder>().enemyType;
 
         _enemyQueues[eType].Enqueue(deadEnemy);
@@ -154,5 +156,10 @@ public class EnemyController : MonoBehaviour
     {
         float randomAngle = Random.Range(0f, Mathf.PI * 2f);
         return new Vector2(Mathf.Sin(randomAngle), Mathf.Cos(randomAngle)).normalized;
+    }
+
+    public int GetKillCount()
+    {
+        return _enemyKillCount;
     }
 }

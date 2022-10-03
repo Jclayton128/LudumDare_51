@@ -45,7 +45,7 @@ public class BackgroundUIDriver : MonoBehaviour
 
     private void HandlePhaseChange(TimeController.Phase newPhase)
     {
-        Debug.Log($"new phase color: {_phaseColors[(int)newPhase]}");
+        //Debug.Log($"new phase color: {_phaseColors[(int)newPhase]}");
         _upMain.startColor = _phaseColors[ (int)newPhase];
         _downMain.startColor = _phaseColors[(int)newPhase];
     }
