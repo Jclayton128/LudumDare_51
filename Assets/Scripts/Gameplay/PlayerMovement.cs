@@ -24,5 +24,7 @@ public class PlayerMovement : MonoBehaviour {
         previousPosition = transform.position;
         transform.position += (Vector3)desiredHeading * stats.MoveSpeed * timeController.PlayerTimeScale * Time.deltaTime;
         velocity = ((Vector2)transform.position - previousPosition) / Time.deltaTime;
+
+        Debug.Log($"move={input.Move} alive={stats.IsAlive} desiredHeading={desiredHeading}");
     }
 }

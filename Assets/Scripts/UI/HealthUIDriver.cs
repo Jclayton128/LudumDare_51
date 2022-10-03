@@ -25,7 +25,7 @@ public class HealthUIDriver : MonoBehaviour
     [SerializeField] float _deployTime = 0.7f;
 
     [Tooltip("0: 4/4 hits left, 1: 3/4 hits left, 2: 2/4 hits left, 3: 1/4 hits left, 4: dead")]
-    [SerializeField] Color[] _damageLevelsByColor = new Color[5];
+    [SerializeField] Color[] _damageLevelsByColor = new Color[6];
 
     [SerializeField] int _particlesToEmitPerFrameWhileRepairing = 2;
 
@@ -130,7 +130,7 @@ public class HealthUIDriver : MonoBehaviour
 
     private Color ConvertDamageTierIntoColor(float damageTier)
     {
-        return _damageLevelsByColor[Mathf.Clamp((int)Mathf.Ceil(damageTier), 0, 4)];
+        return _damageLevelsByColor[Mathf.Clamp(((int)Mathf.Ceil(damageTier)) + 1, 0, 5)];
     }
 
     #endregion
