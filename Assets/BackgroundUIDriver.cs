@@ -7,6 +7,7 @@ public class BackgroundUIDriver : MonoBehaviour
     TimeController timeController;
     [SerializeField] Color[] _phaseColors = new Color[3];
 
+    [SerializeField] ParticleSystem _prestartSystem = null;
     [SerializeField] ParticleSystem _upSystem = null;
     [SerializeField] ParticleSystem _downSystem = null;
     ParticleSystem.MainModule _upMain;
@@ -19,8 +20,14 @@ public class BackgroundUIDriver : MonoBehaviour
         timeController.OnTimerAdvancement += HandleOnTimerAdvanced;
         timeController.OnNewPhase += HandlePhaseChange;
 
+        FindObjectOfType<GameController>().OnPlayerStartsRun += DisableWaitingSystemOnStartsRun;
+
         _upMain = _upSystem.main;
         _downMain = _downSystem.main;
+    }
+    private void DisableWaitingSystemOnStartsRun(GameObject go)
+    {
+        _prestartSystem.gameObject.SetActive(false);
     }
 
     private void HandleOnTimerAdvanced(int count)

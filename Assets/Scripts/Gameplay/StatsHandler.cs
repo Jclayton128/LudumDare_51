@@ -69,11 +69,11 @@ public class StatsHandler : MonoBehaviour {
 
     public float CameraZoom { get => isAlive ? _cameraZoom_Normal * _statModifiersBySubsystem[0] : _cameraZoom_Normal; }
 
-    public float ShieldRegenRate { get => _shieldRegenRate_Normal * _statModifiersBySubsystem[1]; }
+    public float ShieldRegenRate { get => _shieldRegenRate_Normal * _statModifiersBySubsystem[3]; }
 
     public float MoveSpeed { get => _moveSpeed_Normal * _statModifiersBySubsystem[2]; }
 
-    public float FireRate { get => _fireRate_Current * _statModifiersBySubsystem[3]; }
+    public float FireRate { get => _fireRate_Current * _statModifiersBySubsystem[1]; }  
 
     public float RotationSpeed { get => _rotationSpeed_Normal; }
 
@@ -146,7 +146,6 @@ public class StatsHandler : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if (!isAlive) return;
-        Debug.Log("received impact");
         ReceiveBulletImpact();
     }
 
@@ -220,7 +219,6 @@ public class StatsHandler : MonoBehaviour {
     private void CheckForDeath() {
         for (int i = 0; i < _damageLevelsBySubsystem.Length; i++) {
             if (_damageLevelsBySubsystem[i] >= _maxDamagePossible) {
-                Debug.LogError("Player subsystem reached 4 hits - game over!");
 
                 ExecuteDeathSequence();
             }
@@ -239,9 +237,14 @@ public class StatsHandler : MonoBehaviour {
     }
 
     void HideSprite() {
-        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        if (spriteRenderer == null) return;
-        spriteRenderer.enabled = false;
+        SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+        if (spriteRenderers == null) return;
+        
+        foreach (SpriteRenderer sr in spriteRenderers)
+        {
+            sr.enabled = false;
+        }
+
     }
 
     #endregion
