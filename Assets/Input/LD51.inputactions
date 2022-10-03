@@ -34,9 +34,45 @@
                 },
                 {
                     "name": "Heal",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "45890376-7e78-4f1b-bd0f-adca5c77bcac",
                     "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "HealUp",
+                    "type": "Value",
+                    "id": "19421d91-04b5-4424-ac0a-6e796c1cd357",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "HealDown",
+                    "type": "Value",
+                    "id": "59ff3bdf-8d5a-450e-80e5-5e495b95bb86",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "HealLeft",
+                    "type": "Value",
+                    "id": "3aeee2c3-68c6-4969-9170-c70bd5c1f2b7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "HealRight",
+                    "type": "Value",
+                    "id": "7152cf6f-f131-4c16-ad54-8505e585fb73",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -260,6 +296,50 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Heal",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "27c5ec39-9619-4f40-8da0-a86eb279424b",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "HealUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1bcc8d07-68ac-4253-bce3-56e0d76eba88",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "HealDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a33fe0ec-b1ea-4b68-957b-f9775300d49d",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "HealLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d33c22fd-92c7-46eb-a70f-aca2ac4811d4",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "HealRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -14,6 +14,8 @@ public class InputController : MonoBehaviour {
     Vector2 mousePositionWorld; // mouse position in world relative to this GameObject's transform position
     Vector2 mousePositionNormalized; // (0,0) lower LH corner -> (1,1) upper RH corner
     bool isFirePressed;
+    bool isHealing;
+    int subsystemIndex;
     #endregion
 
     #region PublicAccessors
@@ -72,6 +74,11 @@ public class InputController : MonoBehaviour {
         int subsystemIndex = GetSubsystemRepairIndex(value.Get<Vector2>());
         stats.RepairDamage(subsystemIndex);
     }
+
+    void OnHealUp(InputValue value) { }
+    void OnHealDown(InputValue value) { }
+    void OnHealLeft(InputValue value) { }
+    void OnHealRight(InputValue value) { }
 
     int GetSubsystemRepairIndex(Vector2 dpad) {
         if (dpad.y > dpadDeadZone) return 0;
