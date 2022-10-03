@@ -31,17 +31,18 @@ public class PlayerAnimationHandler : MonoBehaviour
         {
             case TimeController.Phase.A_mobility:
                 ExtendPods(0f);
-                RotatePods(false, _deployTime/2f);
-                RetractPods(_deployTime);
+                RotatePods(false, _deployTime);
+                RetractPods(_deployTime*2f);
                 break;
 
             case TimeController.Phase.B_firepower:
                 ExtendPods(0f);
+                RotatePods(true, _deployTime);
+
                 break;
 
             case TimeController.Phase.C_healing:
-                RotatePods(true, 0f);
-                RetractPods(_deployTime);
+                RetractPods(0f);
                 break;
 
 

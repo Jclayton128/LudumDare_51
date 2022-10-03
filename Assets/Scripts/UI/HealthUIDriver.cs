@@ -68,6 +68,7 @@ public class HealthUIDriver : MonoBehaviour
                 _systemIcons[i].DOColor(Color.clear, _deployTime).SetUpdate(false);
         }
 
+
         _instructionTMP.color = Color.clear;
         _tooltipTMP.color = Color.clear;
 
@@ -77,7 +78,13 @@ public class HealthUIDriver : MonoBehaviour
     {
         StatsHandler sh = newPlayer.GetComponent<StatsHandler>();
         sh.OnReceiveDamage += HandleDamageStatusChanged;
+        _tooltipColorTween.Kill();
+        _instructionTween.Kill();
+        _tooltipTMP.color = Color.clear;
+        _instructionTMP.color = Color.clear;
+
         ResetHealthStatusToFull();
+        _tooltipTMP.text = "";
     }
 
     private void HandleOnPlayerDies(GameObject despawningPlayer)
@@ -139,6 +146,8 @@ public class HealthUIDriver : MonoBehaviour
             _iconColorTweens[i] =
                 _systemIcons[i].DOColor(_iconColor, _deployTime).SetUpdate(false);
         }
+
+
 
         _tooltipColorTween.Kill();
         _tooltipColorTween = _tooltipTMP.DOColor(_tooltipColor, _deployTime);
