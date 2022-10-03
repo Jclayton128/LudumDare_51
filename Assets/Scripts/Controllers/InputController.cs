@@ -10,11 +10,11 @@ public class InputController : MonoBehaviour {
     #region State
     Vector2 move;
     Vector2 look; // note - look only applies to gamepad R stick
+    Vector2 heal; // note - look only applies to gamepad R stick
     Vector2 mousePositionScreen;
     Vector2 mousePositionWorld; // mouse position in world relative to this GameObject's transform position
     Vector2 mousePositionNormalized; // (0,0) lower LH corner -> (1,1) upper RH corner
     bool isFirePressed;
-    bool isHealing;
     int subsystemIndex;
     #endregion
 
@@ -49,10 +49,12 @@ public class InputController : MonoBehaviour {
 
     void Update() {
         if (camera == null) camera = Camera.main;
+        if (stats == null) stats = GetComponent<StatsHandler>();
         mousePositionScreen = Mouse.current.position.ReadValue();
         mousePositionWorld = camera.ScreenToWorldPoint(mousePositionScreen) - transform.position;
         mousePositionNormalized = camera.ScreenToViewportPoint(mousePositionScreen);
         SetMouseStyle();
+        TryRepair();
         // Debug.Log($"move={move}, look={look}, mouseNorm={mousePositionNormalized}, mouseWorld={mousePositionWorld}");
     }
 
@@ -61,6 +63,7 @@ public class InputController : MonoBehaviour {
     }
 
     void OnLook(InputValue value) {
+        if (value.Get<Vector2>() == Vector2.zero) return;
         look = value.Get<Vector2>();
     }
 
@@ -69,22 +72,37 @@ public class InputController : MonoBehaviour {
     }
 
     void OnHeal(InputValue value) {
-        if (!value.isPressed) return;
-        if (stats == null) stats = GetComponent<StatsHandler>();
-        int subsystemIndex = GetSubsystemRepairIndex(value.Get<Vector2>());
-        stats.RepairDamage(subsystemIndex);
+        heal = value.Get<Vector2>();
     }
 
-    void OnHealUp(InputValue value) { }
-    void OnHealDown(InputValue value) { }
-    void OnHealLeft(InputValue value) { }
-    void OnHealRight(InputValue value) { }
+    void OnHealUp(InputValue value) {
+        heal.y = value.isPressed ? 1 : 0;
+    }
+
+    void OnHealDown(InputValue value) {
+        heal.y = value.isPressed ? -1 : 0;
+    }
+
+    void OnHealLeft(InputValue value) {
+        heal.x = value.isPressed ? -1 : 0;
+    }
+
+    void OnHealRight(InputValue value) {
+        heal.x = value.isPressed ? 1 : 0;
+    }
 
     int GetSubsystemRepairIndex(Vector2 dpad) {
         if (dpad.y > dpadDeadZone) return 0;
         if (dpad.y < -dpadDeadZone) return 1;
-        if (dpad.x > dpadDeadZone) return 2;
+        if (dpad.x < dpadDeadZone) return 2;
         return 3;
+    }
+
+    void TryRepair() {
+        AppIntegrity.Assert(stats != null);
+        if (heal == Vector2.zero) return;
+        int subsystemIndex = GetSubsystemRepairIndex(heal);
+        stats.RepairDamage(subsystemIndex);
     }
 
     void SetMouseStyle() {
