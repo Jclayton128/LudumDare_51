@@ -3680,7 +3680,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c4e4190ff0689f41a66b691642dda75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyPrefab: {fileID: 4572541516144422410, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
+  _enemyPrefab: {fileID: 7351433339355187186, guid: eb9bc2cec5452264fbb1a1487bdd1f46, type: 3}
   _spawnPerimeterRadius: 7
 --- !u!114 &2052628011
 MonoBehaviour:

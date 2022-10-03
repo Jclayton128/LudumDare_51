@@ -12,6 +12,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3168446124197734601, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3168446124197734601, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3168446124197734601, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3168446124197734601, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -51,6 +63,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3168446124197734601, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3830533406619047830, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}
       propertyPath: m_Name
       value: BulletPrefab_enemy
@@ -58,6 +74,22 @@ PrefabInstance:
     - target: {fileID: 3830533406619047830, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3956777008111789005, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}
+      propertyPath: _isPlayerBullet
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7748544645026051322, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b0880f4b963bf114dbd5250c3b455a58, type: 3}
+    - target: {fileID: 7748544645026051322, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}
+      propertyPath: m_Color.g
+      value: 0.22747847
+      objectReference: {fileID: 0}
+    - target: {fileID: 7748544645026051322, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d5cd9ec3a8bb4041a771394d1edf7e0, type: 3}

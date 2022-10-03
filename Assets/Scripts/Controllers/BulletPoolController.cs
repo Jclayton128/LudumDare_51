@@ -21,7 +21,7 @@ public class BulletPoolController : MonoBehaviour
 
     public void ReturnExpiredBulletToPool(Bullet expiringBullet)
     {
-        if (expiringBullet.IsPlayerBullet)
+        if (expiringBullet.CheckIfIsPlayerBullet())
         {
             _activePlayerBullets.Remove(expiringBullet);
             _pooledPlayerBullets.Enqueue(expiringBullet);            

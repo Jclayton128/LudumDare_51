@@ -82,6 +82,8 @@ public class TimeController : MonoBehaviour {
         _timerAdvancementsRemainingInPhase = Mathf.RoundToInt(_timeBetweenPhases);
         isTimerActive = false;
         timeToStart = Mathf.Infinity;
+        _currentEnemyTimeScale = _enemyTimeScales[0];
+        //_currentPlayerTimeScale = _playerTimeScales[0];
     }
 
     private void Update() {

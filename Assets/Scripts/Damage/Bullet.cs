@@ -3,8 +3,8 @@ using UnityEngine;
 public class Bullet : MonoBehaviour {
     BulletPoolController _poolController;
     TimeController _timeController;
+    ExplosionController _explosionController;
     [SerializeField] bool _isPlayerBullet = false;
-    public bool IsPlayerBullet { get => _isPlayerBullet; }
 
     //state
     float _scaledLifetimeRemaining;
@@ -13,6 +13,7 @@ public class Bullet : MonoBehaviour {
     public void Initialize(BulletPoolController poolControllerRef, TimeController timeControllerRef) {
         _poolController = poolControllerRef;
         _timeController = timeControllerRef;
+        _explosionController = timeControllerRef.GetComponent<ExplosionController>();
     }
 
     public void SetupForUse(float lifetime, Vector3 velocity) {
@@ -47,4 +48,18 @@ public class Bullet : MonoBehaviour {
 
     }
 
+    public bool CheckIfIsPlayerBullet()
+    {
+        return _isPlayerBullet;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (_isPlayerBullet)
+        {
+            _explosionController.RequestExplosion(1, transform.position, Color.red);
+        }
+
+        _poolController.ReturnExpiredBulletToPool(this);
+    }
 }

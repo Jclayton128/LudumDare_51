@@ -139,7 +139,9 @@ public class StatsHandler : MonoBehaviour {
 
     #region Receive Incoming Damage
 
-    private void OnTriggerEnter2D(Collider2D collision) {
+    private void OnTriggerEnter2D(Collider2D collision) 
+    {
+        Debug.Log("received impact");
         ReceiveBulletImpact();
     }
 

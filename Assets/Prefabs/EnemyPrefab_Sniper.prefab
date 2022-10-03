@@ -74,9 +74,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c9bf2bdfd24e3c49baacd2f6803d260, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _standoffRange: 3
-  _maxWeaponRange: 15
+  _standoffRange_Nominal: 3
+  _maxWeaponRange: 5
   _weaponSpeed: 5
   _timeBetweenShots: 1
-  _moveSpeed: 3
+  _maxMoveSpeed: 3
   _isLeadingPlayerWithShots: 0
+  _accelDecelTime: 3
