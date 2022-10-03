@@ -111,6 +111,9 @@ Weapon sounds courtesy of Frank Bry at The Recordist.</value>
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{54a244ae-3aae-49b3-a194-b0da0ffc71c2}">
+		<property name="volume">
+			<value>-6</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{03d96c17-6733-4022-bfca-430e8c38eb55}</destination>
 		</relationship>
