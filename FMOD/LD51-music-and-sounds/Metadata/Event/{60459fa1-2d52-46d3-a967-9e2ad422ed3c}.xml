@@ -83,7 +83,7 @@ Weapon sounds courtesy of Frank Bry at The Recordist.</value>
 			<destination>{31b958de-3f76-4dad-b089-02dd00e55e7e}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{ab4bd866-41bc-4516-9bf9-5e474f8d60d2}</destination>
+			<destination>{163a83c6-3671-4e5e-94dc-0d87b04b4678}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{eb4abceb-216e-4393-bc11-9c57d4dafe80}" />
