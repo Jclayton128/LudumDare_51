@@ -5473,6 +5473,7 @@ MonoBehaviour:
   _shieldPanel: {fileID: 616462342}
   _healthPanel: {fileID: 1311767557}
   _endgamePanel: {fileID: 1217688115}
+  _startButton: {fileID: 1290875943}
   _killCountTMP: {fileID: 532478602}
   _phaseCountTMP: {fileID: 172377529}
   _statsSubpanel: {fileID: 257133308}
