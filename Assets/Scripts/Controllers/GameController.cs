@@ -29,10 +29,23 @@ public class GameController : MonoBehaviour {
         _timeController.StopTimer();
     }
 
+    public void ShowAudioSettings() {
+        _uiController.SetContext(UIController.Context.AudioSettings);
+    }
+
+    public void ShowMainMenu() {
+        _uiController.SetContext(UIController.Context.Pregame);
+    }
+
     public void StartNewGame() {
         GlobalEvent.Invoke(GlobalEvent.GlobalEventType.GameStart);
         float timeToWaitForSongSync = _timeController.StartTimer();
-        Invoke("OnStartGameElements", timeToWaitForSongSync);
+        Invoke("OnStartCoolEffects", timeToWaitForSongSync);
+    }
+
+    void OnStartCoolEffects() {
+        // TODO: show the cool triangle dissolve
+        Invoke("OnStartGameElements", 2.5f);
     }
 
     void OnStartGameElements() {
@@ -56,6 +69,7 @@ public class GameController : MonoBehaviour {
     }
 
     public void HandleRestartMetaGameLoop() {
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         GlobalEvent.Invoke(GlobalEvent.GlobalEventType.GameReset);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
