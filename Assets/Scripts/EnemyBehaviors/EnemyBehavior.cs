@@ -11,30 +11,34 @@ public class EnemyBehavior : MonoBehaviour
     /// 2 - translate towards player.  Stop at standoff range
     /// 3 - shoot at player.
 
+    [Header("Move Parameters")]
+
     [Tooltip("Average Range at which these enemies stop trying to close the distance. Should be" +
         "less than max weapon range. Actual enemies use a random variation on this.")]
     [SerializeField] float _standoffRange_Nominal = 3f;
-
-    [Tooltip("Distance a enemy bullet from this enemy will travel.")]
-    [SerializeField] float _maxWeaponRange = 15f;
-
-    [Tooltip("Speed that an enemy bullet from this enemy will travel.")]
-    [SerializeField] float _weaponSpeed = 5f;
-
-    [SerializeField] float _timeBetweenShots = 1.0f;
-
     [SerializeField] float _maxMoveSpeed = 3f;
-    [SerializeField] bool _isLeadingPlayerWithShots = false;
 
     [Tooltip("How long it takes to get from 0 to 60, or vice versa." +
         "Higher should feel heavier, with more inertia.")]
     [SerializeField] float _accelDecelTime = 1.0f;
 
+    [Header("Attack Parameters")]
+
+    [Tooltip("Distance a enemy bullet from this enemy will travel.")]
+    [SerializeField] float _weaponRange = 15f;
+
+    [Tooltip("Speed that an enemy bullet from this enemy will travel.")]
+    [SerializeField] float _weaponSpeed = 5f;
+
+    [SerializeField] float _timeBetweenShots = 1.0f;
+    [SerializeField] ShotType _shotType = EnemyBehavior.ShotType.Single;
+    enum ShotType { Single, Lead, NovaShot}
+
     GameObject _player;
     PlayerMovement _pm;
     Vector3 _moveDirection;
     float _actualMoveSpeed;
-    float _range;
+    float _rangeToPlayer;
     float _countdownUntilNextShot = 0;
     float _standoffRange_Actual;
     float _accelDecelRate;
@@ -53,10 +57,25 @@ public class EnemyBehavior : MonoBehaviour
     private void Update()
     {
         if (!_player) return;
-        _moveDirection = (_player.transform.position - transform.position);
-        _range = _moveDirection.magnitude;
 
-        if (_range > _standoffRange_Actual)
+        Move();
+
+        _countdownUntilNextShot -= Time.deltaTime * _timeController.EnemyTimeScale;
+        if (_countdownUntilNextShot <= 0 && _rangeToPlayer < _weaponRange)
+        {
+            Fire();
+            _countdownUntilNextShot = _timeBetweenShots;
+        }
+
+
+    }
+
+    private void Move()
+    {
+        _moveDirection = (_player.transform.position - transform.position);
+        _rangeToPlayer = _moveDirection.magnitude;
+
+        if (_rangeToPlayer > _standoffRange_Actual)
         {
             _actualMoveSpeed = Mathf.MoveTowards
                 (_actualMoveSpeed, _maxMoveSpeed,
@@ -71,23 +90,59 @@ public class EnemyBehavior : MonoBehaviour
 
         transform.position += _moveDirection.normalized * _actualMoveSpeed *
                 _timeController.EnemyTimeScale * Time.deltaTime;
-
-        _countdownUntilNextShot -= Time.deltaTime * _timeController.EnemyTimeScale;
-        if (_countdownUntilNextShot <= 0 && _range < _maxWeaponRange )
-        {
-            Fire();
-            _countdownUntilNextShot = _timeBetweenShots;
-        }
-
-        
     }
 
     private void Fire()
     {
-        float lifetime = (_range / _weaponSpeed) * 1.5f;
+        switch (_shotType)
+        {
+            case ShotType.Single:
+                FireSingleShot();
+                break;
+
+            case ShotType.Lead:
+                FireSingleShotWithLead();
+                break;
+
+            case ShotType.NovaShot:
+                FireNovaShot();
+                break;
+        }
+    }
+
+    private void FireSingleShot()
+    {
+        float lifetime = (_rangeToPlayer / _weaponSpeed) * 1.5f;
         Vector2 velocity = _moveDirection.normalized * _weaponSpeed;
         Bullet bullet = _bulletPoolController.
             RequestBullet(false, transform.position, Quaternion.identity);
         bullet.SetupForUse(lifetime, velocity);
+    }
+
+    private void FireSingleShotWithLead()
+    {
+        float lifetime =
+            (_player.transform.position + (Vector3)_pm.Velocity).magnitude / _weaponSpeed;
+        Vector3 futurePlayerPosition = _player.transform.position + (Vector3)(_pm.Velocity * lifetime);
+        Vector3 direction = futurePlayerPosition - transform.position;
+        Vector2 velocity = direction.normalized * _weaponSpeed;
+        Bullet bullet = _bulletPoolController.
+            RequestBullet(false, transform.position, Quaternion.identity);
+        bullet.SetupForUse(lifetime*1.3f, velocity);
+    }
+
+    private void FireNovaShot()
+    {
+        float degreesSpreadOfEntireBurst = 360f;
+        int projectilesInBurst = 10;
+
+        float spreadSubdivided = degreesSpreadOfEntireBurst / projectilesInBurst;
+        for (int i = 0; i < projectilesInBurst; i++)
+        {
+            Quaternion sector = Quaternion.Euler(0, 0, (i * spreadSubdivided) - (degreesSpreadOfEntireBurst / 2) + transform.eulerAngles.z);
+            Bullet bullet = _bulletPoolController.RequestBullet(false, transform.position, sector);
+            Vector2 velocity = bullet.transform.up * _weaponSpeed;
+            bullet.SetupForUse(_weaponRange / _weaponSpeed, velocity);
+        }
     }
 }

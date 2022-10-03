@@ -27,5 +27,6 @@ public class PlayerMovement : MonoBehaviour {
         velocity = ((Vector2)transform.position - previousPosition) / Time.deltaTime;
 
         if (debug) Debug.Log($"move={input.Move} alive={stats.IsAlive} desiredHeading={desiredHeading}");
+        Debug.DrawLine(transform.position, transform.position + (Vector3)velocity, Color.blue, 0.1f);
     }
 }
