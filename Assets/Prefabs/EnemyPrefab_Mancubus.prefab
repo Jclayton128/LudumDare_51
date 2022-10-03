@@ -69,7 +69,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1202532460792927086, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
       propertyPath: hideOnDeath
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1202532460792927086, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
       propertyPath: explodeOnDeath

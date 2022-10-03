@@ -34,7 +34,7 @@ public class Explosion : MonoBehaviour {
         gameObject.SetActive(true);
         particleFX.Play();
         bulletPool = FindObjectOfType<BulletPoolController>();
-        AppIntegrity.Assert(explosionSound != null);
+        AppIntegrity.Assert(explosionSound == null); // was set as 'sound != null'
     }
 
     void Start() {
@@ -44,7 +44,8 @@ public class Explosion : MonoBehaviour {
 
     void Update() {
         if (t >= timeActive) {
-            circle.enabled = false;
+            //circle.enabled = false;
+            gameObject.SetActive(false);
             return;
         }
 
@@ -53,7 +54,7 @@ public class Explosion : MonoBehaviour {
             OnHit(results[i].collider);
         }
 
-        t += Time.deltaTime;
+        t += Time.unscaledDeltaTime; // was += Time.deltaTime;
     }
 
     void OnTriggerEnter2D(Collider2D other) {
