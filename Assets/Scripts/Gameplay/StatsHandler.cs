@@ -144,13 +144,25 @@ public class StatsHandler : MonoBehaviour {
 
     #region Receive Incoming Damage
 
-    private void OnTriggerEnter2D(Collider2D collision) 
-    {
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (!isAlive) return;
         Debug.Log("received impact");
         ReceiveBulletImpact();
     }
 
+    public void ReceiveExplosiveImpact(float damage) {
+        if (!isAlive) return;
+        float appliedAmout = damage - _shieldLayers_Current;
+        _shieldLayers_Current = Mathf.Max(0, _shieldLayers_Current - Mathf.RoundToInt(damage));
+        OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
+        while (appliedAmout > 0) {
+            ReceiveDamage();
+            appliedAmout--;
+        }
+    }
+
     public void ReceiveBulletImpact() {
+        if (!isAlive) return;
         if (_shieldLayers_Current > 0) {
             _shieldLayers_Current--;
             OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
@@ -174,7 +186,9 @@ public class StatsHandler : MonoBehaviour {
         StartCoroutine(ScreenShakeOnDamage(UnityEngine.Random.Range(.3f, 1f)));
         CheckForDeath();
     }
+
     public void ReceivedTargetedBulletImpact(int targetedSystem) {
+        if (!isAlive) return;
         hasPerfectHealthThisRound = false;
         if (_shieldLayers_Current > 0) {
             _shieldLayers_Current--;
@@ -221,7 +235,7 @@ public class StatsHandler : MonoBehaviour {
         StartCoroutine(ScreenShakeOnDeath());
         HideSprite();
         Destroy(gameObject, 3f);
-        
+
     }
 
     void HideSprite() {

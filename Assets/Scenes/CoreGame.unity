@@ -435,6 +435,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 5838383410017903743, guid: 2462da27ceeacca4b9b0c8fbb50726d7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2462da27ceeacca4b9b0c8fbb50726d7, type: 3}
 --- !u!1001 &450546213
@@ -3396,6 +3400,7 @@ MonoBehaviour:
   - {fileID: 7351433339355187186, guid: eb9bc2cec5452264fbb1a1487bdd1f46, type: 3}
   - {fileID: 3406081471608059151, guid: c908b91f01a26ff469085dd0cd63eee7, type: 3}
   - {fileID: 9028203586643859608, guid: 6694a0a6342245c4aafa3d208db0f7e8, type: 3}
+  - {fileID: 7552709026604271137, guid: b9496d30dcebc4a2db06e29f62a03410, type: 3}
   _spawnPerimeterRadius: 7
   _timeBetweenEnemySpawns: 2
 --- !u!114 &2052628011

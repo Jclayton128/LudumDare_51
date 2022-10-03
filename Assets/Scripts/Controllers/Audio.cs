@@ -11,6 +11,7 @@ public class Audio : MonoBehaviour {
     StudioEventEmitter emitter;
     FMOD.Studio.EventInstance eventInstance;
     int timelinePositionMs = 0;
+    float timelinePosition;
 
     void OnEnable() {
         GlobalEvent.Subscribe(OnGlobalEvent);
@@ -32,9 +33,8 @@ public class Audio : MonoBehaviour {
 
     void Update() {
         emitter.EventInstance.getTimelinePosition(out timelinePositionMs);
-        float timelinePosition = ((float)timelinePositionMs) * 0.001f;
+        timelinePosition = ((float)timelinePositionMs) * 0.001f;
         AudioStats.currentPlaybackTime = timelinePosition;
-        Debug.Log($"Setting AudioStats => {timelinePosition}");
     }
 
     void OnGlobalEvent(GlobalEvent.GlobalEventType eventType) {

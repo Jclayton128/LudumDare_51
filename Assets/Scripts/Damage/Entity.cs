@@ -25,7 +25,8 @@ public class Entity : MonoBehaviour {
     [Space]
     [Header("Death")]
     [SerializeField] bool hideOnDeath = false;
-    //[SerializeField] ParticleSystem deathFX;
+    [SerializeField] bool explodeOnDeath = false;
+    [SerializeField] Explosion explosionPrefab;
 
     float currentHealth;
     public bool IsAlive { get; private set; } = true;
@@ -49,15 +50,26 @@ public class Entity : MonoBehaviour {
         IsAlive = true;
     }
 
+    private void OnCollisionEnter2D(Collision2D other) {
+        if (!IsAlive) return;
+        if (other.collider == null) return;
+        if (explodeOnDeath && other.collider.CompareTag("Player")) {
+            TakeDamage(10f);
+            return;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision) {
+        if (!IsAlive) return;
         //TODO reference a variable damage amount. Not all bullets do exactly 1 damage?
         TakeDamage(1);
     }
 
     public bool TakeDamage(float amount) {
+        if (!IsAlive) return false;
         if (Time.time < _timeInvulnerabilityEnds) return false;
 
-        _explosionController.RequestExplosion(amount, transform.position, Color.red);
+        if (_explosionController != null) _explosionController.RequestExplosion(amount, transform.position, Color.red);
         OnReceiveDamage?.Invoke(amount);
         currentHealth -= amount;
 
@@ -81,16 +93,23 @@ public class Entity : MonoBehaviour {
 
         currentHealth = Mathf.Min(currentHealth, 0f);
 
-        _explosionController.RequestExplosion(startingHealth, transform.position, Color.red);
+        if (_explosionController != null) _explosionController.RequestExplosion(startingHealth, transform.position, Color.red);
         OnDie?.Invoke();
 
-        if (_enemyController) {
+        if (explodeOnDeath) Detonate();
+
+        if (_enemyController != null) {
             _enemyController.ReturnDeadEnemy(this.gameObject);
         } else {
             if (hideOnDeath) HideSprite();
         }
 
         //if (deathFX != null) deathFX.Play();
+    }
+
+    void Detonate() {
+        if (explosionPrefab == null) return;
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
     }
 
     void HideSprite() {
