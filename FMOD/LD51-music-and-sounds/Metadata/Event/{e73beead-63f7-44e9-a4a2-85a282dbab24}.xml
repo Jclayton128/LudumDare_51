@@ -121,8 +121,14 @@
 	</object>
 	<object class="MixerBusPanner" id="{2487a2f5-75f9-497a-80f0-523f4705ac7c}" />
 	<object class="MultiSound" id="{8e566b28-25ad-4283-a425-2c9c12fe28d9}">
-		<property name="startOffset">
-			<value>66</value>
+		<property name="delayType">
+			<value>0</value>
+		</property>
+		<property name="minimumTimeDelay">
+			<value>60</value>
+		</property>
+		<property name="maximumTimeDelay">
+			<value>140</value>
 		</property>
 		<relationship name="modulators">
 			<destination>{d457ff73-99b3-4e96-bb20-b24a7c4cba50}</destination>
@@ -155,6 +161,12 @@
 		</relationship>
 	</object>
 	<object class="MultiSound" id="{a9619e4f-782b-4855-a948-43ab24e951ee}">
+		<property name="delayType">
+			<value>0</value>
+		</property>
+		<property name="maximumTimeDelay">
+			<value>40</value>
+		</property>
 		<property name="pitch">
 			<value>-5.5</value>
 		</property>
@@ -206,9 +218,6 @@
 	<object class="RandomizerModulator" id="{9790bc07-3f6f-412e-bff6-abd9734dcbeb}">
 		<property name="nameOfPropertyBeingModulated">
 			<value>startOffset</value>
-		</property>
-		<property name="amount">
-			<value>58</value>
 		</property>
 	</object>
 	<object class="FadeCurve" id="{48f9b4a1-5c8e-4d11-8ef0-bcc687524ea0}">

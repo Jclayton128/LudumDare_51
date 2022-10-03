@@ -124,8 +124,17 @@
 		<property name="length">
 			<value>2</value>
 		</property>
+		<property name="delayType">
+			<value>0</value>
+		</property>
+		<property name="minimumTimeDelay">
+			<value>60</value>
+		</property>
+		<property name="maximumTimeDelay">
+			<value>120</value>
+		</property>
 		<property name="startOffset">
-			<value>43.5</value>
+			<value>0.800000012</value>
 		</property>
 		<relationship name="modulators">
 			<destination>{b92afee7-b583-4604-ba2a-c273f0e620b7}</destination>
@@ -154,6 +163,12 @@
 	<object class="MultiSound" id="{8dc3965f-0184-4291-87d4-04896779a76e}">
 		<property name="length">
 			<value>2</value>
+		</property>
+		<property name="delayType">
+			<value>0</value>
+		</property>
+		<property name="maximumTimeDelay">
+			<value>40</value>
 		</property>
 		<relationship name="sounds">
 			<destination>{9e8a5c13-554c-4ed1-9a31-aecee1ad53da}</destination>
@@ -189,9 +204,6 @@
 	<object class="RandomizerModulator" id="{b92afee7-b583-4604-ba2a-c273f0e620b7}">
 		<property name="nameOfPropertyBeingModulated">
 			<value>startOffset</value>
-		</property>
-		<property name="amount">
-			<value>100</value>
 		</property>
 	</object>
 	<object class="RandomizerModulator" id="{d8a6524b-d249-4014-acda-9f99aa5dd934}">

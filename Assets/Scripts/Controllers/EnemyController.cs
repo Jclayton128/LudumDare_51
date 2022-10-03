@@ -103,6 +103,7 @@ public class EnemyController : MonoBehaviour
 
     private EnemyInfoHolder.EnemyType GetRandomEnemyType()
     {
+        if (_enemyPrefabs.Length == 0) return EnemyInfoHolder.EnemyType.Rat;
         int rand = UnityEngine.Random.Range(0, _enemyPrefabs.Length);
         return _enemyPrefabs[rand].GetComponent<EnemyInfoHolder>().enemyType;
     }

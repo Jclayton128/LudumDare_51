@@ -5,6 +5,14 @@ using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour
 {
+    enum ShotType {
+        Single,
+        Lead,
+        NovaShot,
+        Nothing,
+        Lunge,
+    }
+
     TimeController _timeController;
     BulletPoolController _bulletPoolController;
     /// 1 - find player
@@ -32,7 +40,13 @@ public class EnemyBehavior : MonoBehaviour
 
     [SerializeField] float _timeBetweenShots = 1.0f;
     [SerializeField] ShotType _shotType = EnemyBehavior.ShotType.Single;
-    enum ShotType { Single, Lead, NovaShot}
+
+    [Header("Lunge Behavior")]
+
+    [SerializeField] float timeTelegraphLunge = 0.4f;
+    [SerializeField] float lungeDuration = 1f;
+    [SerializeField] float lungeSpeed = 1f;
+    [SerializeField] AnimationCurve lungeCurve = AnimationCurve.Linear(0f, 1f, 1f, 0.2f);
 
     GameObject _player;
     PlayerMovement _pm;
@@ -43,12 +57,16 @@ public class EnemyBehavior : MonoBehaviour
     float _standoffRange_Actual;
     float _accelDecelRate;
 
+    EnemyAnimator _enemyAnimator;
+    Coroutine _lunging;
+    bool isLunging = false;
 
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
         _pm = _player.GetComponent<PlayerMovement>();
         _timeController = FindObjectOfType<TimeController>();
+        _enemyAnimator = GetComponent<EnemyAnimator>();
         _bulletPoolController = _timeController.GetComponent<BulletPoolController>();
         _standoffRange_Actual = UnityEngine.Random.Range(.8f, 1.2f) * _standoffRange_Nominal;
         _accelDecelRate = _maxMoveSpeed / _accelDecelTime;
@@ -72,6 +90,7 @@ public class EnemyBehavior : MonoBehaviour
 
     private void Move()
     {
+        if (isLunging) return;
         _moveDirection = (_player.transform.position - transform.position);
         _rangeToPlayer = _moveDirection.magnitude;
 
@@ -106,6 +125,13 @@ public class EnemyBehavior : MonoBehaviour
 
             case ShotType.NovaShot:
                 FireNovaShot();
+                break;
+
+            case ShotType.Nothing:
+                break;
+
+            case ShotType.Lunge:
+                LungeTowardsPlayer();
                 break;
         }
     }
@@ -144,5 +170,26 @@ public class EnemyBehavior : MonoBehaviour
             Vector2 velocity = bullet.transform.up * _weaponSpeed;
             bullet.SetupForUse(_weaponRange / _weaponSpeed, velocity);
         }
+    }
+
+    private void LungeTowardsPlayer() {
+        if (_lunging != null) StopCoroutine(_lunging);
+        _lunging = StartCoroutine(Lunging());
+    }
+
+    IEnumerator Lunging() {
+        isLunging = true;
+        if (_enemyAnimator != null) _enemyAnimator.SetAgro(true);
+        yield return new WaitForSeconds(timeTelegraphLunge);
+        if (_enemyAnimator != null) _enemyAnimator.SetAgro(false);
+        float t = 0f;
+        while (t < lungeDuration) {
+            Vector2 heading = (_player.transform.position - transform.position).normalized;
+            transform.position += (Vector3)heading * lungeSpeed * lungeCurve.Evaluate(t / lungeDuration) * Time.deltaTime;
+            t += Time.deltaTime;
+            yield return null;
+        }
+        isLunging = false;
+        _lunging = null;
     }
 }

@@ -27,7 +27,7 @@ public class TimeController : MonoBehaviour {
     [SerializeField]
     private float[] _playerTimeScales = new float[3]
     {
-            1.0f, 1.0f, 0.1f
+        1.0f, 1.0f, 0.1f
     };
     float _timeToLerptoNewTimescale = 1f;
 
@@ -59,14 +59,16 @@ public class TimeController : MonoBehaviour {
     #endregion
 
     public float StartTimer() {
+        Time.timeScale = 1f;
         // When triggered, FMOD will advance to the GAME_START sound upon completion of the current measure. The GAME_START sound is exactly 1 measure in duration.
-        float timeLeftInCurrentMeasure = _timePerSongMeasure - Time.unscaledTime % _timePerSongMeasure;
+        float timeLeftInCurrentMeasure = _timePerSongMeasure - AudioStats.currentPlaybackTime % _timePerSongMeasure;
         float timeToWaitForSongSync = timeLeftInCurrentMeasure + _timePerSongMeasure;
         timeToStart = Time.unscaledTime + timeToWaitForSongSync;
 
-        // _timeToRotatePhases = Time.unscaledTime + _timeBetweenPhases;
-        _timeForTimerAdvancement = Time.unscaledTime + timeToWaitForSongSync + _timeBetweenTimerAdvancements;
+        _timeForTimerAdvancement = timeToStart + _timeBetweenTimerAdvancements;
         _timerAdvancementsRemainingInPhase = Mathf.RoundToInt(_timeBetweenPhases);
+
+        // Debug.Log($"Time.unscaledTime={Time.unscaledTime} currentPlaybackTime={AudioStats.currentPlaybackTime} TimeElapsed={(Time.unscaledTime - AudioStats.currentPlaybackTime)} MOD={(Time.unscaledTime - AudioStats.currentPlaybackTime) % _timePerSongMeasure}\r\ntimeLeftInCurrentMeasure={timeLeftInCurrentMeasure} timeToWaitForSongSync={timeToWaitForSongSync}");
 
         return timeToWaitForSongSync;
     }
@@ -77,7 +79,6 @@ public class TimeController : MonoBehaviour {
     }
 
     private void Start() {
-        // _timeToRotatePhases = Time.unscaledTime + _timeBetweenPhases;
         _timeForTimerAdvancement = Time.unscaledTime + _timeBetweenTimerAdvancements;
         _timerAdvancementsRemainingInPhase = Mathf.RoundToInt(_timeBetweenPhases);
         isTimerActive = false;

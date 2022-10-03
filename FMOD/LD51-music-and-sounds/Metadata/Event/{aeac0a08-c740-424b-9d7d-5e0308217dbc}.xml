@@ -63,7 +63,11 @@
 			<destination>{ab4bd866-41bc-4516-9bf9-5e474f8d60d2}</destination>
 		</relationship>
 	</object>
-	<object class="EventAutomatableProperties" id="{2b5e5126-b185-456a-84e9-98c82bb5c6b3}" />
+	<object class="EventAutomatableProperties" id="{2b5e5126-b185-456a-84e9-98c82bb5c6b3}">
+		<property name="maxVoices">
+			<value>1</value>
+		</property>
+	</object>
 	<object class="MarkerTrack" id="{e9cd3b7f-6e3b-4476-b7af-5307ea556117}" />
 	<object class="GroupTrack" id="{11715729-7759-4b1c-a623-59a9227d6f71}">
 		<relationship name="modules">
@@ -111,8 +115,20 @@
 	</object>
 	<object class="MixerBusPanner" id="{d49acb51-db3e-4dc9-833b-0e5fb70653c1}" />
 	<object class="MultiSound" id="{1a58eec3-1deb-4e25-81dc-b8e53c78e45c}">
+		<property name="isAsync">
+			<value>true</value>
+		</property>
 		<property name="length">
 			<value>0.20000000000000001</value>
+		</property>
+		<property name="delayType">
+			<value>0</value>
+		</property>
+		<property name="maximumTimeDelay">
+			<value>40</value>
+		</property>
+		<property name="startOffset">
+			<value>0.5</value>
 		</property>
 		<relationship name="sounds">
 			<destination>{020d40c1-f3a1-479e-b799-8b202ec9b9ec}</destination>
