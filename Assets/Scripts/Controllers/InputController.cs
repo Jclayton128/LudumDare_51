@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 public class InputController : MonoBehaviour {
     [SerializeField][Range(0f, 1f)] float dpadDeadZone = 0.2f;
@@ -28,8 +30,14 @@ public class InputController : MonoBehaviour {
     new Camera camera;
     StatsHandler stats;
     PlayerInput playerInput;
+    InputSystemUIInputModule uiModule;
     string prevControlScheme;
     #endregion
+
+    public void ResetInputSystemBecauseUnityIsDumb() {
+        playerInput.SwitchCurrentActionMap("Player");
+        StartCoroutine(HaveYouTriedTurningItOffAndOnAgain());
+    }
 
     void Awake() {
         if (camera == null) camera = Camera.main;
@@ -81,5 +89,14 @@ public class InputController : MonoBehaviour {
         }
         Cursor.SetCursor(mouseReticleTexture, Vector2.zero, CursorMode.Auto);
         prevControlScheme = playerInput.currentControlScheme;
+    }
+
+    // UNITY WHYYYYYYY??
+    // This fixes a bug where keyboard events were not registered.
+    IEnumerator HaveYouTriedTurningItOffAndOnAgain() {
+        uiModule = FindObjectOfType<InputSystemUIInputModule>();
+        uiModule.enabled = false;
+        yield return new WaitForFixedUpdate();
+        uiModule.enabled = true;
     }
 }

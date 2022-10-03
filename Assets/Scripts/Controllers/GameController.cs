@@ -38,7 +38,9 @@ public class GameController : MonoBehaviour {
     void OnStartGameElements() {
         if (_currentPlayer == null) _currentPlayer = GameObject.FindGameObjectWithTag("Player");
         _currentPlayer.GetComponent<StatsHandler>().OnPlayerDying += HandlePlayerDying;
+        // IMPORTANT - MAKE SURE THAT THE PLAYER GO IS ACTIVE BEFORE RESETING THE INPUT SYSTEM, OTHERWISE THE PLAYER WON'T HAVE CONTROL.
         _currentPlayer.gameObject.SetActive(true);
+        _currentPlayer.GetComponent<InputController>().ResetInputSystemBecauseUnityIsDumb();
         _uiController.SetContext(UIController.Context.InGame);
         IsGameRunning = true;
         OnPlayerStartsRun?.Invoke(_currentPlayer);
