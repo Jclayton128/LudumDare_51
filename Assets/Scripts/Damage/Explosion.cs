@@ -35,7 +35,7 @@ public class Explosion : MonoBehaviour {
         gameObject.SetActive(true);
         particleFX.Play();
         bulletPool = FindObjectOfType<BulletPoolController>();
-        AppIntegrity.Assert(explosionSound == null); // was set as 'sound != null'
+        AppIntegrity.Assert(explosionSound != null);
     }
 
     void Start() {
@@ -65,7 +65,6 @@ public class Explosion : MonoBehaviour {
 
     void OnHit(Collider2D collider) {
         if (collider == null) return;
-        Debug.Log($"hit {collider.tag}");
 
         if (collider.CompareTag("Player")) {
             OnHitPlayer(collider);

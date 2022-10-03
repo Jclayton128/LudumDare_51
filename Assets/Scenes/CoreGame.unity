@@ -5575,6 +5575,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2828986534295053837, guid: be9fa9f999e1443af9abacccdff906fd, type: 3}
   m_PrefabInstance: {fileID: 1960256433}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1960256435 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2828986534295053836, guid: be9fa9f999e1443af9abacccdff906fd, type: 3}
+  m_PrefabInstance: {fileID: 1960256433}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1966383362 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4494945976827205559, guid: 0d1b357a4bcad43c5a07f8497af93cd9, type: 3}
@@ -5778,6 +5789,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28ca676cf80e92f47aad7faac9411831, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startButton: {fileID: 1109284122}
+  settingsButton: {fileID: 1960256435}
   IsGameRunning: 0
 --- !u!114 &2052628009
 MonoBehaviour:

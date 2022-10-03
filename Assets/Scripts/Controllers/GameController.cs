@@ -4,8 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
+    [SerializeField] Button startButton;
+    [SerializeField] Button settingsButton;
+
     UIController _uiController;
 
     public Action<GameObject> OnPlayerStartsRun;
@@ -27,6 +31,8 @@ public class GameController : MonoBehaviour {
         if (_currentPlayer == null) _currentPlayer = GameObject.FindGameObjectWithTag("Player");
         _currentPlayer.gameObject.SetActive(false);
         _timeController.StopTimer();
+        startButton.interactable = true;
+        settingsButton.interactable = true;
     }
 
     public void ShowAudioSettings() {
@@ -38,6 +44,8 @@ public class GameController : MonoBehaviour {
     }
 
     public void StartNewGame() {
+        startButton.interactable = false;
+        settingsButton.interactable = false;
         GlobalEvent.Invoke(GlobalEvent.GlobalEventType.GameStart);
         float timeToWaitForSongSync = _timeController.StartTimer();
         Invoke("OnStartCoolEffects", timeToWaitForSongSync);
@@ -69,6 +77,8 @@ public class GameController : MonoBehaviour {
     }
 
     public void HandleRestartMetaGameLoop() {
+        startButton.interactable = true;
+        settingsButton.interactable = true;
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         GlobalEvent.Invoke(GlobalEvent.GlobalEventType.GameReset);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
