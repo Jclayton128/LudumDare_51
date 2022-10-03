@@ -24,7 +24,7 @@ public class StatsHandler : MonoBehaviour {
     TimeController _timeController;
 
     //settings
-    [SerializeField] float _cameraZoom_Normal = 5f;
+    [SerializeField] float _cameraZoom_Normal = 6f;
 
     [SerializeField] float _moveSpeed_Normal = 10f;
     [SerializeField] float _rotationSpeed_Normal = 360f;
@@ -163,6 +163,7 @@ public class StatsHandler : MonoBehaviour {
     }
 
     private void ReceiveDamage() {
+        if (!isAlive) return;
         hasPerfectHealthThisRound = false;
         AppIntegrity.Assert(_damageLevelsBySubsystem.Length != 0, "_damageLevelsBySubsystem is empty!");
         _explosionController.RequestExplosion(2, transform.position, Color.green);
@@ -220,6 +221,7 @@ public class StatsHandler : MonoBehaviour {
         StartCoroutine(ScreenShakeOnDeath());
         HideSprite();
         Destroy(gameObject, 3f);
+        
     }
 
     void HideSprite() {
@@ -270,27 +272,28 @@ public class StatsHandler : MonoBehaviour {
 
     private void ConvertDamageLevelsIntoStatChanges(
         int subsystem, float damageLevel, bool ignored) {
-        float normalizedDamage = damageLevel / _maxDamagePossible;
+
+        float normalizedDamage = Mathf.InverseLerp(-1, _maxDamagePossible, damageLevel);
 
         switch (subsystem) {
             case 0:
                 //Camera zooms in with more damage
-                _statModifiersBySubsystem[0] = Mathf.Lerp(1f, 0.25f, normalizedDamage);
+                _statModifiersBySubsystem[0] = Mathf.Lerp(1.2f, 0.7f, normalizedDamage);
                 break;
 
             case 1:
                 // Shield regen rate drops with more damage
-                _statModifiersBySubsystem[1] = Mathf.Lerp(1f, 0.25f, normalizedDamage);
+                _statModifiersBySubsystem[1] = Mathf.Lerp(1.33f, 0.25f, normalizedDamage);
                 break;
 
             case 2:
                 // Translate speed drops with more damage
-                _statModifiersBySubsystem[2] = Mathf.Lerp(1f, 0.5f, normalizedDamage);
+                _statModifiersBySubsystem[2] = Mathf.Lerp(1.33f, 0.5f, normalizedDamage);
                 break;
 
             case 3:
                 // Time between shots increases with more damage
-                _statModifiersBySubsystem[3] = Mathf.Lerp(1f, 4f, normalizedDamage);
+                _statModifiersBySubsystem[3] = Mathf.Lerp(.75f, 4f, normalizedDamage);
                 break;
 
         }
@@ -300,14 +303,14 @@ public class StatsHandler : MonoBehaviour {
 
     IEnumerator ScreenShakeOnDamage(float damage) {
         screenShakeOnDamage.GenerateImpulse(UnityEngine.Random.insideUnitCircle.normalized * damage * 0.1f);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSecondsRealtime(0.1f);
         screenShakeOnDamage.GenerateImpulse(UnityEngine.Random.insideUnitCircle.normalized * damage * 0.1f);
     }
 
     IEnumerator ScreenShakeOnDeath() {
         float amount = UnityEngine.Random.Range(.4f, .6f);
         screenShakeOnDeath.GenerateImpulse(Vector3.right * amount);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSecondsRealtime(0.1f);
         amount = UnityEngine.Random.Range(.4f, .6f);
         screenShakeOnDeath.GenerateImpulse(Vector3.up * amount);
     }

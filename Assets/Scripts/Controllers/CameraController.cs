@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour {
     [SerializeField] float zoomModHealPhase = 2f;
     [SerializeField] float cameraTransitionRate = 0.5f;
 
-    float initialZoom = 5f;
+    float initialZoom = 6f; // Warning - this number ought to match the parameter in StatsHandler
     Tween currentZoomTween;
 
     private void OnEnable() {
@@ -48,6 +48,7 @@ public class CameraController : MonoBehaviour {
                 x => _cco.m_Offset.x = x,
                 3f,
                 cameraTransitionRate);
+            currentZoomTween.Kill();
             currentZoomTween = DOTween.To(
                 () => _cvc.m_Lens.OrthographicSize,
                 x => _cvc.m_Lens.OrthographicSize = x,
@@ -59,6 +60,7 @@ public class CameraController : MonoBehaviour {
                 x => _cco.m_Offset.x = x,
                 0f,
                 cameraTransitionRate);
+            currentZoomTween.Kill();
             currentZoomTween = DOTween.To(
                 () => _cvc.m_Lens.OrthographicSize,
                 x => _cvc.m_Lens.OrthographicSize = x,
