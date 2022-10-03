@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using FMODUnity;
 using UnityEngine;
 
@@ -34,6 +35,8 @@ public class StatsHandler : MonoBehaviour {
     [SerializeField] StudioEventEmitter playerShieldHitSound;
     [SerializeField] StudioEventEmitter playerHurtSound;
     [SerializeField] StudioEventEmitter playerDeathSound;
+    [SerializeField] CinemachineImpulseSource screenShakeOnDamage;
+    [SerializeField] CinemachineImpulseSource screenShakeOnDeath;
     const float _requiredRegenLevelPerShield = 1f;
     const int _shieldLayers_Max = 3;
 
@@ -64,7 +67,7 @@ public class StatsHandler : MonoBehaviour {
 
     public bool IsAlive => isAlive;
 
-    public float CameraZoom { get => _cameraZoom_Normal * _statModifiersBySubsystem[0]; }
+    public float CameraZoom { get => isAlive ? _cameraZoom_Normal * _statModifiersBySubsystem[0] : _cameraZoom_Normal; }
 
     public float ShieldRegenRate { get => _shieldRegenRate_Normal * _statModifiersBySubsystem[1]; }
 
@@ -103,6 +106,8 @@ public class StatsHandler : MonoBehaviour {
         AppIntegrity.Assert(playerShieldHitSound != null);
         AppIntegrity.Assert(playerHurtSound != null);
         AppIntegrity.Assert(playerDeathSound != null);
+        AppIntegrity.Assert(screenShakeOnDamage != null);
+        AppIntegrity.Assert(screenShakeOnDeath != null);
     }
 
     private void Start() {
@@ -146,7 +151,6 @@ public class StatsHandler : MonoBehaviour {
     }
 
     public void ReceiveBulletImpact() {
-
         if (_shieldLayers_Current > 0) {
             _shieldLayers_Current--;
             OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
@@ -166,6 +170,7 @@ public class StatsHandler : MonoBehaviour {
         _damageLevelsBySubsystem[damagedSubsystem] += 1f;
         OnReceiveDamage?.Invoke(
             damagedSubsystem, _damageLevelsBySubsystem[damagedSubsystem], false);
+        StartCoroutine(ScreenShakeOnDamage(UnityEngine.Random.Range(.3f, 1f)));
         CheckForDeath();
     }
     public void ReceivedTargetedBulletImpact(int targetedSystem) {
@@ -173,7 +178,9 @@ public class StatsHandler : MonoBehaviour {
             _shieldLayers_Current--;
             OnChangeShieldLayerCount?.Invoke(_shieldLayers_Current);
             _explosionController.RequestExplosion(2, transform.position, Color.green);
+            playerShieldHitSound.Play();
         } else {
+            playerHurtSound.Play();
             ReceiveTargetedDamage(targetedSystem);
         }
     }
@@ -189,6 +196,7 @@ public class StatsHandler : MonoBehaviour {
         _damageLevelsBySubsystem[targetedSystem] += 1f;
         OnReceiveDamage?.Invoke(
             targetedSystem, _damageLevelsBySubsystem[targetedSystem], false);
+        StartCoroutine(ScreenShakeOnDamage(UnityEngine.Random.Range(.3f, 1f)));
         CheckForDeath();
     }
 
@@ -208,6 +216,7 @@ public class StatsHandler : MonoBehaviour {
         playerDeathSound.Play();
         _explosionController.RequestExplosion(20, transform.position, Color.green);
         OnPlayerDying?.Invoke();
+        StartCoroutine(ScreenShakeOnDeath());
         HideSprite();
         Destroy(gameObject, 3f);
     }
@@ -286,5 +295,22 @@ public class StatsHandler : MonoBehaviour {
         }
     }
 
+    #region SCREEN_SHAKE
+
+    IEnumerator ScreenShakeOnDamage(float damage) {
+        screenShakeOnDamage.GenerateImpulse(UnityEngine.Random.insideUnitCircle.normalized * damage * 0.1f);
+        yield return new WaitForSeconds(0.1f);
+        screenShakeOnDamage.GenerateImpulse(UnityEngine.Random.insideUnitCircle.normalized * damage * 0.1f);
+    }
+
+    IEnumerator ScreenShakeOnDeath() {
+        float amount = UnityEngine.Random.Range(.4f, .6f);
+        screenShakeOnDeath.GenerateImpulse(Vector3.right * amount);
+        yield return new WaitForSeconds(0.1f);
+        amount = UnityEngine.Random.Range(.4f, .6f);
+        screenShakeOnDeath.GenerateImpulse(Vector3.up * amount);
+    }
+
+    #endregion
 
 }
