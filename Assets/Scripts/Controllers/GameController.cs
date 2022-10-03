@@ -69,6 +69,7 @@ public class GameController : MonoBehaviour {
     }
 
     public void HandleRestartMetaGameLoop() {
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         GlobalEvent.Invoke(GlobalEvent.GlobalEventType.GameReset);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -91,7 +92,6 @@ public class GameController : MonoBehaviour {
     }
 
     void OnGameOverState() {
-        Time.timeScale = 1f;
         _uiController.SetContext(UIController.Context.PostGame);
     }
 }
