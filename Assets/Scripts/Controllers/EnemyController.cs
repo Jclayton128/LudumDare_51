@@ -7,14 +7,19 @@ public class EnemyController : MonoBehaviour
     GameController _gameController;
     TimeController _timeController;
     ExplosionController _explosionController;
-    [SerializeField] GameObject _enemyPrefab = null;
+    [SerializeField] GameObject[] _enemyPrefabs = null;
     [SerializeField] float _spawnPerimeterRadius = 5f;
 
-    List<GameObject> _activeEnemies = new List<GameObject>();
-    Queue<GameObject> _pooledEnemies = new Queue<GameObject> ();
+    Dictionary<EnemyInfoHolder.EnemyType, GameObject> _enemyMenu 
+        = new Dictionary<EnemyInfoHolder.EnemyType, GameObject>();
+
+    Dictionary<EnemyInfoHolder.EnemyType, Queue<GameObject>> _enemyQueues =
+        new Dictionary<EnemyInfoHolder.EnemyType, Queue<GameObject>>();
+
 
     //settings
-    float _timeBetweenEnemySpawns = 2f;
+    //TODO make this steadily faster?
+    [SerializeField] float _timeBetweenEnemySpawns = 2f;
 
     //state
     float _countdownUntilNextSpawn;
@@ -26,17 +31,60 @@ public class EnemyController : MonoBehaviour
 
         _timeController = _gameController.GetComponent<TimeController>();
         _explosionController  =_gameController.GetComponent <ExplosionController>();
+        
+        CreateEnemyPools();
+        CreateEnemyMenu();
+    }
+
+    private void CreateEnemyMenu()
+    {
+        foreach (var enemy in _enemyPrefabs)
+        {
+            EnemyInfoHolder.EnemyType eType = enemy.GetComponent<EnemyInfoHolder>().enemyType;
+
+            if (_enemyMenu.ContainsKey(eType))
+            {
+                Debug.LogError($"Menu already contains a {eType} prefab");
+                return;
+            }
+
+            _enemyMenu.Add(eType, enemy);
+        }
+    }
+
+    private void CreateEnemyPools()
+    {
+        foreach (var enemy in _enemyPrefabs)
+        {
+            Queue<GameObject> queue = new Queue<GameObject>();
+            EnemyInfoHolder.EnemyType eType = enemy.GetComponent<EnemyInfoHolder>().enemyType;
+            
+            if (_enemyQueues.ContainsKey(eType))
+            {
+                Debug.LogError($"Already have a pool for {eType}");
+                return;
+            }
+            
+            _enemyQueues.Add(eType, queue);
+        }
     }
 
     public void HandleOnPlayerSpawn(GameObject newPlayer)
     {
-        SpawnEnemyOnSpawnPerimeter(2);
+
     }
 
     private void Update()
     {
         //SHIM DEBUG
-        if (Input.GetKeyDown(KeyCode.B)) SpawnEnemyOnSpawnPerimeter(1);
+        if (Input.GetKeyDown(KeyCode.Z)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)0, 1);
+        if (Input.GetKeyDown(KeyCode.X)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)1, 1);
+        if (Input.GetKeyDown(KeyCode.C)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)2, 1);
+        if (Input.GetKeyDown(KeyCode.V)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)3, 1);
+        if (Input.GetKeyDown(KeyCode.B)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)4, 1);
+        if (Input.GetKeyDown(KeyCode.N)) SpawnEnemyOnSpawnPerimeter((EnemyInfoHolder.EnemyType)5, 1);
+
+
 
         if (_gameController.IsGameRunning )
         {
@@ -44,7 +92,8 @@ public class EnemyController : MonoBehaviour
             
             if (_countdownUntilNextSpawn <= 0)
             {
-                SpawnEnemyOnSpawnPerimeter(1);
+                
+                SpawnEnemyOnSpawnPerimeter(GetRandomEnemyType(), 1);
                 _countdownUntilNextSpawn = _timeBetweenEnemySpawns;
             }
 
@@ -52,19 +101,34 @@ public class EnemyController : MonoBehaviour
        
     }
 
-    private void SpawnEnemyOnSpawnPerimeter (int numberToSpawn)
+    private EnemyInfoHolder.EnemyType GetRandomEnemyType()
     {
+        int rand = UnityEngine.Random.Range(0, _enemyPrefabs.Length);
+        return _enemyPrefabs[rand].GetComponent<EnemyInfoHolder>().enemyType;
+    }
+
+    private void SpawnEnemyOnSpawnPerimeter 
+        (EnemyInfoHolder.EnemyType enemyType, int numberToSpawn)
+    {
+
+
         for (int i = 0; i < numberToSpawn; i++)
         {
             GameObject enemy;
-            if (_pooledEnemies.Count == 0)
+            if (_enemyQueues[enemyType].Count == 0)
             {
-                enemy = Instantiate(_enemyPrefab);
+                GameObject menuExample = _enemyMenu[enemyType];
+                if (menuExample == null)
+                {
+                    Debug.LogError($"{enemyType} isn't on the Menu!");
+                    return;
+                }
+                enemy = Instantiate(menuExample);
                 enemy.GetComponent<Entity>().Initialize(this, _explosionController);
             }
             else
             {
-                enemy = _pooledEnemies.Dequeue ();
+                enemy = _enemyQueues[enemyType].Dequeue ();
                 enemy.SetActive(true);
             }
             enemy.GetComponent<Entity>().SetUpForUse();
@@ -77,8 +141,9 @@ public class EnemyController : MonoBehaviour
 
     public void ReturnDeadEnemy(GameObject deadEnemy)
     {
-        _activeEnemies.Remove(deadEnemy);
-        _pooledEnemies.Enqueue(deadEnemy);
+        EnemyInfoHolder.EnemyType eType = deadEnemy.GetComponent<EnemyInfoHolder>().enemyType;
+
+        _enemyQueues[eType].Enqueue(deadEnemy);
         deadEnemy.SetActive(false);
     }
 

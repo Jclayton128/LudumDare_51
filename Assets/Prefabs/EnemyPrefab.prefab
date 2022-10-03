@@ -108,6 +108,7 @@ GameObject:
   - component: {fileID: -2645333545744315644}
   - component: {fileID: 239229086886833213}
   - component: {fileID: 1202532460792927086}
+  - component: {fileID: -2654643215101377421}
   m_Layer: 8
   m_Name: EnemyPrefab
   m_TagString: Untagged
@@ -237,6 +238,19 @@ MonoBehaviour:
   startingHealth: 5
   timeInvincibleAfterHit: 0
   hideOnDeath: 0
+--- !u!114 &-2654643215101377421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4572541516144422410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 279c60a7463d7904596ffd412aaa5553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyType: 0
 --- !u!1 &5953298409155876618
 GameObject:
   m_ObjectHideFlags: 0
