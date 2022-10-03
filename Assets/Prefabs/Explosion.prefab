@@ -14713,6 +14713,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeActive: 0.8
+  explosiveForce: 5
   particleFX: {fileID: 8248079012175030144}
   enemyLayer:
     serializedVersion: 2
@@ -14720,8 +14721,8 @@ MonoBehaviour:
   bulletLayer:
     serializedVersion: 2
     m_Bits: 640
-  explosionSound: {fileID: 0}
-  screenShake: {fileID: 0}
+  explosionSound: {fileID: 8248079012175030149}
+  screenShake: {fileID: 6430844102705380810}
 --- !u!114 &8248079012175030149
 MonoBehaviour:
   m_ObjectHideFlags: 0

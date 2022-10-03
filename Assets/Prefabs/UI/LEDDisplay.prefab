@@ -313,6 +313,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7002683718218364515}
+  - component: {fileID: 136173426148241}
   m_Layer: 5
   m_Name: LEDDisplay
   m_TagString: Untagged
@@ -344,3 +345,21 @@ RectTransform:
   m_AnchoredPosition: {x: 2.75, y: 22}
   m_SizeDelta: {x: 214.5, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &136173426148241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7002683718218364512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a009b5875014d48b53ad7e05700d22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorBeat: {r: 0.43164828, g: 0.9433962, b: 0.92227685, a: 1}
+  colorActive: {r: 0.9528302, g: 0.30607048, b: 0.21124065, a: 1}
+  ledA: {fileID: 7002683717336357976}
+  ledB: {fileID: 7002683717775559144}
+  ledC: {fileID: 7002683718041455978}
+  ledD: {fileID: 7002683716566034326}

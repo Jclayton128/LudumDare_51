@@ -65,7 +65,7 @@ public class TimeController : MonoBehaviour {
         // When triggered, FMOD will advance to the GAME_START sound upon completion of the current measure. The GAME_START sound is exactly 1 measure in duration.
         float timeLeftInCurrentMeasure = _timePerSongMeasure - AudioStats.currentPlaybackTime % _timePerSongMeasure;
         float timeToWaitForSongSync = timeLeftInCurrentMeasure;
-        timeToStart = Time.unscaledTime + timeToWaitForSongSync;
+        timeToStart = Time.unscaledTime + timeToWaitForSongSync + _timePerSongMeasure;
 
         _timeForTimerAdvancement = timeToStart + _timeBetweenTimerAdvancements;
         _timerAdvancementsRemainingInPhase = Mathf.RoundToInt(_timeBetweenPhases);
