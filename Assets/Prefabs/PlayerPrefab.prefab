@@ -1220,6 +1220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debug: 0
   moveAccel: 10
+  forceDecayMod: 5
 --- !u!114 &3083795031452987394
 MonoBehaviour:
   m_ObjectHideFlags: 0

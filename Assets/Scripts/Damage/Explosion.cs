@@ -11,6 +11,7 @@ using UnityEngine;
 //
 public class Explosion : MonoBehaviour {
     [SerializeField] float timeActive = 0.7f;
+    [SerializeField] float explosiveForce = 5f;
     [SerializeField] ParticleSystem particleFX;
     [SerializeField] LayerMask enemyLayer;
     [SerializeField] LayerMask bulletLayer;
@@ -87,6 +88,7 @@ public class Explosion : MonoBehaviour {
         StatsHandler stats = collider.GetComponent<StatsHandler>();
         if (stats == null) return;
         stats.ReceiveExplosiveImpact(5f);
+        PushBackPlayer(stats);
         Physics2D.IgnoreCollision(collider, circle);
         hitPlayer = true;
     }
@@ -102,6 +104,13 @@ public class Explosion : MonoBehaviour {
         if (bullet == null) return;
         if (bulletPool == null) return;
         bulletPool.ReturnExpiredBulletToPool(bullet);
+    }
+
+    void PushBackPlayer(StatsHandler stats) {
+        if (stats == null) return;
+        PlayerMovement movement = stats.GetComponent<PlayerMovement>();
+        if (movement == null) return;
+        movement.AddForce((movement.transform.position - transform.position).normalized * explosiveForce);
     }
 
     IEnumerator ScreenShakeOnExplode() {
