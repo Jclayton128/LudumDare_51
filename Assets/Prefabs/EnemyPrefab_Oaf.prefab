@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &4773377021396072082
+--- !u!1001 &6445046772719512056
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -9,27 +9,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -2654643215101377421, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
       propertyPath: enemyType
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 15121018152011848, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 15121018152011848, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 15121018152011848, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 15121018152011848, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2
+      value: -0.018882036
       objectReference: {fileID: 0}
     - target: {fileID: 15121018152011848, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.16
+      value: -2.0236697
       objectReference: {fileID: 0}
     - target: {fileID: 15121018152011848, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -65,31 +57,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1202532460792927086, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
       propertyPath: startingHealth
-      value: 7
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4572541516144422410, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
       propertyPath: m_Name
-      value: EnemyPrefab_Ogre
+      value: EnemyPrefab_Oaf
       objectReference: {fileID: 0}
     - target: {fileID: 8901765831431646809, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 8cbc2965e7539a848ae90918d19f2489, type: 3}
+      objectReference: {fileID: 21300000, guid: 36b4d30d50998c04aa11e9db9ccffb93, type: 3}
     m_RemovedComponents:
     - {fileID: 239229086886833213, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
---- !u!1 &9028203586643859608 stripped
+--- !u!1 &7351433339355187186 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4572541516144422410, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
-  m_PrefabInstance: {fileID: 4773377021396072082}
+  m_PrefabInstance: {fileID: 6445046772719512056}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &5877829112508445397
+--- !u!60 &3235350185001936910
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9028203586643859608}
+  m_GameObject: {fileID: 7351433339355187186}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -100,7 +92,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.93285716, y: 0.88714284}
+    oldSize: {x: 0.63, y: 0.59833336}
     newSize: {x: 3.3, y: 3.14}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -108,45 +100,31 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.23199928, y: -0.35599673}
-      - {x: -0.37972316, y: 0.08437747}
-      - {x: -0.00562346, y: 0.35730982}
-      - {x: 0.3789935, y: 0.089056015}
-      - {x: 0.23360062, y: -0.35733995}
---- !u!114 &-2412133136375505779
+    - - {x: -0.42719242, y: 0.073413596}
+      - {x: -0.27375782, y: -0.4121933}
+      - {x: 0.27184945, y: -0.40225405}
+      - {x: 0.426869, y: 0.07449181}
+      - {x: -0.003251046, y: 0.42176646}
+--- !u!114 &-2104759711744717038
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9028203586643859608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 648459c2d4001d0468c10c295a2ce976, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _growthScale: 1.2
-  _tempo: 2
---- !u!114 &-1410837376227656178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9028203586643859608}
+  m_GameObject: {fileID: 7351433339355187186}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9c9bf2bdfd24e3c49baacd2f6803d260, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _standoffRange_Nominal: 3
-  _maxMoveSpeed: 1
-  _accelDecelTime: 3
+  _standoffRange_Nominal: 2
+  _maxMoveSpeed: 2
+  _accelDecelTime: 1
   _isGuard: 0
-  _weaponRange: 4
-  _weaponSpeed: 4
-  _timeBetweenShots: 3
-  _shotType: 2
+  _weaponRange: 10
+  _weaponSpeed: 2
+  _timeBetweenShots: 0.8
+  _shotType: 0
   timeTelegraphLunge: 0.4
   lungeDuration: 1
   lungeSpeed: 1
@@ -174,3 +152,17 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1369148108180154977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7351433339355187186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 648459c2d4001d0468c10c295a2ce976, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _growthScale: 1.2
+  _tempo: 2

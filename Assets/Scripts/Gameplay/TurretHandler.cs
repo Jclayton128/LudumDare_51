@@ -61,7 +61,7 @@ public class TurretHandler : MonoBehaviour {
 
     private void HandleAim() {
         // _desiredSteeringVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position);
-        _desiredSteeringVector = input.MousePositionWorld;
+        _desiredSteeringVector = input.IsInputKeyboardAndMouse ? input.MousePositionWorld : input.Look;
         Debug.DrawLine(transform.position, transform.position + (Vector3)_desiredSteeringVector, Color.red, 0.1f);
     }
 

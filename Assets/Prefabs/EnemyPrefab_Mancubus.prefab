@@ -76,6 +76,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1202532460792927086, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
+      propertyPath: startingHealth
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1202532460792927086, guid: 71bcd1aa354716b488a4d05b0feb3fb8, type: 3}
       propertyPath: explosionPrefab
       value: 
       objectReference: {fileID: 8248079012175030147, guid: 96b1a95be8f47452daccce8f95bdb159, type: 3}
@@ -137,6 +141,7 @@ MonoBehaviour:
   _standoffRange_Nominal: 0
   _maxMoveSpeed: 4
   _accelDecelTime: 8
+  _isGuard: 0
   _weaponRange: 5
   _weaponSpeed: 5
   _timeBetweenShots: 5

@@ -29,6 +29,9 @@ public class EnemyBehavior : MonoBehaviour
     [Tooltip("How long it takes to get from 0 to 60, or vice versa." +
         "Higher should feel heavier, with more inertia.")]
     [SerializeField] float _accelDecelTime = 1.0f;
+    [SerializeField] bool _isGuard = false;
+    bool isAwakeGuard = false;
+
 
     [Header("Attack Parameters")]
 
@@ -94,18 +97,36 @@ public class EnemyBehavior : MonoBehaviour
         _moveDirection = (_player.transform.position - transform.position);
         _rangeToPlayer = _moveDirection.magnitude;
 
-        if (_rangeToPlayer > _standoffRange_Actual)
+        if (_isGuard)
         {
-            _actualMoveSpeed = Mathf.MoveTowards
-                (_actualMoveSpeed, _maxMoveSpeed,
-                _accelDecelRate * Time.deltaTime * _timeController.EnemyTimeScale);
+            if (_rangeToPlayer < _standoffRange_Actual)
+            {
+                isAwakeGuard = true;
+            }
+
+            if (isAwakeGuard)
+            {
+                _actualMoveSpeed = Mathf.MoveTowards
+                    (_actualMoveSpeed, _maxMoveSpeed,
+                    _accelDecelRate * Time.deltaTime * _timeController.PlayerTimeScale);
+            }
         }
         else
         {
-            _actualMoveSpeed = Mathf.MoveTowards
-                   (_actualMoveSpeed, 0,
-                   _accelDecelRate * Time.deltaTime * _timeController.EnemyTimeScale);
+            if (_rangeToPlayer > _standoffRange_Actual)
+            {
+                _actualMoveSpeed = Mathf.MoveTowards
+                    (_actualMoveSpeed, _maxMoveSpeed,
+                    _accelDecelRate * Time.deltaTime * _timeController.EnemyTimeScale);
+            }
+            else
+            {
+                _actualMoveSpeed = Mathf.MoveTowards
+                       (_actualMoveSpeed, 0,
+                       _accelDecelRate * Time.deltaTime * _timeController.EnemyTimeScale);
+            }
         }
+        
 
         transform.position += _moveDirection.normalized * _actualMoveSpeed *
                 _timeController.EnemyTimeScale * Time.deltaTime;
