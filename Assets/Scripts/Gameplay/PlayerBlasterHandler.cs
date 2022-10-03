@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
+using Cinemachine;
 
 public class PlayerBlasterHandler : MonoBehaviour {
     StatsHandler _statsHandlers;
@@ -15,9 +16,11 @@ public class PlayerBlasterHandler : MonoBehaviour {
     [SerializeField] float _bulletVelocity = 4f;
     [SerializeField] float _bulletLifetime = 2f;
     [SerializeField] float _gunSpinUpTime = 1f;
+    [SerializeField] float _recoilScreenShakeMod = 0.1f;
     [SerializeField] AnimationCurve _gunSpinUpRate = AnimationCurve.Linear(0f, 2f, 1f, 1f);
     [SerializeField] StudioEventEmitter gunSound;
     [SerializeField] StudioEventEmitter machineGunSound;
+    [SerializeField] CinemachineImpulseSource screenShakeOnFire;
 
     //state
     [SerializeField] bool _isFiring = false;
@@ -97,6 +100,8 @@ public class PlayerBlasterHandler : MonoBehaviour {
         Vector2 vel = _muzzleTransform.up * _bulletVelocity;
         // apply extra velocity to the bullet if the direction matches the player's current velocity
         vel = vel + movement.Velocity * Mathf.Clamp01(Vector2.Dot(vel, movement.Velocity));
+
+        screenShakeOnFire.GenerateImpulse(-vel.normalized * _recoilScreenShakeMod);
 
         bullet.SetupForUse(_bulletLifetime, vel);
 

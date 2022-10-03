@@ -1162,6 +1162,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   gunSound: {fileID: 4437126109487755615}
   machineGunSound: {fileID: 4824935629706697323}
+  screenShakeOnFire: {fileID: 2133350456193878098}
   _isFiring: 0
 --- !u!1 &6197472531981982083
 GameObject:
