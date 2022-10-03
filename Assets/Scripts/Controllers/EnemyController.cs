@@ -16,6 +16,8 @@ public class EnemyController : MonoBehaviour
     Dictionary<EnemyInfoHolder.EnemyType, Queue<GameObject>> _enemyQueues =
         new Dictionary<EnemyInfoHolder.EnemyType, Queue<GameObject>>();
 
+    [SerializeField] GameObject _guardPrefab;
+
     int _enemyKillCount = 0;
 
     //settings
@@ -73,7 +75,23 @@ public class EnemyController : MonoBehaviour
 
     public void HandleOnPlayerSpawn(GameObject newPlayer)
     {
+        CreateGuardWall(34, 3f);
+        CreateGuardWall(36, 3.25f);
+    }
 
+    private void CreateGuardWall(int count, float radiusMultiplier)
+    {
+        float degreesSpreadOfEntireBurst = 360f;
+        int projectilesInBurst = count;
+
+        float spreadSubdivided = degreesSpreadOfEntireBurst / projectilesInBurst;
+        for (int i = 0; i < projectilesInBurst; i++)
+        {
+            Quaternion sector = Quaternion.Euler(0, 0, (i * spreadSubdivided) - (degreesSpreadOfEntireBurst / 2) + transform.eulerAngles.z);
+            GameObject go = Instantiate(_guardPrefab);
+            go.transform.rotation = sector;
+            go.transform.position = _spawnPerimeterRadius * radiusMultiplier * go.transform.up;
+        }
     }
 
     private void Update()
@@ -114,8 +132,6 @@ public class EnemyController : MonoBehaviour
     private void SpawnEnemyOnSpawnPerimeter 
         (EnemyInfoHolder.EnemyType enemyType, int numberToSpawn)
     {
-
-
         for (int i = 0; i < numberToSpawn; i++)
         {
             GameObject enemy;
