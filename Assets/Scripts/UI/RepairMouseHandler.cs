@@ -75,7 +75,7 @@ public class RepairMouseHandler : MonoBehaviour
 
     void Update()
     {
-        if (_shouldBeRepairing)
+        if (_shouldBeRepairing && input.IsInputKeyboardAndMouse)
         {
             stats.RepairDamage(subsystemIndex);
         }

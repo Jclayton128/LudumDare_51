@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class UIController : MonoBehaviour
@@ -10,6 +11,8 @@ public class UIController : MonoBehaviour
     [SerializeField] GameObject _shieldPanel = null;
     [SerializeField] GameObject _healthPanel = null;
     [SerializeField] GameObject _endgamePanel = null;
+
+    [SerializeField] Button _startButton = null;
 
     [SerializeField] TextMeshProUGUI _killCountTMP = null;
     [SerializeField] TextMeshProUGUI _phaseCountTMP = null;
@@ -30,6 +33,7 @@ public class UIController : MonoBehaviour
                 _shieldPanel.SetActive(false);
                 _healthPanel.SetActive(false);
                 _endgamePanel.SetActive(false);
+                _startButton.Select(); // needed for gamepad
                 break;
 
             case Context.InGame:
