@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class EnemyController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] GameObject[] _enemyPrefabs = null;
     [SerializeField] float _spawnPerimeterRadius = 5f;
 
+
     Dictionary<EnemyInfoHolder.EnemyType, GameObject> _enemyMenu 
         = new Dictionary<EnemyInfoHolder.EnemyType, GameObject>();
 
@@ -17,6 +19,8 @@ public class EnemyController : MonoBehaviour
         new Dictionary<EnemyInfoHolder.EnemyType, Queue<GameObject>>();
 
     [SerializeField] GameObject _guardPrefab;
+
+    public Action<int> OnEnemyDead;
 
     int _enemyKillCount = 0;
 
@@ -162,6 +166,7 @@ public class EnemyController : MonoBehaviour
     public void ReturnDeadEnemy(GameObject deadEnemy)
     {
         _enemyKillCount++;
+        OnEnemyDead?.Invoke(_enemyKillCount);
         EnemyInfoHolder.EnemyType eType = deadEnemy.GetComponent<EnemyInfoHolder>().enemyType;
 
         _enemyQueues[eType].Enqueue(deadEnemy);
@@ -170,7 +175,7 @@ public class EnemyController : MonoBehaviour
 
     private Vector2 FindPointOnUnitCircleCircumference()
     {
-        float randomAngle = Random.Range(0f, Mathf.PI * 2f);
+        float randomAngle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
         return new Vector2(Mathf.Sin(randomAngle), Mathf.Cos(randomAngle)).normalized;
     }
 
