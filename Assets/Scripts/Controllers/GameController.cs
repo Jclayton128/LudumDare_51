@@ -91,6 +91,7 @@ public class GameController : MonoBehaviour {
     }
 
     void OnGameOverState() {
+        Time.timeScale = 1f;
         _uiController.SetContext(UIController.Context.PostGame);
     }
 }
